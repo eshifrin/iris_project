@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var PostSchema = mongoose.Schema({
+const PostSchema = mongoose.Schema({
   user_id: String,
   text: String,
   image: {data: Buffer, contentType: String},
@@ -9,5 +9,5 @@ var PostSchema = mongoose.Schema({
   date: Date,
 });
 
-var Post = mongoose.model('Post', PostSchema);
+const Post = mongoose.model('Post', PostSchema);
 module.exports = Post;

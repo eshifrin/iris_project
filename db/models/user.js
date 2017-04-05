@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var UserSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema({
   email: {type String, unique: true, required: true},
   password: {String, required: true},
   twitter_token: String,
@@ -9,5 +9,5 @@ var UserSchema = mongoose.Schema({
   past_posts: [Schema.Types.ObjectId]
 });
 
-var User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 module.exports = User;
