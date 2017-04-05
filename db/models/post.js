@@ -7,7 +7,7 @@ var PostSchema = mongoose.Schema({
   twitter: Boolean,
   facebook: Boolean,
   date: Date,
-})
+});
 
 var Post = mongoose.model('Post', PostSchema);
 module.exports = Post;

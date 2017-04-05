@@ -1,8 +1,4 @@
 var mongoose = require('mongoose');
-// var sampledata = require('./sampledata.js');
-// var Analysis = require('./models/analyses.js');
-// var User = require('./models/users.js');
-// var AnalysisTrait = require('./models/analyses_traits.js');
 dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/iris';
 
 mongoose.connect(dbUrl);
