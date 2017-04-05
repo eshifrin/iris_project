@@ -6,7 +6,7 @@ const PostSchema = mongoose.Schema({
   image: {data: Buffer, contentType: String},
   twitter: Boolean,
   facebook: Boolean,
-  date: Date,
+  date: Date
 });
 
 const Post = mongoose.model('Post', PostSchema);

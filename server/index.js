@@ -1,12 +1,13 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-// var cookieParser = require('cookie-parser');
-// var expressSession = require('express-session');
-var db = require('../db/db_config');
-var path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+// const cookieParser = require('cookie-parser');
+// const expressSession = require('express-session');
+const db = require('../db/db_config');
+const user = require('../db/models/user')
+const path = require('path');
 //-------------------------------------------------------------//
 
-var app = express();
+const app = express();
 
 app.use(express.static(__dirname + '/../public/dist'));
 
