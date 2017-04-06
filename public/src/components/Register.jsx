@@ -11,7 +11,11 @@ const Register = props => (
     <h2>Password:</h2>
     <input type="text" name="password" />
     <p>
-      <input type="submit" value="Create" />
+      <input
+        type="submit"
+        value="Create"
+      // onClick={}
+      />
     </p>
   </div>
 );
