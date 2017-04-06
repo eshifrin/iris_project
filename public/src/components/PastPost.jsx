@@ -2,11 +2,13 @@ import React from 'react';
 
 const propTypes = {
 
-}
+};
 
-const Connect = props => (
+
+const PastPost = props => (
   <div>
   </div>
 );
 
-export default Connect;
+
+export default PastPost;
