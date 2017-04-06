@@ -17,9 +17,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 
-app.route('/api/user/scheduled')
+app.route('/api/user/:post_type')
   //.all(authenticate user)
   .get(routeHandler.sendUserPosts)
+  .post(routeHandler.schedulePosts)
 
 
 app.get('*', (req, res) => {

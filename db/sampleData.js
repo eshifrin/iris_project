@@ -10,13 +10,14 @@ module.exports = {
     twitter: true,
     facebook: false,
     date: new Date(),
-
+    status: 'scheduled'
   },
   user1_postedPost: {
     text: 'so long fans',
     twitter: false,
     facebook: true,
     date: new Date("2016-05-18T16:00:00Z"),
+    status: 'posted'
   }
 }
 

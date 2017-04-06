@@ -6,7 +6,7 @@ const PostSchema = mongoose.Schema({
   image: {data: Buffer, contentType: String},
   twitter: Boolean,
   facebook: Boolean,
-  date: Date,
+  date: { type: Date, default: Date.now },
   status: String
 });
 //status: scheduled, approved, posting, posted
