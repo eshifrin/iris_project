@@ -6,8 +6,14 @@ const PostSchema = mongoose.Schema({
   image: {data: Buffer, contentType: String},
   twitter: Boolean,
   facebook: Boolean,
-  date: Date
+  date: Date,
+  status: String
 });
+//status: scheduled, approved, posting, posted
 
 const Post = mongoose.model('Post', PostSchema);
 module.exports = Post;
+
+//create a new an expired post for 2 different users
+  //add the id of each post to the relevant array
+
