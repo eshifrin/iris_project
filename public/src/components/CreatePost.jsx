@@ -7,6 +7,7 @@ const propTypes = {
 
 const CreatePost = props => (
   <div>
+    
   </div>
 );
 
