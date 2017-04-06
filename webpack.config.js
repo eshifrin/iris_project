@@ -1,12 +1,13 @@
-var path = require('path');
-var SRC_DIR = path.join(__dirname, '/public/src');
-var DIST_DIR = path.join(__dirname, '/public/dist');
+const path = require('path');
+
+const SRC_DIR = path.join(__dirname, '/public/src');
+const DIST_DIR = path.join(__dirname, '/public/dist');
 
 module.exports = {
   entry: `${SRC_DIR}/App.jsx`,
   output: {
     filename: 'bundle.js',
-    path: DIST_DIR
+    path: DIST_DIR,
   },
   module: {
     loaders: [
@@ -21,4 +22,4 @@ module.exports = {
       }
     ]
   }
-};
+}
