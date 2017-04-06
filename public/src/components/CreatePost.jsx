@@ -2,11 +2,14 @@ import React from 'react';
 
 const propTypes = {
 
-}
+};
 
-const Connect = props => (
+
+const CreatePost = props => (
   <div>
+    
   </div>
 );
 
-export default Connect;
+
+export default CreatePost;
