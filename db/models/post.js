@@ -11,3 +11,7 @@ const PostSchema = mongoose.Schema({
 
 const Post = mongoose.model('Post', PostSchema);
 module.exports = Post;
+
+//create a new an expired post for 2 different users
+  //add the id of each post to the relevant array
+

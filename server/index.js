@@ -15,6 +15,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
+// app.get('/api/futurePosts/:user', routeHandler.retrieveFuturePosts)
+
+
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/dist/index.html'))
 });
