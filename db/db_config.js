@@ -13,7 +13,6 @@ db.on('error', (error) => {
 db.once('open', (status) => {
   db.dropDatabase()
   .then(() => dbh.populateSampleData())
-  // .then(() => dbh.retrieveFuturePosts({email: 'gary@b.com'}))
 });
 
 module.exports = db;

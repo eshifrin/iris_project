@@ -7,8 +7,8 @@ const UserSchema = mongoose.Schema({
   password: {type: String, required: true},
   twitter_token: String,
   facebook_token: String,
-  future_posts: [Schema.Types.ObjectId],
-  past_posts: [Schema.Types.ObjectId]
+  scheduled: [Schema.Types.ObjectId],
+  posted: [Schema.Types.ObjectId]
 });
 
 const User = mongoose.model('User', UserSchema);

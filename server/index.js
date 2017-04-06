@@ -5,9 +5,10 @@ const bodyParser = require('body-parser');
 const db = require('../db/db_config');
 const user = require('../db/models/user')
 const path = require('path');
+const app = express();
+const routeHandler = require('./routeHandler')
 //-------------------------------------------------------------//
 
-const app = express();
 
 app.use(express.static(__dirname + '/../public/dist'));
 
@@ -15,8 +16,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-// app.get('/api/futurePosts/:user', routeHandler.retrieveFuturePosts)
 
+app.route('/api/user/scheduled')
+  //.all(authenticate user)
+  .get(routeHandler.sendUserPosts)
 
 
 app.get('*', (req, res) => {
