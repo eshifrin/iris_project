@@ -7,15 +7,15 @@ module.exports = {
   },
   user1_scheduledPost: {
     text: 'hello fans',
-    twitter: true,
-    facebook: false,
+    postToTwitter: true,
+    postToFacebook: false,
     date: new Date(),
     status: 'scheduled'
   },
   user1_postedPost: {
     text: 'so long fans',
-    twitter: false,
-    facebook: true,
+    postToTwitter: false,
+    postToFacebook: true,
     date: new Date("2016-05-18T16:00:00Z"),
     status: 'posted'
   }

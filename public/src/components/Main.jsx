@@ -8,13 +8,13 @@ import CreatePost from './CreatePost.jsx';
 const propTypes = {
   uploadImg: PropTypes.func.isRequired,
   imgUrl: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
   scheduleNewpost: PropTypes.func.isRequired,
   handlePostSubmit: PropTypes.func.isRequired,
-  handleMessageChange: PropTypes.func.isRequired,
+  handleTextChange: PropTypes.func.isRequired,
 };
 
-const Main = ({ uploadImg, imgUrl, message, scheduleNewpost, handlePostSubmit, handleMessageChange }) => (
+const Main = ({ uploadImg, imgUrl, text, scheduleNewpost, handlePostSubmit, handleTextChange }) => (
   <div>
     <Register />
     <Connect />
@@ -23,10 +23,10 @@ const Main = ({ uploadImg, imgUrl, message, scheduleNewpost, handlePostSubmit, h
     <CreatePost
       uploadImg={uploadImg}
       imgUrl={imgUrl}
-      message={message}
+      text={text}
       scheduleNewpost={scheduleNewpost}
       handlePostSubmit={handlePostSubmit}
-      handleMessageChange={handleMessageChange}
+      handleTextChange={handleTextChange}
     />
   </div>
 );
