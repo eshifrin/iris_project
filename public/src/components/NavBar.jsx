@@ -1,6 +1,6 @@
 import React from 'react';
-import FuturePost from './FuturePost.jsx';
-import PastPost from './PastPost.jsx';
+import FuturePostList from './FuturePostList.jsx';
+import PastPostList from './PastPostList.jsx';
 // import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 
 const propTypes = {
@@ -10,8 +10,8 @@ const propTypes = {
 
 const NavBar = props => (
   <div>
-    <FuturePost />
-    <PastPost />
+    <FuturePostList />
+    <PastPostList />
   </div>
 );
 

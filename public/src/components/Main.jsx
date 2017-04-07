@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Register from './Register.jsx';
 import Connect from './Connect.jsx';
-import FuturePost from './FuturePost.jsx';
-import PastPost from './PastPost.jsx';
+import FuturePostList from './FuturePostList.jsx';
+import PastPostList from './PastPostList.jsx';
 import CreatePost from './CreatePost.jsx';
 
 const propTypes = {
-
+  uploadImg: PropTypes.func.isRequired,
+  imgUrl: PropTypes.string.isRequired
 };
 
 const Main = props => (
   <div>
     <Register />
     <Connect />
-    <FuturePost />
-    <PastPost />
-    <CreatePost />
+    <FuturePostList />
+    <PastPostList />
+    <CreatePost
+      uploadImg={props.uploadImg}
+      imgUrl={props.imgUrl}
+    />
   </div>
 );
 

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
-import PhotoUpload from './components/PhotoUpload.jsx';
+// import PhotoUpload from './components/PhotoUpload.jsx';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -12,7 +12,6 @@ class App extends React.Component {
     this.state = {
       imgPreviewUrl: ''
     };
-
     this.imageIn = this.imageIn.bind(this);
   }
 
@@ -26,6 +25,9 @@ class App extends React.Component {
         imgPreviewUrl: [reader.result]
       })
       axios.post('/api/image/imgLink', {image: reader.result})
+      .then((res) => {
+        console.log(res);
+      })
     }
   }
 
@@ -33,10 +35,11 @@ class App extends React.Component {
     return (
       <div>
         <NavBar />
-        <Main />
+        <Main
+          uploadImg={this.imageIn}
+          imgUrl={this.state.imgPreviewUrl}
+        />
         <h1>This is App component.</h1>
-        <img src={this.state.imgPreviewUrl} style={{width: 100}} />
-        <PhotoUpload imageIn={this.imageIn}/>
       </div>
     );
   }
