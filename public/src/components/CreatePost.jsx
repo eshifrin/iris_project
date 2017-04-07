@@ -5,16 +5,21 @@ import WriteMessage from './WriteMessage.jsx';
 const propTypes = {
   uploadImg: PropTypes.func.isRequired,
   imgUrl: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
   // scheduleNewpost: PropTypes.func.isRequired,
-  onPostSubmit: PropTypes.func.isRequired,
+  handlePostSubmit: PropTypes.func.isRequired,
+  handleMessageChange: PropTypes.func.isRequired,
 };
 
-const CreatePost = ({ imgUrl, uploadImg, onPostSubmit }) => (
+const CreatePost = ({ imgUrl, message, uploadImg, handlePostSubmit, handleMessageChange }) => (
   <div>
-    <form onSubmit={onPostSubmit}>
+    <form onSubmit={handlePostSubmit}>
       <h1>Schedule New Post</h1>
       <img src={imgUrl} style={{width: 100}} />
-      <WriteMessage />
+      <WriteMessage
+        message={message}
+        handleMessageChange={handleMessageChange}
+      />
       <PhotoUpload uploadImg={uploadImg} />
       <input type="submit" value="Create" />
     </form>
