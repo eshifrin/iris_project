@@ -5,10 +5,10 @@ const propTypes = {
 };
 
 
-const FuturePost = props => (
+const PastPostList = props => (
   <div>
   </div>
 );
 
 
-export default FuturePost;
+export default PastPostList;
