@@ -17,8 +17,6 @@ cloudinary.config({
 });
 
 //-------------------------------------------------------------//
-
-
 app.use(express.static(__dirname + '/../public/dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
