@@ -48,8 +48,8 @@ class App extends React.Component {
     axios
   }
 
-  handlePostSubmit() {
-    this.scheduleNewPost();
+  handlePostSubmit(e) {
+    this.scheduleNewPost(e);
     console.log('---handlePostSubmit is heard!!!');
   }
 

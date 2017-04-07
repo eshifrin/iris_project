@@ -13,7 +13,7 @@ const propTypes = {
 
 const CreatePost = ({ imgUrl, message, uploadImg, handlePostSubmit, handleMessageChange }) => (
   <div>
-    <form onSubmit={handlePostSubmit}>
+    <form onSubmit={(e) => handlePostSubmit(e)}>
       <h1>Schedule New Post</h1>
       <img src={imgUrl} style={{width: 100}} />
       <WriteMessage

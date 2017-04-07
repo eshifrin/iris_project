@@ -13,6 +13,7 @@ const WriteMessage = ({ message, handleMessageChange }) => (
     <input
       type="text"
       name="message"
+      placeholder="What do you want to share?"
       value={message}
       onChange={handleMessageChange}
     />
