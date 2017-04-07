@@ -12,11 +12,14 @@ class App extends React.Component {
       email: '',
       fbPage: false,
       twPage: false,
+      message: '',
       imgPreviewUrl: '',
       schedulePosts: [],
       pastPosts: []
     };
     this.uploadImg = this.uploadImg.bind(this);
+    this.handlePostSubmit = this.handlePostSubmit.bind(this);
+    this.handleMessageChange = this.handleMessageChange.bind(this);
   }
 
   uploadImg(e) {
@@ -33,14 +36,36 @@ class App extends React.Component {
     }
   }
 
+  handleMessageChange(e) {
+    let message = e.target.value;
+    this.setState({ message: message })
+  }
+
+  scheduleNewPost(e) {
+    e.preventDefault();
+    console.log('-----this is the e after clicking submit!!!', this.state.message)
+    let message = this.state.message;
+    axios
+  }
+
+  handlePostSubmit() {
+    this.scheduleNewPost();
+    console.log('---handlePostSubmit is heard!!!');
+  }
+
   render() {
-    const { imgPreviewUrl } = this.state;
+    const { imgPreviewUrl, message } = this.state;
+    const { uploadImg, scheduleNewPost, handlePostSubmit, handleMessageChange } = this;
     return (
       <div>
         <NavBar />
         <Main
-          uploadImg={this.uploadImg}
+          uploadImg={uploadImg}
           imgUrl={imgPreviewUrl}
+          scheduleNewPost={scheduleNewPost}
+          handlePostSubmit={handlePostSubmit}
+          message={message}
+          handleMessageChange={handleMessageChange}
         />
       </div>
     );

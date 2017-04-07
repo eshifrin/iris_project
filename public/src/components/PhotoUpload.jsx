@@ -6,13 +6,10 @@ const propTypes = {
 
 const PhotoUpload = ({ uploadImg }) => (
   <div>
-    <form id="myForm" name="myForm">
-      <div>
-        <h2>Upload file:</h2>
-        <input type="file" id="userfile" name="userfile" onChange={uploadImg}/>
-      </div>
-    </form>
+    <h2>Upload file:</h2>
+    <input type="file" id="userfile" name="userfile" onChange={uploadImg} />
   </div>
 );
 
+PhotoUpload.propTypes = propTypes;
 export default PhotoUpload;
