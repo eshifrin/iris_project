@@ -10,16 +10,16 @@ class App extends React.Component {
     super(props);
     this.state = {
       email: '',
-      fbPage: false,
-      twPage: false,
-      message: '',
-      imgPreviewUrl: '',
+      postToTwitter: false,
+      postToFacebook: false,
+      text: '',
+      imgUrl: '',
       schedulePosts: [],
       pastPosts: []
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
-    this.handleMessageChange = this.handleMessageChange.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
   }
 
   uploadImg(e) {
@@ -29,43 +29,40 @@ class App extends React.Component {
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       this.setState({
-        imgPreviewUrl: [reader.result]
+        imgUrl: [reader.result]
       })
       axios.post('/api/image/imgLink', {image: reader.result})
       .then(res => console.log(res));
     }
   }
 
-  handleMessageChange(e) {
-    let message = e.target.value;
-    this.setState({ message: message })
+  handleTextChange(e) {
+    let text = e.target.value;
+    this.setState({ text: text })
   }
 
   scheduleNewPost(e) {
     e.preventDefault();
-    console.log('-----this is the e after clicking submit!!!', this.state.message)
-    let message = this.state.message;
-    axios
+    let text = this.state.text;
   }
 
-  handlePostSubmit() {
-    this.scheduleNewPost();
-    console.log('---handlePostSubmit is heard!!!');
+  handlePostSubmit(e) {
+    this.scheduleNewPost(e);
   }
 
   render() {
-    const { imgPreviewUrl, message } = this.state;
-    const { uploadImg, scheduleNewPost, handlePostSubmit, handleMessageChange } = this;
+    const { imgUrl, text } = this.state;
+    const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange } = this;
     return (
       <div>
         <NavBar />
         <Main
           uploadImg={uploadImg}
-          imgUrl={imgPreviewUrl}
+          imgUrl={imgUrl}
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
-          message={message}
-          handleMessageChange={handleMessageChange}
+          text={text}
+          handleTextChange={handleTextChange}
         />
       </div>
     );

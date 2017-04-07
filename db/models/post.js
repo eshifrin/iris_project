@@ -4,8 +4,9 @@ const PostSchema = mongoose.Schema({
   user_id: String,
   text: String,
   image: { data: Buffer, contentType: String },
-  twitter: Boolean,
-  facebook: Boolean,
+  imgUrl: String,
+  postToTwitter: Boolean,
+  postToFacebook: Boolean,
   date: { type: Date, default: Date.now },
   status: String
 });

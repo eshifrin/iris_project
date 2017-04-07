@@ -1,20 +1,21 @@
 import React, { PropTypes } from 'react';
 
 const propTypes = {
-  message: PropTypes.string.isRequired,
-  handleMessageChange: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+  handleTextChange: PropTypes.func.isRequired,
 };
 
-const WriteMessage = ({ message, handleMessageChange }) => (
+const WriteMessage = ({ text, handleTextChange }) => (
   <div>
     <h3>Facebook Status:</h3>
     <h3>Twitter Status:</h3>
     <h3>Message:</h3>
     <input
       type="text"
-      name="message"
-      value={message}
-      onChange={handleMessageChange}
+      name="text"
+      placeholder="What do you want to share?"
+      value={text}
+      onChange={handleTextChange}
     />
   </div>
 );
