@@ -42,8 +42,10 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e) {
+    e.preventDefault();
     console.log('-----this is the e after clicking submit!!!', this.state.message)
-
+    let message = this.state.message;
+    axios
   }
 
   handlePostSubmit() {
