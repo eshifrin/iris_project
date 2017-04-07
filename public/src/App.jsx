@@ -16,10 +16,10 @@ class App extends React.Component {
       schedulePosts: [],
       pastPosts: []
     };
-    this.imageIn = this.imageIn.bind(this);
+    this.uploadImg = this.uploadImg.bind(this);
   }
 
-  imageIn(e) {
+  uploadImg(e) {
     e.preventDefault();
     let file = e.target.files[0];
     let reader = new FileReader(file);  
@@ -29,6 +29,7 @@ class App extends React.Component {
         imgPreviewUrl: [reader.result]
       })
       axios.post('/api/image/imgLink', {image: reader.result})
+      .then(res => console.log(res));
     }
   }
 
@@ -38,7 +39,7 @@ class App extends React.Component {
       <div>
         <NavBar />
         <Main
-          uploadImg={this.imageIn}
+          uploadImg={this.uploadImg}
           imgUrl={imgPreviewUrl}
         />
       </div>

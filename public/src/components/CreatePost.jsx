@@ -8,9 +8,12 @@ const propTypes = {
 
 const CreatePost = ({ imgUrl, uploadImg }) => (
   <div>
-    <h1>Schedule New Post</h1>
-    <img src={imgUrl} style={{width: 100}} />
-    <PhotoUpload uploadImg={uploadImg}/> 
+    <form>
+      <h1>Schedule New Post</h1>
+      <img src={imgUrl} style={{width: 100}} />
+      <PhotoUpload uploadImg={uploadImg}/> 
+      <input type="submit" value="Create"/>
+    </form>
   </div>
 );
 
