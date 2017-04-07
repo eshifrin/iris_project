@@ -7,10 +7,12 @@ import CreatePost from './CreatePost.jsx';
 
 const propTypes = {
   uploadImg: PropTypes.func.isRequired,
-  imgUrl: PropTypes.string.isRequired
+  imgUrl: PropTypes.string.isRequired,
+  scheduleNewpost: PropTypes.func.isRequired,
+  onPostSubmit: PropTypes.func.isRequired,
 };
 
-const Main = ({ uploadImg, imgUrl }) => (
+const Main = ({ uploadImg, imgUrl, scheduleNewpost, onPostSubmit }) => (
   <div>
     <Register />
     <Connect />
@@ -19,6 +21,8 @@ const Main = ({ uploadImg, imgUrl }) => (
     <CreatePost
       uploadImg={uploadImg}
       imgUrl={imgUrl}
+      scheduleNewpost={scheduleNewpost}
+      onPostSubmit={onPostSubmit}
     />
   </div>
 );

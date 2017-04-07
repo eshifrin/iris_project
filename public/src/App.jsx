@@ -17,6 +17,7 @@ class App extends React.Component {
       pastPosts: []
     };
     this.uploadImg = this.uploadImg.bind(this);
+    this.onPostSubmit = this.onPostSubmit.bind(this);
   }
 
   uploadImg(e) {
@@ -33,14 +34,27 @@ class App extends React.Component {
     }
   }
 
+  scheduleNewPost(e) {
+    e.preventDefault();
+
+  }
+
+  onPostSubmit(e) {
+    this.scheduleNewPost(e);
+    console.log('---onPostSubmit is heard!!!');
+  }
+
   render() {
     const { imgPreviewUrl } = this.state;
+    const { uploadImg, scheduleNewPost, onPostSubmit } = this;
     return (
       <div>
         <NavBar />
         <Main
-          uploadImg={this.uploadImg}
+          uploadImg={uploadImg}
           imgUrl={imgPreviewUrl}
+          scheduleNewPost={scheduleNewPost}
+          onPostSubmit={onPostSubmit}
         />
       </div>
     );
