@@ -7,13 +7,11 @@ const propTypes = {
 
 };
 
-
 const NavBar = props => (
   <div>
     <FuturePostList />
     <PastPostList />
   </div>
 );
-
 
 export default NavBar;

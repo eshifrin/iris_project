@@ -8,10 +8,10 @@ const propTypes = {
 
 const CreatePost = ({ imgUrl, uploadImg }) => (
   <div>
+    <h1>Schedule New Post</h1>
     <img src={imgUrl} style={{width: 100}} />
     <PhotoUpload uploadImg={uploadImg}/> 
   </div>
 );
-
 
 export default CreatePost;
