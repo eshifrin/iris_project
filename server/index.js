@@ -16,7 +16,6 @@ cloudinary.config({
   api_secret: 'Fr9x5K3tELc1z9kkUH4EvhbD6hs' 
 });
 
-//-------------------------------------------------------------//
 app.use(express.static(__dirname + '/../public/dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

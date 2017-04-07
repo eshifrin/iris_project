@@ -3,19 +3,23 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
-// import PhotoUpload from './components/PhotoUpload.jsx';
 import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgPreviewUrl: ''
+      email: '',
+      fbPage: false,
+      twPage: false,
+      imgPreviewUrl: '',
+      schedulePosts: [],
+      pastPosts: []
     };
-    this.imageIn = this.imageIn.bind(this);
+    this.uploadImg = this.uploadImg.bind(this);
   }
 
-  imageIn(e) {
+  uploadImg(e) {
     e.preventDefault();
     let file = e.target.files[0];
     let reader = new FileReader(file);  
@@ -25,21 +29,19 @@ class App extends React.Component {
         imgPreviewUrl: [reader.result]
       })
       axios.post('/api/image/imgLink', {image: reader.result})
-      .then((res) => {
-        console.log(res);
-      })
+      .then(res => console.log(res));
     }
   }
 
   render() {
+    const { imgPreviewUrl } = this.state;
     return (
       <div>
         <NavBar />
         <Main
-          uploadImg={this.imageIn}
-          imgUrl={this.state.imgPreviewUrl}
+          uploadImg={this.uploadImg}
+          imgUrl={imgPreviewUrl}
         />
-        <h1>This is App component.</h1>
       </div>
     );
   }

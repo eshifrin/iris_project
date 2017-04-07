@@ -6,12 +6,15 @@ const propTypes = {
   imgUrl: PropTypes.string.isRequired
 };
 
-const CreatePost = props => (
+const CreatePost = ({ imgUrl, uploadImg }) => (
   <div>
-    <img src={props.imgUrl} style={{width: 100}} />
-    <PhotoUpload uploadImg={props.uploadImg}/> 
+    <form>
+      <h1>Schedule New Post</h1>
+      <img src={imgUrl} style={{width: 100}} />
+      <PhotoUpload uploadImg={uploadImg}/> 
+      <input type="submit" value="Create"/>
+    </form>
   </div>
 );
-
 
 export default CreatePost;
