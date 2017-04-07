@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//need to add salt
 const UserSchema = mongoose.Schema({
-  email: {type: String, unique: true, required: true},
-  password: {type: String, required: true},
-  twitter_token: String,
-  facebook_token: String,
+  email: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
+  twitter_token: { type: String, default: null },
+  facebook_token: { type: String, default: null },
   scheduled: [Schema.Types.ObjectId],
   posted: [Schema.Types.ObjectId]
 });
