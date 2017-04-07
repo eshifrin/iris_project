@@ -29,7 +29,7 @@ app.post('/api/image/imgLink', (req, res) => {
 })
 
 app.route('/api/user/:post_type')
-  //.all(authenticate user)
+  //.all(authenticateuser)
   .get(routeHandler.sendUserPosts)
   .post(routeHandler.schedulePosts)
 
