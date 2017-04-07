@@ -6,10 +6,10 @@ const propTypes = {
   imgUrl: PropTypes.string.isRequired
 };
 
-const CreatePost = props => (
+const CreatePost = ({ imgUrl, uploadImg }) => (
   <div>
-    <img src={props.imgUrl} style={{width: 100}} />
-    <PhotoUpload uploadImg={props.uploadImg}/> 
+    <img src={imgUrl} style={{width: 100}} />
+    <PhotoUpload uploadImg={uploadImg}/> 
   </div>
 );
 

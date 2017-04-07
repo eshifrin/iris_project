@@ -25,9 +25,9 @@ class App extends React.Component {
         imgPreviewUrl: [reader.result]
       })
       axios.post('/api/image/imgLink', {image: reader.result})
-      .then((res) => {
-        console.log(res);
-      })
+      // .then((res) => {
+      //   console.log(res);
+      // })
     }
   }
 
@@ -39,7 +39,6 @@ class App extends React.Component {
           uploadImg={this.imageIn}
           imgUrl={this.state.imgPreviewUrl}
         />
-        <h1>This is App component.</h1>
       </div>
     );
   }

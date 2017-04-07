@@ -10,15 +10,15 @@ const propTypes = {
   imgUrl: PropTypes.string.isRequired
 };
 
-const Main = props => (
+const Main = ({ uploadImg, imgUrl }) => (
   <div>
     <Register />
     <Connect />
     <FuturePostList />
     <PastPostList />
     <CreatePost
-      uploadImg={props.uploadImg}
-      imgUrl={props.imgUrl}
+      uploadImg={uploadImg}
+      imgUrl={imgUrl}
     />
   </div>
 );
