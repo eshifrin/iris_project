@@ -12,6 +12,7 @@ const multer = require('multer');
 const passport = require('passport');
 const Auth0Strategy = require('./auth/Auth0');
 const Auth0 = require('./auth/Auth0Helpers');
+const twitter = require('./twitter.js');
 // const user = require('./routes/user');
 const cloudinary = require('cloudinary');
 cloudinary.config({ 
