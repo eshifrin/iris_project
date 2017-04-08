@@ -60,7 +60,11 @@ class App extends React.Component {
   }
 
   handleLogoClick() {
-    this.setState({ bgColor: 'green' })
+    if (this.state.bgColor === 'grey') {
+      this.setState({ bgColor: 'green' });
+    } else {
+      this.setState({ bgColor: 'grey' });
+    }
   }
 
   scheduleNewPost(e) {

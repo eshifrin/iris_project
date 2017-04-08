@@ -9,10 +9,16 @@ const propTypes = {
 
 const WriteMessage = ({ text, handleTextChange, bgColor, handleLogoClick }) => (
   <div>
-    <button type="button" style={{backgroundColor: bgColor}}
-      onClick={handleLogoClick}>Facebook</button>
-    <button type="button" style={{backgroundColor: bgColor}}
-      onClick={handleLogoClick}>Twitter</button>
+    <button
+      type="button"
+      style={{backgroundColor: bgColor}}
+      onClick={handleLogoClick}
+    >Facebook</button>
+    <button
+      type="button"
+      style={{backgroundColor: bgColor}}
+      onClick={handleLogoClick}
+    >Twitter</button>
     <h3>Message:</h3>
     <input
       type="text"
