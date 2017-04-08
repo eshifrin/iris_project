@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import FuturePostListItem from './FuturePostListItem.jsx'
 
 const propTypes = {
-
+  scheduledPosts: PropTypes.array.isRequired
 };
 
 
-const FuturePostList = props => (
+const FuturePostList = ({scheduledPosts}) => {
+  console.log('called again')
+  console.log(scheduledPosts)
+  return (
   <div>
-  </div>
-);
+
+  </div>)
+}
+  
 
 
 export default FuturePostList;
+    // {scheduledPosts.map(post => {
+    //   <FuturePostListItem post={post} />
+    // })}

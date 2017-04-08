@@ -6,10 +6,10 @@ import PastPostList from './PastPostList.jsx';
 const propTypes = {
 
 };
-
+    // <FuturePostList />
 const NavBar = props => (
   <div>
-    <FuturePostList />
+
     <PastPostList />
   </div>
 );

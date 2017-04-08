@@ -5,6 +5,7 @@ const url = require('url');
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
+  
   const email = url_parts.query.email;
 
   dbh.showUserPosts(email, req.params.post_type)
