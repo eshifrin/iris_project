@@ -13,6 +13,12 @@ exports.login = (req, res) => {
 	res.render('login', { env: env });
 }
 
+exports.landing = (req, res) => {
+	console.log('hitting landing')
+	// res.render('index', { title: 'Broasis!', env: env });
+	res.redirect('/');
+}
+
 exports.success = (req, res) => {
 	res.redirect('/');
 }

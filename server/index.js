@@ -40,11 +40,13 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/../public/dist'));
 
 
+
 /************************** Authorization ******************************/
 
 app.use('/login', Auth0.login);
 app.use('/callback', Auth0.authVerify, rh.userCheck);
 app.use('/logout', Auth0.logout);
+app.use('/', Auth0.landing);
 
 /************************** Social media auth ******************************/
 
@@ -55,6 +57,11 @@ app.get('/facebook', sm.FBtoAuth);
 app.get('/facebook/return', sm.FBfromAuth);
 
 /************************** paths ******************************/
+
+/*app.get('/', function(req, res, next) {
+  console.log('inside broasis /');
+  res.render('index', { title: 'Broasis!', env: env });
+});*/
 
 app.post('/api/image/imgLink', (req, res) => {
     cloudinary.uploader.upload(req.body.image, (result) => {
@@ -70,6 +77,8 @@ app.route('/api/user/:post_type')
   .post(rh.scheduleOrSavePosts)
   .delete(rh.deletePost)
 
+app.get('/facebook', sm.FBtoAuth);
+app.get('/facebook/return', sm.FBfromAuth);
 
 
 
