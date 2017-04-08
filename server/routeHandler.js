@@ -21,8 +21,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 //if authenticated, send posts
 module.exports.schedulePosts = (req, res, next) => {
   //create new object appropriate for post consumption
-
-  dbh.retrieveUserId('gary@b.com')
+  dbh.retrieveUserId(req.body.email)
   .then(id => {
     return dbh.savePost(id, req.body, 'scheduled')
   })

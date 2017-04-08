@@ -20,7 +20,6 @@ cloudinary.config({
   api_secret: 'Fr9x5K3tELc1z9kkUH4EvhbD6hs' 
 });
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -41,10 +40,6 @@ app.use('/login', Auth0.login);
 app.use('/callback', Auth0.authVerify, Auth0.success);
 app.use('/logout', Auth0.logout);
 
-
-
-
-
 /************************** paths ******************************/
 
 app.post('/api/image/imgLink', (req, res) => {
@@ -62,9 +57,6 @@ app.route('/api/user/:post_type')
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/dist/index.html'))
 });
-
-
-
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port 3000.');

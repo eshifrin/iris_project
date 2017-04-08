@@ -9,4 +9,9 @@ const retrievePosts = (type, email) => {
             { params: { email: email } });
 }
 
-export { retrievePosts };
+const submitNewPost = (type, newPost) => {
+  console.log('what do we have in the new post? -----', newPost)
+  return axios.post(routes[type], newPost);
+}
+
+export { retrievePosts, submitNewPost };

@@ -56,15 +56,21 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e) {
+    const { email, text, imgUrl, postToFacebook, postToTwitter } = this.state;
+
     e.preventDefault();
-    let text = this.state.text;
+    util.submitNewPost('scheduled', { email, text, imgUrl, postToFacebook, postToTwitter })
+    .then(results => {
+      console.log('Submit new post - status code:', results.status);
+    })
+    .catch({
+      //error handling needs to go here
+    })
   }
 
   handlePostSubmit(e) {
     this.scheduleNewPost(e);
   }
-
-
 
   render() {
     const { imgUrl, text, scheduledPosts} = this.state;
