@@ -7,11 +7,14 @@ const propTypes = {
 
 
 const FuturePostList = ({scheduledPosts}) => {
-  console.log('called again')
-  console.log(scheduledPosts)
+  const posts = scheduledPosts.map(post => 
+     <li key={post._id}><FuturePostListItem post={post} /></li>)
+  
   return (
   <div>
-
+      <ul>
+        {posts}
+      </ul>
   </div>)
 }
   
