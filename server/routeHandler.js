@@ -1,7 +1,6 @@
 const dbh = require('../db/db_helpers');
 const url = require('url');
 
-
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);

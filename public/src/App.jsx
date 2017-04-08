@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
 import FuturePostList from './components/FuturePostList.jsx';
+import DateTimePicker from './components/DateTimePicker.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 
@@ -77,6 +78,7 @@ class App extends React.Component {
     const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange } = this;
     return (
       <div>
+        <DateTimePicker />
         <NavBar />
           <Main
           scheduledPosts={scheduledPosts}
