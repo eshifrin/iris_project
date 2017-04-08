@@ -7,7 +7,6 @@ const { user1, user1_scheduledPost, user1_scheduledPost2, user1_postedPost } =
         require('./sampleData');
 
 module.exports.savePost = (userId, postData, postType) => {
-  console.log('postdata!!!!', postData);
   postData.user_id = userId;
   postData.status = postType;
   return Post(postData).saveAsync()

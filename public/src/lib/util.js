@@ -10,7 +10,6 @@ const retrievePosts = (type, email) => {
 }
 
 const submitNewPost = (type, newPost) => {
-  console.log('what do we have in the new post? -----', newPost)
   return axios.post(routes[type], newPost);
 }
 
