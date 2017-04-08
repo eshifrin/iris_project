@@ -64,14 +64,7 @@ class App extends React.Component {
     this.scheduleNewPost(e);
   }
 
-        //   <Main
-        //   uploadImg={uploadImg}
-        //   imgUrl={imgUrl}
-        //   scheduleNewPost={scheduleNewPost}
-        //   handlePostSubmit={handlePostSubmit}
-        //   text={text}
-        //   handleTextChange={handleTextChange}
-        // />
+
 
   render() {
     const { imgUrl, text, scheduledPosts} = this.state;
@@ -80,7 +73,14 @@ class App extends React.Component {
       <div>
         <NavBar />
         <FuturePostList scheduledPosts={scheduledPosts} />
-
+        <Main
+          uploadImg={uploadImg}
+          imgUrl={imgUrl}
+          scheduleNewPost={scheduleNewPost}
+          handlePostSubmit={handlePostSubmit}
+          text={text}
+          handleTextChange={handleTextChange}
+        />
       </div>
     );
   }
