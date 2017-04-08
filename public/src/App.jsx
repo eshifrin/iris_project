@@ -4,22 +4,33 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
 import axios from 'axios';
+import * as util from './lib/util.js'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      email: 'gary@b.com',
       postToTwitter: false,
       postToFacebook: false,
       text: '',
       imgUrl: '',
-      schedulePosts: [],
+      scheduledPosts: [],
       pastPosts: []
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
+  }
+
+  componentWillMount(){
+    util.retrievePosts('scheduled', this.state.email)
+    .then(results => {
+      this.setState({
+        scheduledPosts: results.data
+      })
+    })
+    .catch()
   }
 
   uploadImg(e) {
