@@ -2,13 +2,17 @@ import React, { PropTypes } from 'react';
 
 const propTypes = {
   text: PropTypes.string.isRequired,
+  bgColor: PropTypes.string.isRequired,
   handleTextChange: PropTypes.func.isRequired,
+  handleLogoClick: PropTypes.func.isRequired,
 };
 
-const WriteMessage = ({ text, handleTextChange }) => (
+const WriteMessage = ({ text, handleTextChange, bgColor, handleLogoClick }) => (
   <div>
-    <h3>Facebook Status:</h3>
-    <h3>Twitter Status:</h3>
+    <button type="button" style={{backgroundColor: bgColor}}
+      onClick={handleLogoClick}>Facebook</button>
+    <button type="button" style={{backgroundColor: bgColor}}
+      onClick={handleLogoClick}>Twitter</button>
     <h3>Message:</h3>
     <input
       type="text"

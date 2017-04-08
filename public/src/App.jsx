@@ -16,6 +16,7 @@ class App extends React.Component {
       postToTwitter: false,
       postToFacebook: false,
       text: '',
+      bgColor: 'grey',
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: []
@@ -23,6 +24,7 @@ class App extends React.Component {
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleLogoClick = this.handleLogoClick.bind(this);
   }
 
   componentWillMount(){
@@ -43,6 +45,7 @@ class App extends React.Component {
     let reader = new FileReader(file);  
     reader.readAsDataURL(file);
     reader.onloadend = () => {
+      console.log(reader, '---------------');
       this.setState({
         imgUrl: [reader.result]
       })
@@ -54,6 +57,10 @@ class App extends React.Component {
   handleTextChange(e) {
     let text = e.target.value;
     this.setState({ text: text })
+  }
+
+  handleLogoClick() {
+    this.setState({ bgColor: 'green' })
   }
 
   scheduleNewPost(e) {
@@ -74,8 +81,8 @@ class App extends React.Component {
   }
 
   render() {
-    const { imgUrl, text, scheduledPosts} = this.state;
-    const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange } = this;
+    const { imgUrl, text, bgColor, scheduledPosts} = this.state;
+    const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange, handleLogoClick } = this;
     return (
       <div>
         <DateTimePicker />
@@ -84,10 +91,12 @@ class App extends React.Component {
           scheduledPosts={scheduledPosts}
           uploadImg={uploadImg}
           imgUrl={imgUrl}
+          bgColor={bgColor}
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
           text={text}
           handleTextChange={handleTextChange}
+          handleLogoClick={handleLogoClick}
           />
       </div>
     );

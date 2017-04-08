@@ -9,12 +9,14 @@ const propTypes = {
   uploadImg: PropTypes.func.isRequired,
   imgUrl: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  bgColor: PropTypes.string.isRequired,
   scheduleNewpost: PropTypes.func.isRequired,
   handlePostSubmit: PropTypes.func.isRequired,
   handleTextChange: PropTypes.func.isRequired,
+  handleLogoClick: PropTypes.func.isRequired,
 };
 
-const Main = ({ uploadImg, imgUrl, text, scheduleNewpost, handlePostSubmit, handleTextChange, scheduledPosts }) => (
+const Main = ({ uploadImg, imgUrl, text, bgColor, scheduleNewpost, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick }) => (
   <div>
     <Register />
     <Connect />
@@ -24,9 +26,11 @@ const Main = ({ uploadImg, imgUrl, text, scheduleNewpost, handlePostSubmit, hand
       uploadImg={uploadImg}
       imgUrl={imgUrl}
       text={text}
+      bgColor={bgColor}
       scheduleNewpost={scheduleNewpost}
       handlePostSubmit={handlePostSubmit}
       handleTextChange={handleTextChange}
+      handleLogoClick={handleLogoClick}
     />
   </div>
 );
