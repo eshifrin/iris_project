@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
+import FuturePostList from './components/FuturePostList.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 
@@ -30,7 +31,9 @@ class App extends React.Component {
         scheduledPosts: results.data
       })
     })
-    .catch()
+    .catch({
+      //error handling needs to go here
+    })
   }
 
   uploadImg(e) {
@@ -61,12 +64,15 @@ class App extends React.Component {
     this.scheduleNewPost(e);
   }
 
+
+
   render() {
-    const { imgUrl, text } = this.state;
+    const { imgUrl, text, scheduledPosts} = this.state;
     const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange } = this;
     return (
       <div>
         <NavBar />
+        <FuturePostList scheduledPosts={scheduledPosts} />
         <Main
           uploadImg={uploadImg}
           imgUrl={imgUrl}
