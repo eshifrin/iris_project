@@ -10,7 +10,6 @@ module.exports.sendUserPosts = (req, res, next) => {
 
   dbh.showUserPosts(email, req.params.post_type)
   .then(results => {
-    console.log(results)
     res.status(200).json(results);
   })
   .catch(err => {

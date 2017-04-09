@@ -72,15 +72,15 @@ class App extends React.Component {
     return (
       <div>
         <NavBar />
-        <FuturePostList scheduledPosts={scheduledPosts} />
-        <Main
+          <Main
+          scheduledPosts={scheduledPosts}
           uploadImg={uploadImg}
           imgUrl={imgUrl}
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
           text={text}
           handleTextChange={handleTextChange}
-        />
+          />
       </div>
     );
   }

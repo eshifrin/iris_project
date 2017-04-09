@@ -14,11 +14,11 @@ const propTypes = {
   handleTextChange: PropTypes.func.isRequired,
 };
 
-const Main = ({ uploadImg, imgUrl, text, scheduleNewpost, handlePostSubmit, handleTextChange }) => (
+const Main = ({ uploadImg, imgUrl, text, scheduleNewpost, handlePostSubmit, handleTextChange, scheduledPosts }) => (
   <div>
     <Register />
     <Connect />
-    <FuturePostList />
+    <FuturePostList scheduledPosts={scheduledPosts}/>
     <PastPostList />
     <CreatePost
       uploadImg={uploadImg}
