@@ -84,8 +84,8 @@ app.get('/home', function(req, res){
 //     res.redirect('/home');
 // });
 
-app.listen(3000, function() {
-  console.log('App runining on port 3000!');
+app.listen(1337, function() {
+  console.log('App runining on port 1337!');
 });
 
 

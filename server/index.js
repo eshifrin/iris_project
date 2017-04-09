@@ -45,6 +45,7 @@ app.use('/logout', Auth0.logout);
 
 app.post('/api/image/imgLink', (req, res) => {
     cloudinary.uploader.upload(req.body.image, (result) => {
+      console.log('cloudinary server result', result);
       res.send(result.secure_url);
     })
 })

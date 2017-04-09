@@ -17,6 +17,7 @@ class App extends React.Component {
       postToFacebook: false,
       text: '',
       bgColor: 'grey',
+      img: '',
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: []
@@ -47,10 +48,12 @@ class App extends React.Component {
     reader.onloadend = () => {
       console.log(reader, '---------------');
       this.setState({
-        imgUrl: [reader.result]
+        img: [reader.result]
       })
       axios.post('/api/image/imgLink', {image: reader.result})
-      .then(res => console.log(res));
+      .then(res =>
+        this.setState({ imgUrl: res.data })
+      );
     }
   }
 
