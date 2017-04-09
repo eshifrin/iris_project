@@ -48,7 +48,7 @@ class App extends React.Component {
     reader.onloadend = () => {
       console.log(reader, '---------------');
       this.setState({
-        img: [reader.result]
+        img: reader.result
       })
       axios.post('/api/image/imgLink', {image: reader.result})
       .then(res =>
@@ -71,10 +71,10 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e) {
-    const { email, text, imgUrl, postToFacebook, postToTwitter } = this.state;
+    const { email, text, img, imgUrl, postToFacebook, postToTwitter } = this.state;
 
     e.preventDefault();
-    util.submitNewPost('scheduled', { email, text, imgUrl, postToFacebook, postToTwitter })
+    util.submitNewPost('scheduled', { email, text, img, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
     })
