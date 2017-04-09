@@ -19,6 +19,10 @@ module.exports = {
           presets: ['react', 'es2015'],
           plugins: ["transform-es2015-destructuring", "transform-object-rest-spread"]
         }
+      },
+      {
+          test: /\.scss$/,
+          loader: 'style!css!sass?outputStyle=expanded',
       }
     ]
   }

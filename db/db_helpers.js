@@ -25,6 +25,7 @@ module.exports.retrievePosts = (postIds) => {
 module.exports.showUserPosts = (email, typeofPost) => {
   return User.findOneAsync({email: email})
   .then(data => {
+    console.log('what are these data?', data)
     if (!data) throw ('invalid user');
     else return module.exports.retrievePosts(data[typeofPost])
   })

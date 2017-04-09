@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
 import FuturePostList from './components/FuturePostList.jsx';
+import DateTimePicker from './components/DateTimePicker.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 
@@ -15,6 +16,8 @@ class App extends React.Component {
       postToTwitter: false,
       postToFacebook: false,
       text: '',
+      bgColor: 'grey',
+      img: '',
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: []
@@ -22,6 +25,7 @@ class App extends React.Component {
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleLogoClick = this.handleLogoClick.bind(this);
   }
 
   componentWillMount(){
@@ -42,11 +46,14 @@ class App extends React.Component {
     let reader = new FileReader(file);  
     reader.readAsDataURL(file);
     reader.onloadend = () => {
+      console.log(reader, '---------------');
       this.setState({
-        imgUrl: [reader.result]
+        img: reader.result
       })
       axios.post('/api/image/imgLink', {image: reader.result})
-      .then(res => console.log(res));
+      .then(res =>
+        this.setState({ imgUrl: res.data })
+      );
     }
   }
 
@@ -55,31 +62,48 @@ class App extends React.Component {
     this.setState({ text: text })
   }
 
+  handleLogoClick() {
+    if (this.state.bgColor === 'grey') {
+      this.setState({ bgColor: 'green' });
+    } else {
+      this.setState({ bgColor: 'grey' });
+    }
+  }
+
   scheduleNewPost(e) {
+    const { email, text, img, imgUrl, postToFacebook, postToTwitter } = this.state;
+
     e.preventDefault();
-    let text = this.state.text;
+    util.submitNewPost('scheduled', { email, text, img, imgUrl, postToFacebook, postToTwitter })
+    .then(results => {
+      console.log('Submit new post - status code:', results.status);
+    })
+    .catch({
+      //error handling needs to go here
+    })
   }
 
   handlePostSubmit(e) {
     this.scheduleNewPost(e);
   }
 
-
-
   render() {
-    const { imgUrl, text, scheduledPosts} = this.state;
-    const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange } = this;
+    const { imgUrl, text, bgColor, scheduledPosts} = this.state;
+    const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange, handleLogoClick } = this;
     return (
       <div>
+        <DateTimePicker />
         <NavBar />
           <Main
           scheduledPosts={scheduledPosts}
           uploadImg={uploadImg}
           imgUrl={imgUrl}
+          bgColor={bgColor}
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
           text={text}
           handleTextChange={handleTextChange}
+          handleLogoClick={handleLogoClick}
           />
       </div>
     );

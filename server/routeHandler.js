@@ -1,7 +1,6 @@
 const dbh = require('../db/db_helpers');
 const url = require('url');
 
-
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
@@ -21,8 +20,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 //if authenticated, send posts
 module.exports.schedulePosts = (req, res, next) => {
   //create new object appropriate for post consumption
-
-  dbh.retrieveUserId('gary@b.com')
+  dbh.retrieveUserId(req.body.email)
   .then(id => {
     return dbh.savePost(id, req.body, 'scheduled')
   })
