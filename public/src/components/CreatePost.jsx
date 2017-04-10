@@ -13,7 +13,7 @@ const propTypes = {
   handleLogoClick: PropTypes.func.isRequired,
 };
 
-const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handlePostSubmit, handleTextChange, handleLogoClick }) => (
+const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick }) => (
   <div>
     <form onSubmit={(e) => handlePostSubmit(e)}>
       <h1>Schedule New Post</h1>
@@ -27,6 +27,7 @@ const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handlePostSubmit, handle
       <PhotoUpload uploadImg={uploadImg} />
       <input type="submit" value="Create" />
     </form>
+      <button value="postnow" onClick={handleNowSubmit}>post now</button>
   </div>
 );
 

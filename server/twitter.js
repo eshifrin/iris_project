@@ -1,92 +1,75 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var oauth = require('oauth');
+var passport = require('passport');
+var TwitterStrategy = require('passport-twitter');
+var Twitter = require('twitter');
+var dbh = require('../db/db_helpers.js')
 
-var app = express();
 
-// Get your credentials here: https://dev.twitter.com/apps
-var _twitterConsumerKey = "gh5jBEiZfZn1PJDxfUdwKdte0";
-var _twitterConsumerSecret = "T275na7aBHvy2tIuf2Y1IYoVfwv0nw71DhxstN43vk3rr9R3xo";
+passport.use('twitter-authz', new TwitterStrategy({
+    consumerKey: process.env.TW_KEY,
+    consumerSecret: process.env.TW_SECRET,
+    callbackURL: 'http://localhost:3000/twitter/return',
+    passReqToCallback: true
+  },
+  function(req, token, tokenSecret, profile, cb) {
+    //we might want to do something w/the profile
 
-var consumer = new oauth.OAuth(
-    "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
-    _twitterConsumerKey, _twitterConsumerSecret, "1.0A", "http://127.0.0.1:3000/sessions/callback", "HMAC-SHA1");
+    return dbh.updateUserTwitter({
+      email: req.user.displayName,
+      token: token,
+      tokenSecret: tokenSecret
+    })
+    .then(() => {
+      return cb(null, profile); 
+    })
+    .catch(err => {
+      console.log('Error saving tokens', err);
+      return cb(null, profile);       
+    })
+  })
+);
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(session({ secret: "very secret", resave: false, saveUninitialized: true}));
-
-app.use(function(req, res, next) {
-  res.locals.session = req.session;
-  next();
+//need to look into what these do - right now nothing
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
 });
 
-app.get('/sessions/connect', function(req, res){
-  consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
-    if (error) {
-      res.send("Error getting OAuth request token : " + err);
-    } else {  
-      req.session.oauthRequestToken = oauthToken;
-      req.session.oauthRequestTokenSecret = oauthTokenSecret;
-      console.log("Double check on 2nd step");
-      console.log("------------------------");
-      console.log("<<"+req.session.oauthRequestToken);
-      console.log("<<"+req.session.oauthRequestTokenSecret);
-      res.redirect("https://twitter.com/oauth/authorize?oauth_token="+req.session.oauthRequestToken);      
-    }
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
+
+
+module.exports.toAuth = passport.authorize('twitter-authz');
+module.exports.fromAuth = passport.authorize('twitter-authz', { failureRedirect: '/'});
+
+// Module.exports functions //
+module.exports.populateClient = (token, tokenSecret) => {
+  var client = new Twitter({
+    consumer_key: process.env.TW_KEY,
+    consumer_secret: process.env.TW_SECRET,
+    access_token_key: token,
+    access_token_secret: tokenSecret
   });
-});
 
-app.get('/sessions/callback', function(req, res){
-  console.log("!!!!!!!this is the req", req);
-  console.log("------------------------");
-  console.log(">>"+req.session.oauthRequestToken);
-  console.log(">>"+req.session.oauthRequestTokenSecret);
-  console.log(">>"+req.query.oauth_verifier);
-  consumer.getOAuthAccessToken(req.session.oauthRequestToken, req.session.oauthRequestTokenSecret, req.query.oauth_verifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
-    if (error) {
-      res.send("Error getting OAuth access token : " + error + "[" + oauthAccessToken + "]" + "[" + oauthAccessTokenSecret + "]", 500);
-    } else {
-      req.session.oauthAccessToken = oauthAccessToken;
-      req.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
-      
-      res.redirect('/home');
-    }
-  });
-});
+  return client;
+};
 
-app.get('/home', function(req, res){
-    consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
-      if (error) {
-        //console.log(error)
-        res.redirect('/sessions/connect');
-      } else {
-        // var parsedData = JSON.parse(data);
-                consumer.post(
-                  "https://api.twitter.com/1.1/statuses/update.json",
-                  req.session.oauthAccessToken, req.session.oauthAccessTokenSecret,
-                  {"status":"nap reactor is fabulous #3"},
-                  function(error, data) {
-                      if(error) console.log(error)
-                      else console.log(data)
-                  }
-               );        
-        // res.send('You are signed in: ' + parsedData.screen_name);
-        res.redirect('/');
-      } 
-    });
-});
 
-// app.get('*', function(req, res){
-//     res.redirect('/home');
-// });
 
-app.listen(1337, function() {
-  console.log('App runining on port 1337!');
-});
+module.exports.tweet = function(client, message, cb) {
+  var params = {
+    status: message
+  };
+
+  client.post('https://api.twitter.com/1.1/statuses/update.json', 
+    params, cb) 
+
+  //    function(err) {
+  //     err ? res.status(500).send(err) : res.redirect('/Home');
+  // });
+};
+
+
 
 
 

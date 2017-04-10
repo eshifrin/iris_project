@@ -1,4 +1,5 @@
 const passport = require('passport');
+const dbh = require('../../db/db_helpers')
 
 const env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -9,12 +10,13 @@ const env = {
 exports.authVerify = passport.authenticate('auth0', { failureRedirect: '/failed-login' });
 
 exports.login = (req, res) => {
-	console.log('hitting login')
 	res.render('login', { env: env });
 }
 
 exports.success = (req, res) => {
-	console.log('hitting success')
+	console.log('hitting success', req)
+
+
 	res.redirect('/');
 }
 
