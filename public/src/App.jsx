@@ -12,7 +12,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'c@d.com',
+      isLoggedIn: false,
+      twitterAuthenticated: false,
+      email: '',
       postToTwitter: false,
       postToFacebook: false,
       text: '',
@@ -33,6 +35,8 @@ class App extends React.Component {
   componentWillMount(){
     //need to start with retrieving user info, if none
       //route to login...
+    // util.checkLoggedIn()
+    // .then()
 
     util.retrievePosts('scheduled', this.state.email)
     .then(results => {
@@ -51,7 +55,6 @@ class App extends React.Component {
     let reader = new FileReader(file);  
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      console.log(reader, '---------------');
       this.setState({
         img: reader.result
       })
@@ -106,6 +109,7 @@ class App extends React.Component {
     return (
       <div>
         <a href="/twitter">verify twitter</a>
+        <a href="/facebook">verify facebook</a>
         <DateTimePicker />
         <NavBar />
           <Main

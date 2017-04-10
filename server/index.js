@@ -62,6 +62,10 @@ app.route('/api/user/:post_type')
 app.get('/twitter', tw.toAuth);
 app.get('/twitter/return', tw.fromAuth);
 
+app.get('/facebook', tw.FBtoAuth);
+app.get('/facebook/return', tw.FBfromAuth);
+
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/dist/index.html'))

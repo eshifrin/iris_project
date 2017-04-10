@@ -1,7 +1,10 @@
-var passport = require('passport');
-var TwitterStrategy = require('passport-twitter');
-var Twitter = require('twitter');
-var dbh = require('../db/db_helpers.js')
+const passport = require('passport');
+const TwitterStrategy = require('passport-twitter');
+const FacebookStrategy = require('passport-facebook');
+const axios = require('axios')
+
+const Twitter = require('twitter');
+const dbh = require('../db/db_helpers.js')
 
 
 passport.use('twitter-authz', new TwitterStrategy({
@@ -28,6 +31,25 @@ passport.use('twitter-authz', new TwitterStrategy({
   })
 );
 
+passport.use('facebook-authz', new FacebookStrategy({
+    clientID: process.env.FB_ID,
+    clientSecret: process.env.FB_SECRET,
+    callbackURL: "http://localhost:3000/facebook/return"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+
+    axios.request({
+      url: `https://graph.facebook.com/${profile.id}/feed`,
+      method: 'post',
+      params: {'message':'testing123',
+        'access_token': accessToken}
+    }).then(console.log)
+    .catch(e => console.log('error', e))
+
+    return cb(null, profile); 
+  }
+));
+
 //need to look into what these do - right now nothing
 passport.serializeUser(function(user, cb) {
   cb(null, user);
@@ -38,9 +60,13 @@ passport.deserializeUser(function(obj, cb) {
 });
 
 
-
+//rename this!
 module.exports.toAuth = passport.authorize('twitter-authz');
 module.exports.fromAuth = passport.authorize('twitter-authz', { failureRedirect: '/'});
+module.exports.FBtoAuth = passport.authorize('facebook-authz', { scope: ['publish_actions'] });
+module.exports.FBfromAuth = passport.authorize('facebook-authz', { failureRedirect: '/'});
+
+
 
 // Module.exports functions //
 module.exports.populateClient = (token, tokenSecret) => {
