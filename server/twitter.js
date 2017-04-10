@@ -34,21 +34,35 @@ passport.use('twitter-authz', new TwitterStrategy({
 passport.use('facebook-authz', new FacebookStrategy({
     clientID: process.env.FB_ID,
     clientSecret: process.env.FB_SECRET,
-    callbackURL: "http://localhost:3000/facebook/return"
+    callbackURL: "http://localhost:3000/facebook/return",
+    passReqToCallback: true
   },
   function(accessToken, refreshToken, profile, cb) {
-
-    axios.request({
-      url: `https://graph.facebook.com/${profile.id}/feed`,
-      method: 'post',
-      params: {'message':'testing123',
-        'access_token': accessToken}
-    }).then(console.log)
-    .catch(e => console.log('error', e))
+    return dbh.updateUserFacebook({
+      email: req.user.displayName,
+      token: facebook_token,
+      facebook_id: profile.id,
+    })
+    .then(() => {
+      return cb(null, profile); 
+    })
+    .catch(err => {
+      console.log('Error saving tokens', err);
+      return cb(null, profile);       
+    })
 
     return cb(null, profile); 
   }
 ));
+
+
+    // axios.request({
+    //   url: `https://graph.facebook.com/${profile.id}/feed`,
+    //   method: 'post',
+    //   params: {'message':'testing123',
+    //     'access_token': accessToken}
+    // }).then(console.log)
+    // .catch(e => console.log('error', e))
 
 //need to look into what these do - right now nothing
 passport.serializeUser(function(user, cb) {

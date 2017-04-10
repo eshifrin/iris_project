@@ -110,6 +110,7 @@ class App extends React.Component {
       <div>
         <a href="/twitter">verify twitter</a>
         <a href="/facebook">verify facebook</a>
+
         <DateTimePicker />
         <NavBar />
           <Main

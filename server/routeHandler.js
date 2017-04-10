@@ -37,7 +37,7 @@ module.exports.sendPostNow = (req, res, next) => {
   //create client in twitter, error possible here
     //make a post in twitter, another error
       //send 200
-
+  console.log('in sendpost now' , req.body)
   let email = req.body.email
   console.log(tw)
   return dbh.userExists(email)
@@ -56,7 +56,8 @@ module.exports.sendPostNow = (req, res, next) => {
 
 
 module.exports.userCheck = (req, res, next) => {
-  let email = req.user.displayName
+  console.log(req)
+  let email = req.user.displayName;
   return dbh.userExists(email)
   .then(data => {
     if (!data) return dbh.saveUser(email)

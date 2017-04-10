@@ -6,6 +6,7 @@ const UserSchema = mongoose.Schema({
   twitter_token: { type: String, default: null },
   twitter_secret: { type: String, default: null },  
   facebook_token: { type: String, default: null },
+  facebook_id: { type: String, default: null },
   scheduled: [Schema.Types.ObjectId],
   posted: [Schema.Types.ObjectId]
 });
