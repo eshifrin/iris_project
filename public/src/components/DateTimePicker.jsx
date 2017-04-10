@@ -1,29 +1,19 @@
-var React = require('react');
-var DatePicker = require('react-datepicker');
-var moment = require('moment');
-// require('./datepicker-cssmodules.css');
-// require('iris/public/dist/datepicker-cssmodules.css');
+import React from 'react';
 
-var DateTimePicker = React.createClass({
-  displayName: 'Example',
+const propTypes = {
 
-  getInitialState: function() {
-    return {
-      startDate: moment()
-    };
-  },
+};
 
-  handleChange: function(date) {
-    this.setState({
-      startDate: date
-    });
-  },
-
-  render: function() {
-    return <DatePicker
-        selected={this.state.startDate}
-        onChange={this.handleChange} />;
-  }
-});
+const DateTimePicker = props => {
+  return (
+    <div>
+      <form action="/action_page.php">
+        <h2>Set Schedule</h2>
+        <input type="datetime-local" name="datetime"/>
+        <input type="submit" value="Set"/>
+      </form>
+    </div>
+  )
+}
 
 export default DateTimePicker;

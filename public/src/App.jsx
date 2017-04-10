@@ -30,7 +30,7 @@ class App extends React.Component {
     this.handleLogoClick = this.handleLogoClick.bind(this);
     this.handleNowSubmit = this.handleNowSubmit.bind(this);
     this.deletePost = this.deletePost.bind(this);
-  
+    this.scheduleNewPost = this.scheduleNewPost.bind(this);
   }
 
   componentWillMount(){
@@ -99,6 +99,7 @@ class App extends React.Component {
     const { email, text, img, imgUrl, postToFacebook, postToTwitter } = this.state;
 
     e.preventDefault();
+    console.log('hi');
     util.submitNewPost(when, { email, text, img, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
