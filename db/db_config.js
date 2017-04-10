@@ -11,8 +11,7 @@ db.on('error', (error) => {
 })
 
 db.once('open', (status) => {
-  db.dropDatabase()
-  .then(() => dbh.populateSampleData())
+  console.log(status);
 });
 
 module.exports = db;

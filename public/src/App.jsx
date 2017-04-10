@@ -12,7 +12,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'gary@b.com',
+      isLoggedIn: false,
+      twitterAuthenticated: false,
+      email: '',
       postToTwitter: false,
       postToFacebook: false,
       text: '',
@@ -26,9 +28,16 @@ class App extends React.Component {
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleLogoClick = this.handleLogoClick.bind(this);
+    this.handleNowSubmit = this.handleNowSubmit.bind(this);
+
   }
 
   componentWillMount(){
+    //need to start with retrieving user info, if none
+      //route to login...
+    // util.checkLoggedIn()
+    // .then()
+
     util.retrievePosts('scheduled', this.state.email)
     .then(results => {
       this.setState({
@@ -46,7 +55,6 @@ class App extends React.Component {
     let reader = new FileReader(file);  
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      console.log(reader, '---------------');
       this.setState({
         img: reader.result
       })
@@ -70,11 +78,11 @@ class App extends React.Component {
     }
   }
 
-  scheduleNewPost(e) {
+  scheduleNewPost(e, when) {
     const { email, text, img, imgUrl, postToFacebook, postToTwitter } = this.state;
 
     e.preventDefault();
-    util.submitNewPost('scheduled', { email, text, img, imgUrl, postToFacebook, postToTwitter })
+    util.submitNewPost(when, { email, text, img, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
     })
@@ -83,15 +91,26 @@ class App extends React.Component {
     })
   }
 
+
+
   handlePostSubmit(e) {
-    this.scheduleNewPost(e);
+    this.scheduleNewPost(e, 'scheduled');
+  }
+
+  handleNowSubmit(e) {
+    e.preventDefault();
+    console.log('getting this')
+    this.scheduleNewPost(e, 'now');
   }
 
   render() {
     const { imgUrl, text, bgColor, scheduledPosts} = this.state;
-    const { uploadImg, scheduleNewPost, handlePostSubmit, handleTextChange, handleLogoClick } = this;
+    const { uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick } = this;
     return (
       <div>
+        <a href="/twitter">verify twitter</a>
+        <a href="/facebook">verify facebook</a>
+
         <DateTimePicker />
         <NavBar />
           <Main
@@ -101,6 +120,7 @@ class App extends React.Component {
           bgColor={bgColor}
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
+          handleNowSubmit={handleNowSubmit}
           text={text}
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}

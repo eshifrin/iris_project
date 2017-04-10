@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const routes = {
-  'scheduled': '/api/user/scheduled'
+  'scheduled': '/api/user/scheduled',
+  'now': 'api/user/now'
 }
 
 const retrievePosts = (type, email) => {

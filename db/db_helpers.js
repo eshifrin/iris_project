@@ -21,11 +21,9 @@ module.exports.retrievePosts = (postIds) => {
   return Post.findAsync({_id: {$in: postIds} })
 }
 
-//change to userId instead of email after authentication
 module.exports.showUserPosts = (email, typeofPost) => {
   return User.findOneAsync({email: email})
   .then(data => {
-    console.log('what are these data?', data)
     if (!data) throw ('invalid user');
     else return module.exports.retrievePosts(data[typeofPost])
   })
@@ -36,22 +34,49 @@ module.exports.retrieveUserId = (email) => {
   .then(data => {
     if (!data) throw ('invalid user');
     else return data._id;
-  })
+  });
 }
 
-module.exports.populateSampleData = () => {
-    return User(user1).saveAsync()
-    .then(user => {
-      return Promise.all([
-        module.exports.savePost(user._id, user1_scheduledPost, 'scheduled'),
-        module.exports.savePost(user._id, user1_scheduledPost2, 'scheduled'),
-        module.exports.savePost(user._id, user1_postedPost, 'posted')
-      ])
-    })
-    .then(() => {
-      console.log('successfully populated sample data');
-    })
-    .catch(err => {
-      console.error('error in aggregate sample data posting', err)
-    })
+module.exports.userExists = (email) => {
+  return User.findOneAsync({email: email});
 }
+
+module.exports.saveUser = (email) => {
+  return User({email: email}).saveAsync();
+}
+
+//can abstract this to update other info
+module.exports.updateUserTwitter = ({email, token, tokenSecret}) => {
+ return User.updateAsync(
+      { email: email},
+      { $set:  {twitter_token: token,
+                twitter_secret: tokenSecret }})
+}
+
+module.exports.updateUserFacebook = ({email, token, facebook_id}) => {
+ return User.updateAsync(
+      { email: email},
+      { $set:  {facebook_token: token,
+                facebook_id: facebook_id }})
+}
+
+
+
+
+
+// module.exports.populateSampleData = () => {
+//     return User(user1).saveAsync()
+//     .then(user => {
+//       return Promise.all([
+//         module.exports.savePost(user._id, user1_scheduledPost, 'scheduled'),
+//         module.exports.savePost(user._id, user1_scheduledPost2, 'scheduled'),
+//         module.exports.savePost(user._id, user1_postedPost, 'posted')
+//       ])
+//     })
+//     .then(() => {
+//       console.log('successfully populated sample data');
+//     })
+//     .catch(err => {
+//       console.error('error in aggregate sample data posting', err)
+//     })
+// }
