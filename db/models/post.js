@@ -6,7 +6,9 @@ const PostSchema = mongoose.Schema({
   img: { type: Buffer, contentType: String },
   imgUrl: String,
   postToTwitter: Boolean,
+  postedTwitterId: String,
   postToFacebook: Boolean,
+  postedFacebookId: String,
   date: { type: Date, default: Date.now },
   status: String
 });

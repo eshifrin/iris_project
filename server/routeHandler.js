@@ -1,13 +1,13 @@
 const dbh = require('../db/db_helpers');
 const url = require('url');
-const tw = require('./twitter.js')
+const sm = require('./socialmedia.js')
 
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
   const email = url_parts.query.email;
 
-  dbh.showUserPosts(email, req.params.post_type)
+  dbh.showUserPosts(email, req.params.sendpost_type)
   .then(results => {
     res.status(200).json(results);
   })
@@ -18,10 +18,10 @@ module.exports.sendUserPosts = (req, res, next) => {
 }
 
 //if authenticated, send posts
-module.exports.schedulePosts = (req, res, next) => {
+module.exports.scheduleOrSavePosts = (req, res, next) => {
   dbh.retrieveUserId(req.body.email)
   .then(id => {
-    return dbh.savePost(id, req.body, 'scheduled')
+    return dbh.savePost(id, req.body, req.body.status || '')
   })
   .then(() => {
     res.status(200).end();
@@ -32,31 +32,60 @@ module.exports.schedulePosts = (req, res, next) => {
   })
 }
 
-module.exports.sendPostNow = (req, res, next) => {
-  //retrieve user info incl keys, might not exist?
-  //create client in twitter, error possible here
-    //make a post in twitter, another error
-      //send 200
-  console.log('in sendpost now' , req.body)
-  let email = req.body.email
-  console.log(tw)
+
+
+module.exports.sendFacebookNow = (req, res, next) => {
+  let email = req.body.email;
+  let message = req.body.text;
+
   return dbh.userExists(email)
   .then(data => {
     if (!data) throw 'invalid user'
-    else return tw.populateClient(data.twitter_token, data.twitter_secret)
+    else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
+  })
+  .then(fbpost => {
+    req.body.postedFacebookId = fbpost.data.id;
+    return 'Facebook Successful'
+  });
+}
+
+
+module.exports.sendTwitterNow = (req, res, next) => {
+  console.log('in twitter now')
+  let email = req.body.email
+  return dbh.userExists('e@f.com')
+  .then(data => {
+    if (!data) throw 'invalid user';
+    else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
   })
   .then(client => {
-    //need to populate actual message here from req
-    tw.tweet(client, req.body.text)
+    return sm.tweet(client, req.body.text)
   })
-  .catch(err => {
-    console.log('error somewhere in sendpostnow', err)
+  .then(tweet => {
+    req.body.postedTwitterId = tweet.id;
+    return 'Twitter Sucessful'
+  });
+};
+
+module.exports.sendPostsNow = (req, res, next) => {
+  let posts = [];
+  if (req.body.postToFacebook) posts.push(module.exports.sendFacebookNow(req, res, next));
+  if (req.body.postToTwitter) posts.push(module.exports.sendTwitterNow(req, res, next));
+
+  Promise.all(posts)
+  .then(postResults => {
+    req.body.status = 'posted';
+    return module.exports.schedulePosts(req, res, next);
   })
+  .then(() => {
+    res.end();
+  })
+  //need to figure out error handling???
+  .catch(console.log);
 }
 
 
 module.exports.userCheck = (req, res, next) => {
-  console.log(req)
   let email = req.user.displayName;
   return dbh.userExists(email)
   .then(data => {

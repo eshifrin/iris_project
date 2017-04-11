@@ -11,7 +11,7 @@ const multer = require('multer');
 const passport = require('passport');
 const Auth0Strategy = require('./auth/Auth0');
 const Auth0 = require('./auth/Auth0Helpers');
-const tw = require('./twitter.js');
+const sm = require('./socialmedia.js');
 const rh = require('./routeHandler')
 
 // const user = require('./routes/user');
@@ -50,20 +50,17 @@ app.post('/api/image/imgLink', (req, res) => {
     })
 })
 
-
-
 //conditionally do this after passing them through Auth0
-app.post('/api/user/now', rh.sendPostNow)
+app.post('/api/user/now', rh.sendPostsNow)
 app.route('/api/user/:post_type')
-  //.all(authenticateuser)
   .get(rh.sendUserPosts)
-  .post(rh.schedulePosts)
+  .post(rh.scheduleOrSavePosts)
 
-app.get('/twitter', tw.toAuth);
-app.get('/twitter/return', tw.fromAuth);
+app.get('/twitter', sm.TWtoAuth);
+app.get('/twitter/return', sm.TWfromAuth);
 
-app.get('/facebook', tw.FBtoAuth);
-app.get('/facebook/return', tw.FBfromAuth);
+app.get('/facebook', sm.FBtoAuth);
+app.get('/facebook/return', sm.FBfromAuth);
 
 
 

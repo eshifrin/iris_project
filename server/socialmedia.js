@@ -15,7 +15,6 @@ passport.use('twitter-authz', new TwitterStrategy({
   },
   function(req, token, tokenSecret, profile, cb) {
     //we might want to do something w/the profile
-
     return dbh.updateUserTwitter({
       email: req.user.displayName,
       token: token,
@@ -27,9 +26,10 @@ passport.use('twitter-authz', new TwitterStrategy({
     .catch(err => {
       console.log('Error saving tokens', err);
       return cb(null, profile);       
-    })
-  })
-);
+    });
+}));
+
+
 
 passport.use('facebook-authz', new FacebookStrategy({
     clientID: process.env.FB_ID,
@@ -37,32 +37,22 @@ passport.use('facebook-authz', new FacebookStrategy({
     callbackURL: "http://localhost:3000/facebook/return",
     passReqToCallback: true
   },
-  function(accessToken, refreshToken, profile, cb) {
-    return dbh.updateUserFacebook({
-      email: req.user.displayName,
-      token: facebook_token,
-      facebook_id: profile.id,
-    })
+  function(req, accessToken, refreshToken, profile, cb) {
+    console.log('here are the cookies', req.cookies)
+    console.log('here is the req.user', req.user)
+    return dbh.updateUserFacebook(req.user.displayName, accessToken, profile.id)
     .then(() => {
       return cb(null, profile); 
     })
     .catch(err => {
       console.log('Error saving tokens', err);
       return cb(null, profile);       
-    })
-
-    return cb(null, profile); 
+    });
   }
 ));
 
 
-    // axios.request({
-    //   url: `https://graph.facebook.com/${profile.id}/feed`,
-    //   method: 'post',
-    //   params: {'message':'testing123',
-    //     'access_token': accessToken}
-    // }).then(console.log)
-    // .catch(e => console.log('error', e))
+
 
 //need to look into what these do - right now nothing
 passport.serializeUser(function(user, cb) {
@@ -75,15 +65,15 @@ passport.deserializeUser(function(obj, cb) {
 
 
 //rename this!
-module.exports.toAuth = passport.authorize('twitter-authz');
-module.exports.fromAuth = passport.authorize('twitter-authz', { failureRedirect: '/'});
+module.exports.TWtoAuth = passport.authorize('twitter-authz');
+module.exports.TWfromAuth = passport.authorize('twitter-authz', { failureRedirect: '/'});
 module.exports.FBtoAuth = passport.authorize('facebook-authz', { scope: ['publish_actions'] });
 module.exports.FBfromAuth = passport.authorize('facebook-authz', { failureRedirect: '/'});
 
 
 
 // Module.exports functions //
-module.exports.populateClient = (token, tokenSecret) => {
+module.exports.populateTwitterClient = (token, tokenSecret) => {
   var client = new Twitter({
     consumer_key: process.env.TW_KEY,
     consumer_secret: process.env.TW_SECRET,
@@ -94,19 +84,31 @@ module.exports.populateClient = (token, tokenSecret) => {
   return client;
 };
 
+module.exports.facebookPost = (profileId, accessToken, message) => {
+  return axios.request({
+    url: `https://graph.facebook.com/${profileId}/feed`,
+    method: 'post',
+    params: {'message': message,
+      'access_token': accessToken}
+    })
+}
 
 
-module.exports.tweet = function(client, message, cb) {
+
+
+module.exports.tweet = (client, message, cb) => {
   var params = {
     status: message
   };
 
-  client.post('https://api.twitter.com/1.1/statuses/update.json', 
-    params, cb) 
 
-  //    function(err) {
-  //     err ? res.status(500).send(err) : res.redirect('/Home');
-  // });
+  return new Promise((resolve, reject) => {
+    return client.post('https://api.twitter.com/1.1/statuses/update.json', 
+      params, (err, tweet, results) => {
+        if (err) reject(err);
+        else resolve(tweet);
+      });
+  }); 
 };
 
 
