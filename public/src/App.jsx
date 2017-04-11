@@ -14,9 +14,9 @@ class App extends React.Component {
     this.state = {
       isLoggedIn: false,
       twitterAuthenticated: false,
-      email: '',
+      email: 'e@f.com',
       postToTwitter: false,
-      postToFacebook: false,
+      postToFacebook: true,
       text: '',
       bgColor: 'grey',
       img: '',
@@ -29,7 +29,6 @@ class App extends React.Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleLogoClick = this.handleLogoClick.bind(this);
     this.handleNowSubmit = this.handleNowSubmit.bind(this);
-
   }
 
   componentWillMount(){
@@ -91,15 +90,12 @@ class App extends React.Component {
     })
   }
 
-
-
   handlePostSubmit(e) {
     this.scheduleNewPost(e, 'scheduled');
   }
 
   handleNowSubmit(e) {
     e.preventDefault();
-    console.log('getting this')
     this.scheduleNewPost(e, 'now');
   }
 
@@ -110,7 +106,6 @@ class App extends React.Component {
       <div>
         <a href="/twitter">verify twitter</a>
         <a href="/facebook">verify facebook</a>
-
         <DateTimePicker />
         <NavBar />
           <Main

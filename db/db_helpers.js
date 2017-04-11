@@ -53,13 +53,12 @@ module.exports.updateUserTwitter = ({email, token, tokenSecret}) => {
                 twitter_secret: tokenSecret }})
 }
 
-module.exports.updateUserFacebook = ({email, token, facebook_id}) => {
+module.exports.updateUserFacebook = (email, token, facebook_id) => {
  return User.updateAsync(
       { email: email},
       { $set:  {facebook_token: token,
                 facebook_id: facebook_id }})
 }
-
 
 
 
