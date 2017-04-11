@@ -36,18 +36,27 @@ class App extends React.Component {
 
   componentWillMount(){
     //need to start with retrieving user info, if none
-      //route to login...
+      //show login button
     // util.checkLoggedIn()
     // .then()
-    util.retrievePosts('scheduled', this.state.email)
-    .then(results => {
-      this.setState({
-        scheduledPosts: results.data
+
+    util.getCurrentUserEmail()
+    .then((res) => {
+      console.log(res.data);
+      this.setState({email: res.data});
+      util.retrievePosts('scheduled', this.state.email)
+      .then(results => {
+        this.setState({
+          scheduledPosts: results.data
+        })
+      })
+      .catch((err) => {
+        console.log('there was error in retreiving posts of the current user, err : ', err);
       })
     })
-    .catch({
-      //error handling needs to go here
-    })
+    .catch((err) => {
+      console.log('error n getting user email, err :', err);
+    });
   }
 
   uploadImg(e) {
@@ -100,6 +109,7 @@ class App extends React.Component {
     } else {
       this.setState({ bgColor: 'grey' });
     }
+    // (this.bgColor === 'grey') ? this.setState({ bgColor: 'green' }) : this.setState({ bgColor: 'grey' });
   }
 
   scheduleNewPost(e, when) {

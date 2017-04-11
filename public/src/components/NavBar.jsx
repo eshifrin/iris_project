@@ -7,6 +7,8 @@ const propTypes = {
 
 const NavBar = props => (
   <div>
+    <a href="/twitter">verify twitter</a>
+    <a href="/facebook">verify facebook</a>
   </div>
 );
 

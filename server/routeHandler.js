@@ -32,12 +32,9 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
   })
 }
 
-
-
 module.exports.sendFacebookNow = (req, res, next) => {
   let email = req.session.email;
   let message = req.body.text;
-
   return dbh.userExists(email)
   .then(data => {
     if (!data) throw 'invalid user'
@@ -118,6 +115,8 @@ module.exports.userCheck = (req, res, next) => {
     else return
   })
   .then(() => {
+    // console.log(' checking cookies in req: ', req.cookies);
+    // res.cookie('email', email);
     res.redirect('/');
   })
   .catch((err) => {
@@ -143,4 +142,10 @@ module.exports.deletePost = (req, res, next) => {
     console.log(req.body);
   })
 
-} 
+}
+
+module.exports.getUser = (req, res, next) => {
+  console.log('in get user rh');
+  console.log('getUser req cookies: ', req.cookies);
+  res.send(req.cookies.email);
+}

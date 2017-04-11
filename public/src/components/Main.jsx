@@ -41,4 +41,5 @@ const Main = ({ uploadImg, imgUrl, text, bgColor, scheduleNewpost, deletePost, h
   )
 }
 
+
 export default Main;

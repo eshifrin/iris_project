@@ -46,7 +46,7 @@ app.use(express.static(__dirname + '/../public/dist'));
 app.use('/login', Auth0.login);
 app.use('/callback', Auth0.authVerify, rh.userCheck);
 app.use('/logout', Auth0.logout);
-app.use('/', Auth0.landing);
+// app.use('/', Auth0.landing);
 
 /************************** Social media auth ******************************/
 
@@ -69,6 +69,8 @@ app.post('/api/image/imgLink', (req, res) => {
     })
 })
 
+app.get('/user', rh.getUser);
+
 //conditionally do this after passing them through Auth0
 app.post('/api/user/now', rh.sendPostsNow)
 app.route('/api/user/:post_type')
@@ -77,14 +79,18 @@ app.route('/api/user/:post_type')
   .post(rh.scheduleOrSavePosts)
   .delete(rh.deletePost)
 
+
+app.get('/twitter', sm.TWtoAuth);
+app.get('/twitter/return', sm.TWfromAuth);
+
 app.get('/facebook', sm.FBtoAuth);
 app.get('/facebook/return', sm.FBfromAuth);
-
-
 
 /************************** catch all ******************************/
 
 app.get('*', (req, res) => {
+  console.log(' checking cookies in req: ', req.cookies);
+  console.log(' checking cookies in response: ', res.cookies);
   res.sendFile(path.join(__dirname, '../public/dist/index.html'))
 });
 

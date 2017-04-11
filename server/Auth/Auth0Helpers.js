@@ -20,6 +20,7 @@ exports.landing = (req, res) => {
 }
 
 exports.success = (req, res) => {
+	console.log('hitting success, req :', req);
 	res.redirect('/');
 }
 
