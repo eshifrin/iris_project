@@ -19,7 +19,6 @@ module.exports.savePost = (userId, postData, postType) => {
 
 module.exports.deletePost = (userId, postId) => {
   //error handling
-  console.log('removing from ', userId, 'this post', postId)
   return User.updateAsync(
     {_id: userId},
     {$pull: {'scheduled': postId}})

@@ -9,7 +9,6 @@ module.exports.sendUserPosts = (req, res, next) => {
 
   dbh.showUserPosts(email, req.params.post_type)
   .then(results => {
-    console.log('getting user posts', results);
     res.status(200).json(results);
   })
   .catch(err => {
@@ -42,32 +41,41 @@ module.exports.sendFacebookNow = (req, res, next) => {
   return dbh.userExists(email)
   .then(data => {
     if (!data) throw 'invalid user'
+    // else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
     else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
+
   })
   .then(fbpost => {
     req.body.postedFacebookId = fbpost.data.id;
     return 'Facebook Successful'
-  });
+  })
+  .catch(err => {
+    return err;
+  })
 }
 
 
 
 
 module.exports.sendTwitterNow = (req, res, next) => {
-  console.log('in twitter now')
   let email = req.body.email
+  let message = req.body.text;
+
   return dbh.userExists('e@f.com')
   .then(data => {
     if (!data) throw 'invalid user';
     else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
   })
   .then(client => {
-    return sm.tweet(client, req.body.text)
+    return sm.tweet(client, message)
   })
   .then(tweet => {
     req.body.postedTwitterId = tweet.id;
     return 'Twitter Sucessful'
-  });
+  })
+  .catch(err => {
+    return err;
+  })
 };
 
 module.exports.sendPostsNow = (req, res, next) => {
@@ -76,15 +84,29 @@ module.exports.sendPostsNow = (req, res, next) => {
   if (req.body.postToTwitter) posts.push(module.exports.sendTwitterNow(req, res, next));
 
   Promise.all(posts)
+  .catch(e => {
+    return posts
+  })
   .then(postResults => {
     req.body.status = 'posted';
     return module.exports.scheduleOrSavePosts(req, res, next);
   })
   .then(() => {
+    // req.postToTwitter && dont have req.postedtwitterid = twitter failed
+    // same for fb
+    // this is the logic you need to figure out which message to send back
+    // there are 8 possibilities:
+    // twitter failed
+    // twitter succeeded
+    // facebook failed
+    // facebook succeeded
+    // twitter failed & facebook succeeded
+    // etc.
     res.end();
   })
-  //need to figure out error handling???
-  .catch(console.log);
+  .catch((err) => {
+    //send back database error
+  })
 }
 
 
@@ -118,17 +140,9 @@ module.exports.deletePost = (req, res, next) => {
   })
   .catch(err => {
     console.log('err in routehandler', err);
+    console.log(req.body);
   })
 
-  //delete it from users array, if successful delete from posts
-  //user will then refresh array
-
-  //grab post id, delete it from that user's posts
-    //if doesnt exist throw that error
-  //then go delete it from post array
-  
-  //#1) how to delete from array
-  //#2) how to delete an entry
 
 
 
