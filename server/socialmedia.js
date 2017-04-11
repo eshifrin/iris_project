@@ -65,8 +65,8 @@ passport.deserializeUser(function(obj, cb) {
 
 
 //rename this!
-module.exports.toAuth = passport.authorize('twitter-authz');
-module.exports.fromAuth = passport.authorize('twitter-authz', { failureRedirect: '/'});
+module.exports.TWtoAuth = passport.authorize('twitter-authz');
+module.exports.TWfromAuth = passport.authorize('twitter-authz', { failureRedirect: '/'});
 module.exports.FBtoAuth = passport.authorize('facebook-authz', { scope: ['publish_actions'] });
 module.exports.FBfromAuth = passport.authorize('facebook-authz', { failureRedirect: '/'});
 

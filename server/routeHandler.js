@@ -1,6 +1,6 @@
 const dbh = require('../db/db_helpers');
 const url = require('url');
-const tw = require('./twitter.js')
+const sm = require('./socialmedia.js')
 
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
@@ -21,7 +21,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   dbh.retrieveUserId(req.body.email)
   .then(id => {
-    return dbh.savePost(id, req.body, req.body.status || 'scheduled')
+    return dbh.savePost(id, req.body, req.body.status || '')
   })
   .then(() => {
     res.status(200).end();
@@ -41,7 +41,7 @@ module.exports.sendFacebookNow = (req, res, next) => {
   return dbh.userExists(email)
   .then(data => {
     if (!data) throw 'invalid user'
-    else return tw.facebookPost(data.facebook_id, data.facebook_token, message);
+    else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
   })
   .then(fbpost => {
     req.body.postedFacebookId = fbpost.data.id;
@@ -56,10 +56,10 @@ module.exports.sendTwitterNow = (req, res, next) => {
   return dbh.userExists('e@f.com')
   .then(data => {
     if (!data) throw 'invalid user';
-    else return tw.populateTwitterClient(data.twitter_token, data.twitter_secret);
+    else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
   })
   .then(client => {
-    return tw.tweet(client, req.body.text)
+    return sm.tweet(client, req.body.text)
   })
   .then(tweet => {
     req.body.postedTwitterId = tweet.id;
