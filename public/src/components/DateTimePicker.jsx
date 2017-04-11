@@ -1,17 +1,14 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const propTypes = {
-
+  handleScheduleChange: PropTypes.func.isRequired,
 };
 
-const DateTimePicker = props => {
-  return (
+const DateTimePicker = ({ handleScheduleChange }) => {
+  return(
     <div>
-      <form action="/action_page.php">
-        <h2>Set Schedule</h2>
-        <input type="datetime-local" name="datetime"/>
-        <input type="submit" value="Set"/>
-      </form>
+        <label>Set Schedule</label>
+        <input type="datetime-local" name="bdaytime" onChange={handleScheduleChange}/>
     </div>
   )
 }

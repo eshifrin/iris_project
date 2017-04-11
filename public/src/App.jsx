@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
 import FuturePostList from './components/FuturePostList.jsx';
-import DateTimePicker from './components/DateTimePicker.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 
@@ -22,7 +21,8 @@ class App extends React.Component {
       img: '',
       imgUrl: '',
       scheduledPosts: [],
-      pastPosts: []
+      pastPosts: [],
+      dateTime: ''
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -31,6 +31,7 @@ class App extends React.Component {
     this.handleNowSubmit = this.handleNowSubmit.bind(this);
     this.deletePost = this.deletePost.bind(this);
     this.scheduleNewPost = this.scheduleNewPost.bind(this);
+    this.handleScheduleChange = this.handleScheduleChange.bind(this);
   }
 
   componentWillMount(){
@@ -99,7 +100,6 @@ class App extends React.Component {
     const { email, text, img, imgUrl, postToFacebook, postToTwitter } = this.state;
 
     e.preventDefault();
-    console.log('hi');
     util.submitNewPost(when, { email, text, img, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
@@ -119,14 +119,21 @@ class App extends React.Component {
     this.scheduleNewPost(e, 'now');
   }
 
+  handleScheduleChange(e) {
+    console.log('!!!!!-------')
+    e.preventDefault();
+    let dateTime = e.target.value;
+    console.log('---- what is the datetime??', dateTime.toString());
+    this.setState({ dateTime: dateTime });
+  }
+
   render() {
     const { imgUrl, text, bgColor, scheduledPosts} = this.state;
-    const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick } = this;
+    const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
         <a href="/twitter">verify twitter</a>
         <a href="/facebook">verify facebook</a>
-        <DateTimePicker />
         <NavBar />
           <Main
           deletePost={deletePost}
@@ -140,6 +147,7 @@ class App extends React.Component {
           text={text}
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}
+          handleScheduleChange={handleScheduleChange}
           />
       </div>
     );

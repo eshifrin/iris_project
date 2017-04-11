@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import PhotoUpload from './PhotoUpload.jsx';
 import WriteMessage from './WriteMessage.jsx';
+import DateTimePicker from './DateTimePicker.jsx';
 
 const propTypes = {
   uploadImg: PropTypes.func.isRequired,
@@ -11,9 +12,12 @@ const propTypes = {
   handlePostSubmit: PropTypes.func.isRequired,
   handleTextChange: PropTypes.func.isRequired,
   handleLogoClick: PropTypes.func.isRequired,
+  handleScheduleChange: PropTypes.func.isRequired,
 };
 
-const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick }) => (
+const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange }) => {
+  // console.log('!!!!',imgUrl);
+  return (
   <div>
     <form onSubmit={(e) => handlePostSubmit(e)}>
       <h1>Schedule New Post</h1>
@@ -24,12 +28,14 @@ const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handleNowSubmit, handleP
         handleTextChange={handleTextChange}
         handleLogoClick={handleLogoClick}
       />
+      <DateTimePicker handleScheduleChange={handleScheduleChange}/>
       <PhotoUpload uploadImg={uploadImg} />
       <input type="submit" value="Create" />
     </form>
       <button value="postnow" onClick={handleNowSubmit}>post now</button>
   </div>
 );
+};
 
 CreatePost.propTypes = propTypes;
 export default CreatePost;
