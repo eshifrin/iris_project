@@ -16,11 +16,11 @@ const propTypes = {
   handleLogoClick: PropTypes.func.isRequired,
 };
 
-const Main = ({ uploadImg, imgUrl, text, bgColor, scheduleNewpost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick }) => (
+const Main = ({ uploadImg, imgUrl, text, bgColor, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick }) => (
   <div>
     <Register />
     <Connect />
-    <FuturePostList scheduledPosts={scheduledPosts}/>
+    <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost}/>
     <PastPostList />
     <CreatePost
       uploadImg={uploadImg}

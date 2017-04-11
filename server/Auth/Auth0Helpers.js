@@ -14,9 +14,6 @@ exports.login = (req, res) => {
 }
 
 exports.success = (req, res) => {
-	console.log('hitting success', req)
-
-
 	res.redirect('/');
 }
 

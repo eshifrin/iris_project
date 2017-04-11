@@ -55,6 +55,7 @@ app.post('/api/user/now', rh.sendPostsNow)
 app.route('/api/user/:post_type')
   .get(rh.sendUserPosts)
   .post(rh.scheduleOrSavePosts)
+  .delete(rh.deletePost)
 
 app.get('/twitter', sm.TWtoAuth);
 app.get('/twitter/return', sm.TWfromAuth);

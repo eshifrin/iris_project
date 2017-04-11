@@ -7,8 +7,9 @@ module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
   const email = url_parts.query.email;
 
-  dbh.showUserPosts(email, req.params.sendpost_type)
+  dbh.showUserPosts(email, req.params.post_type)
   .then(results => {
+    console.log('getting user posts', results);
     res.status(200).json(results);
   })
   .catch(err => {
@@ -21,7 +22,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   dbh.retrieveUserId(req.body.email)
   .then(id => {
-    return dbh.savePost(id, req.body, req.body.status || '')
+    return dbh.savePost(id, req.body, req.body.status || 'scheduled')
   })
   .then(() => {
     res.status(200).end();
@@ -50,6 +51,8 @@ module.exports.sendFacebookNow = (req, res, next) => {
 }
 
 
+
+
 module.exports.sendTwitterNow = (req, res, next) => {
   console.log('in twitter now')
   let email = req.body.email
@@ -75,7 +78,7 @@ module.exports.sendPostsNow = (req, res, next) => {
   Promise.all(posts)
   .then(postResults => {
     req.body.status = 'posted';
-    return module.exports.schedulePosts(req, res, next);
+    return module.exports.scheduleOrSavePosts(req, res, next);
   })
   .then(() => {
     res.end();
@@ -98,5 +101,38 @@ module.exports.userCheck = (req, res, next) => {
   .catch((err) => {
     console.error('Error checking user in database', err)
     res.redirect('/');
+  });
+};
+
+module.exports.deletePost = (req, res, next) => {
+  const url_parts = url.parse(req.url, true);
+  const postId = url_parts.query._id;
+
+  return dbh.retrieveUserId(req.user.displayName)
+  .then(userId => {
+    return dbh.deletePost(userId, postId)
   })
+  .then(results => {
+    console.log('deletedPost in routehandler', results);
+    res.end()
+  })
+  .catch(err => {
+    console.log('err in routehandler', err);
+  })
+
+  //delete it from users array, if successful delete from posts
+  //user will then refresh array
+
+  //grab post id, delete it from that user's posts
+    //if doesnt exist throw that error
+  //then go delete it from post array
+  
+  //#1) how to delete from array
+  //#2) how to delete an entry
+
+
+
+
+
+
 }
