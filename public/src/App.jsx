@@ -13,8 +13,8 @@ class App extends React.Component {
     this.state = {
       isLoggedIn: false,
       twitterAuthenticated: false,
-      email: 'test@test.com',
-      postToTwitter: true,
+      email: '',
+      postToTwitter: false,
       postToFacebook: true,
       text: '',
       bgColor: 'grey',
@@ -41,21 +41,23 @@ class App extends React.Component {
     // .then()
 
     util.getCurrentUserEmail()
-    .then((res) => {
-      console.log(res.data);
-      this.setState({email: res.data});
-      util.retrievePosts('scheduled', this.state.email)
-      .then(results => {
-        this.setState({
-          scheduledPosts: results.data
+    .then((email) => {
+      console.log('result data in then of getCurrentUserEmail', JSON.stringify(email.data));
+      if (email.data.length !== 0){
+        this.setState({email: email.data});
+        util.retrievePosts('scheduled', email.data)
+        .then(results => {
+          this.setState({
+            scheduledPosts: results.data
+          })
         })
-      })
-      .catch((err) => {
-        console.log('there was error in retreiving posts of the current user, err : ', err);
-      })
+        .catch((err) => {
+          console.log('there was error in retreiving posts of the current user, err : ', err);
+        })
+      }
     })
     .catch((err) => {
-      console.log('error n getting user email, err :', err);
+      console.log('error in getting user email, err :', err);
     });
   }
 

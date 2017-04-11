@@ -1,4 +1,4 @@
-const dbh = require('../db/db_helpers');
+  const dbh = require('../db/db_helpers');
 const url = require('url');
 const sm = require('./socialmedia.js')
 
@@ -111,6 +111,7 @@ module.exports.userCheck = (req, res, next) => {
   let email = req.session.email;
   return dbh.userExists(email)
   .then(data => {
+    console.log('usercheck if user exists, data : ', data);
     if (!data) return dbh.saveUser(email)
     else return
   })
@@ -145,7 +146,13 @@ module.exports.deletePost = (req, res, next) => {
 }
 
 module.exports.getUser = (req, res, next) => {
-  console.log('in get user rh');
   console.log('getUser req cookies: ', req.cookies);
-  res.send(req.cookies.email);
+  console.log('getUser req user: ', req.user);
+  console.log('getUser req session: ', req.session);
+
+  if (req.user) {
+    res.send(req.user.email);
+  } else {
+    res.send(undefined);
+  }
 }
