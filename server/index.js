@@ -55,11 +55,11 @@ app.get('/facebook/return', sm.FBfromAuth);
 
 /************************** paths ******************************/
 
-// app.post('/api/image/imgLink', (req, res) => {
-//     cloudinary.uploader.upload(req.body.image, (result) => {
-//       res.send(result.secure_url);
-//     })
-// })
+app.post('/api/image/imgLink', (req, res) => {
+    cloudinary.uploader.upload(req.body.image, (result) => {
+      res.send(result.secure_url);
+    })
+})
 
 //conditionally do this after passing them through Auth0
 app.post('/api/user/now', rh.sendPostsNow)
@@ -80,4 +80,4 @@ app.get('*', (req, res) => {
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port 3000.');
-});
+}); 

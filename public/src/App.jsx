@@ -22,7 +22,7 @@ class App extends React.Component {
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: [],
-      dateTime: ''
+      scheduledDateTime: ''
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -39,7 +39,6 @@ class App extends React.Component {
       //route to login...
     // util.checkLoggedIn()
     // .then()
-
     util.retrievePosts('scheduled', this.state.email)
     .then(results => {
       this.setState({
@@ -88,6 +87,12 @@ class App extends React.Component {
     this.setState({ text: text })
   }
 
+  handleScheduleChange(e) {
+    e.preventDefault();
+    let scheduledDateTime = e.target.value;
+    this.setState({ scheduledDateTime: scheduledDateTime });
+  }
+
   handleLogoClick() {
     if (this.state.bgColor === 'grey') {
       this.setState({ bgColor: 'green' });
@@ -97,10 +102,10 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e, when) {
-    const { email, text, img, imgUrl, postToFacebook, postToTwitter } = this.state;
+    const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
 
     e.preventDefault();
-    util.submitNewPost(when, { email, text, img, imgUrl, postToFacebook, postToTwitter })
+    util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
     })
@@ -111,29 +116,24 @@ class App extends React.Component {
 
   handlePostSubmit(e) {
     e.preventDefault();
+    console.log('submitting SCHEDULED');
     this.scheduleNewPost(e, 'scheduled');
   }
 
   handleNowSubmit(e) {
     e.preventDefault();
+    console.log('submitting NOW!');
     this.scheduleNewPost(e, 'now');
   }
 
-  handleScheduleChange(e) {
-    console.log('!!!!!-------')
-    e.preventDefault();
-    let dateTime = e.target.value;
-    console.log('---- what is the datetime??', dateTime.toString());
-    this.setState({ dateTime: dateTime });
-  }
 
   render() {
     const { imgUrl, text, bgColor, scheduledPosts} = this.state;
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
-        <a href="/twitter">verify twitter</a>
-        <a href="/facebook">verify facebook</a>
+        <div><a href="/twitter">verify twitter</a></div>
+        <div><a href="/facebook">verify facebook</a></div>
         <NavBar />
           <Main
           deletePost={deletePost}

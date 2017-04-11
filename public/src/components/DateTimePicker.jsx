@@ -10,6 +10,7 @@ const DateTimePicker = ({ handleScheduleChange }) => {
         <label>Set Schedule</label>
         <input type="datetime-local" name="bdaytime" onChange={handleScheduleChange}/>
     </div>
+
   )
 }
 

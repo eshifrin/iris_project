@@ -30,9 +30,9 @@ const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handleNowSubmit, handleP
       />
       <DateTimePicker handleScheduleChange={handleScheduleChange}/>
       <PhotoUpload uploadImg={uploadImg} />
-      <input type="submit" value="Create" />
     </form>
-      <button value="postnow" onClick={handleNowSubmit}>post now</button>
+      <button value="postnow" onClick={handleNowSubmit}>Post Now</button>
+      <button value="schedulepost" onClick={handlePostSubmit}>Schedule Post</button>
   </div>
 );
 };
