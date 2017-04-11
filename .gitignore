@@ -8,7 +8,6 @@ logs
 pids
 *.env
 *.env-old
-*.env-new
 *.pid
 *.seed
 
