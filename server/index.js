@@ -13,6 +13,7 @@ const Auth0Strategy = require('./auth/Auth0');
 const Auth0 = require('./auth/Auth0Helpers');
 const sm = require('./socialmedia.js');
 const rh = require('./routeHandler')
+const cronJob = require('./cronJob.js');
 
 // const user = require('./routes/user');
 const cloudinary = require('cloudinary');

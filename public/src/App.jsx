@@ -90,6 +90,7 @@ class App extends React.Component {
   handleScheduleChange(e) {
     e.preventDefault();
     let scheduledDateTime = e.target.value;
+    scheduledDateTime = new Date(scheduledDateTime);
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
 

@@ -1,6 +1,7 @@
 const Post = require('./models/post');
 const User = require('./models/user');
 const mongoose = require('mongoose');
+
 const Promise = require('bluebird');
 Promise.promisifyAll(mongoose);
 const { user1, user1_scheduledPost, user1_scheduledPost2, user1_postedPost } = 
@@ -72,8 +73,22 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
                 facebook_id: facebook_id }})
 }
 
+module.exports.checkScheduledEvent = (dateTime) => {
+  console.log('!!!!!+', dateTime);
+  return Post.findAsync(
+    { 'scheduledDateTime': { $lte: dateTime }}
+  )
+  .then(data => {
+    console.log('the data', data);
+    return data;
+  })
+}
 
-
+module.exports.moveScheduledToPosted = () => {
+  // take post IDs as parameters
+  // shift() to remove from scheduled
+  // push to insert into posted
+}
 
 // module.exports.populateSampleData = () => {
 //     return User(user1).saveAsync()
