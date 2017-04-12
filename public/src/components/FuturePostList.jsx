@@ -7,7 +7,6 @@ const propTypes = {
 
 
 const FuturePostList = ({scheduledPosts, deletePost}) => {
-  console.log(deletePost)
   const posts = scheduledPosts.map(post => 
      <li key={post._id}>
         <FuturePostListItem post={post} />

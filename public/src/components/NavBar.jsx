@@ -8,7 +8,6 @@ const propTypes = {
 };
 
 const NavBar = ({login, twitter, facebook}) => {
-	console.log('props in nav bar: ', login);
 	return (
 	  <div>
 	    <h2>Iris </h2>

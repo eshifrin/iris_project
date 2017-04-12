@@ -38,7 +38,7 @@ class App extends React.Component {
   componentWillMount(){
     util.getCurrentUserCred()
     .then((res) => {
-      console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
+      // console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
       if (res.data.email.length !== 0){
         this.setState({email: res.data.email,
           isLoggedIn: true,

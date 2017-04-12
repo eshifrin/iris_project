@@ -22,7 +22,6 @@ const deletePost = (postId) => {
 }
 
 const getCurrentUserCred = () => {
-	console.log('get cur user id front end');
   return axios.get('/usercred');
 }
 
