@@ -18,7 +18,6 @@ class App extends React.Component {
       postToTwitter: true,
       postToFacebook: true,
       text: '',
-      bgColor: 'grey',
       img: '',
       imgUrl: '',
       scheduledPosts: [],
@@ -105,18 +104,19 @@ class App extends React.Component {
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
 
-  handleLogoClick() {
-    if (this.state.bgColor === 'grey') {
-      this.setState({ bgColor: 'green' });
+  handleLogoClick(e) {
+    // console.log('print event checked: ', e.target.checked);
+    // console.log('print event value: ', e.target.value);
+    if (e.target.value === 'Facebook') {
+      this.setState({postToFacebook: e.target.checked});
     } else {
-      this.setState({ bgColor: 'grey' });
+      this.setState({postToTwitter: e.target.checked});
     }
-    // (this.bgColor === 'grey') ? this.setState({ bgColor: 'green' }) : this.setState({ bgColor: 'grey' });
   }
 
   scheduleNewPost(e, when) {
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
-
+    // console.log('state before schedule post: ', this.state);
     e.preventDefault();
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
@@ -142,7 +142,7 @@ class App extends React.Component {
 
 
   render() {
-    const { imgUrl, text, bgColor, scheduledPosts} = this.state;
+    const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook} = this.state;
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
@@ -152,12 +152,13 @@ class App extends React.Component {
           facebook={!this.state.facebookAuthenticated}
           
         />
-          <Main
+          {this.state.isLoggedIn && <Main
           deletePost={deletePost}
           scheduledPosts={scheduledPosts}
           uploadImg={uploadImg}
           imgUrl={imgUrl}
-          bgColor={bgColor}
+          postToFacebook={postToFacebook}
+          postToTwitter={postToTwitter}
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
           handleNowSubmit={handleNowSubmit}
@@ -165,7 +166,7 @@ class App extends React.Component {
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}
           handleScheduleChange={handleScheduleChange}
-          />
+          />}
       </div>
     );
   }

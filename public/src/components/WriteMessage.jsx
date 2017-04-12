@@ -2,23 +2,22 @@ import React, { PropTypes } from 'react';
 
 const propTypes = {
   text: PropTypes.string.isRequired,
-  bgColor: PropTypes.string.isRequired,
   handleTextChange: PropTypes.func.isRequired,
   handleLogoClick: PropTypes.func.isRequired,
+  postToFacebook: PropTypes.bool.isRequired,
+  postToTwitter: PropTypes.bool.isRequired
 };
 
-const WriteMessage = ({ text, handleTextChange, bgColor, handleLogoClick }) => (
+const WriteMessage = ({ text, handleTextChange, handleLogoClick, postToFacebook, postToTwitter }) => (
   <div>
-    <button
-      type="button"
-      style={{backgroundColor: bgColor}}
-      onClick={handleLogoClick}
-    >Facebook</button>
-    <button
-      type="button"
-      style={{backgroundColor: bgColor}}
-      onClick={handleLogoClick}
-    >Twitter</button>
+    <input
+      type="checkbox" name="socialSites" value="Facebook"
+      onChange={handleLogoClick} checked={postToFacebook}
+    />Facebook
+    <input
+      type="checkbox" name="socialSites" value="Twitter"
+      onChange={handleLogoClick} checked={postToTwitter}
+    />Twitter
     <h4>Message:</h4>
     <input
       type="text"

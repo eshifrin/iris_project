@@ -16,7 +16,7 @@ const FuturePostListItem = ({post}) => {
   <span> {monthDay} </span>
   <span> {time} </span>
   <span> {post.text} </span>
-  <img src={post.imgUrl} />
+    <img src={post.imgUrl} />
   <span> Twitter: {post.postToTwitter.toString()} </span>
   <span> Facebook: {post.postToFacebook.toString()} </span>
   </div>
@@ -25,3 +25,5 @@ const FuturePostListItem = ({post}) => {
 
 
 export default FuturePostListItem;
+
+

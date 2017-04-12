@@ -148,11 +148,11 @@ module.exports.deletePost = (req, res, next) => {
 module.exports.getUserCred = (req, res, next) => {
   // console.log('getUserCred req cookies: ', req.cookies);
   // console.log('getUserCred req user: ', req.user);
-  // console.log('getUserCred req session: ', req.session);
+  console.log('getUserCred req session: ', req.session.email);
 
   if (req.user) {
     let userCred = {};
-    userCred.email = req.user.displayName;
+    userCred.email = req.session.email;
     dbh.getUser(userCred.email)
     .then((data) => {
       // console.log('data from get user : ', data);
