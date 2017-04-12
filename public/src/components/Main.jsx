@@ -1,6 +1,4 @@
 import React, { PropTypes } from 'react';
-import Register from './Register.jsx';
-import Connect from './Connect.jsx';
 import FuturePostList from './FuturePostList.jsx';
 import PastPostList from './PastPostList.jsx';
 import CreatePost from './CreatePost.jsx';
@@ -21,8 +19,6 @@ const propTypes = {
 const Main = ({ uploadImg, imgUrl, text, bgColor, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange }) => {
   return(
     <div>
-      <Register />
-      <Connect />
       <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost}/>
       <PastPostList />
       <CreatePost

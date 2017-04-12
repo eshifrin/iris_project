@@ -19,7 +19,7 @@ const WriteMessage = ({ text, handleTextChange, bgColor, handleLogoClick }) => (
       style={{backgroundColor: bgColor}}
       onClick={handleLogoClick}
     >Twitter</button>
-    <h3>Message:</h3>
+    <h4>Message:</h4>
     <input
       type="text"
       name="text"

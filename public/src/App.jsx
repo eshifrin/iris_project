@@ -148,19 +148,12 @@ class App extends React.Component {
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
-<<<<<<< HEAD
-        <div><a href="/twitter">verify twitter</a></div>
-        <div><a href="/facebook">verify facebook</a></div>
-        <NavBar />
-=======
-        <DateTimePicker />
         <NavBar 
           login={this.state.email.length === 0}
           twitter={!this.state.postToTwitter}
           facebook={!this.state.postToFacebook}
           
         />
->>>>>>> corrected routing on homepage
           <Main
           deletePost={deletePost}
           scheduledPosts={scheduledPosts}

@@ -144,7 +144,6 @@ module.exports.deletePost = (req, res, next) => {
   });
 }
 
-}
 
 module.exports.getUserCred = (req, res, next) => {
   console.log('getUser req cookies: ', req.cookies);

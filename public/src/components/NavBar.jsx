@@ -10,16 +10,11 @@ const propTypes = {
 const NavBar = ({login, twitter, facebook}) => {
 	console.log('props in nav bar: ', login);
 	return (
-	  <div>{
-	  	twitter &&
-	    <a href="/twitter">verify twitter</a>
-	    }
-	    { facebook &&
-	    <a href="/facebook">verify facebook</a>}
-	    { login && (
-	    	<a href="/login">Login/Signup</a>
-	    	) 
-	    }
+	  <div>
+	    <h2>Iris </h2>
+	    { twitter && <a href="/twitter">verify twitter</a>}  
+	    { facebook && <a href="/facebook">verify facebook</a>}
+	    { login && (<a href="/login">Login/Signup</a>)}
 	  </div>
   );
 };
