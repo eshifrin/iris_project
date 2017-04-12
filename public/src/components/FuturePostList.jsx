@@ -6,10 +6,14 @@ const propTypes = {
 };
 
 
-const FuturePostList = ({scheduledPosts}) => {
+const FuturePostList = ({scheduledPosts, deletePost}) => {
+  console.log(deletePost)
   const posts = scheduledPosts.map(post => 
-     <li key={post._id}><FuturePostListItem post={post} /></li>)
-  
+     <li key={post._id}>
+        <FuturePostListItem post={post} />
+        <a href="#" onClick={e => deletePost(e, post)}>delete this Post</a>
+    </li>)
+
   return (
   <div>
       <ul>
@@ -21,6 +25,3 @@ const FuturePostList = ({scheduledPosts}) => {
 
 
 export default FuturePostList;
-    // {scheduledPosts.map(post => {
-    //   <FuturePostListItem post={post} />
-    // })}

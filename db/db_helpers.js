@@ -17,6 +17,18 @@ module.exports.savePost = (userId, postData, postType) => {
   });
 }
 
+module.exports.deletePost = (userId, postId) => {
+  //error handling
+  return User.updateAsync(
+    {_id: userId},
+    {$pull: {'scheduled': postId}})
+  .then(results => {
+    //need error handling
+    console.log('deleted from user in db', results);
+    return Post.removeAsync({_id: postId})
+  })
+}
+
 module.exports.retrievePosts = (postIds) => {
   return Post.findAsync({_id: {$in: postIds} })
 }

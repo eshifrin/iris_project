@@ -14,8 +14,8 @@ class App extends React.Component {
     this.state = {
       isLoggedIn: false,
       twitterAuthenticated: false,
-      email: 'e@f.com',
-      postToTwitter: false,
+      email: 'gary3@wong.com',
+      postToTwitter: true,
       postToFacebook: true,
       text: '',
       bgColor: 'grey',
@@ -29,6 +29,8 @@ class App extends React.Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleLogoClick = this.handleLogoClick.bind(this);
     this.handleNowSubmit = this.handleNowSubmit.bind(this);
+    this.deletePost = this.deletePost.bind(this);
+  
   }
 
   componentWillMount(){
@@ -64,6 +66,22 @@ class App extends React.Component {
     }
   }
 
+  deletePost(e, post) {
+    e.preventDefault();
+    util.deletePost(post._id)
+    .then(() => {
+      return util.retrievePosts('scheduled', this.state.email)
+    })
+    .then(results => {
+      this.setState({
+        scheduledPosts: results.data
+      })
+    })
+    .catch(err => {
+      //error handling
+    });
+  }
+
   handleTextChange(e) {
     let text = e.target.value;
     this.setState({ text: text })
@@ -91,6 +109,7 @@ class App extends React.Component {
   }
 
   handlePostSubmit(e) {
+    e.preventDefault();
     this.scheduleNewPost(e, 'scheduled');
   }
 
@@ -101,7 +120,7 @@ class App extends React.Component {
 
   render() {
     const { imgUrl, text, bgColor, scheduledPosts} = this.state;
-    const { uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick } = this;
+    const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick } = this;
     return (
       <div>
         <a href="/twitter">verify twitter</a>
@@ -109,6 +128,7 @@ class App extends React.Component {
         <DateTimePicker />
         <NavBar />
           <Main
+          deletePost={deletePost}
           scheduledPosts={scheduledPosts}
           uploadImg={uploadImg}
           imgUrl={imgUrl}
