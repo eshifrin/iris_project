@@ -15,7 +15,7 @@ passport.use('twitter-authz', new TwitterStrategy({
   },
   function(req, token, tokenSecret, profile, cb) {
     //we might want to do something w/the profile
-
+    console.log('in twitter authz callbk - twitter');
     return dbh.updateUserTwitter({
       email: req.user.displayName,
       token: token,
@@ -38,6 +38,7 @@ passport.use('facebook-authz', new FacebookStrategy({
     passReqToCallback: true
   },
   function(accessToken, refreshToken, profile, cb) {
+    console.log('in facebook authz callbk - twitter');
     return dbh.updateUserFacebook({
       email: req.user.displayName,
       token: facebook_token,
@@ -84,6 +85,7 @@ module.exports.FBfromAuth = passport.authorize('facebook-authz', { failureRedire
 
 // Module.exports functions //
 module.exports.populateClient = (token, tokenSecret) => {
+  console.log('in populate client - twitter');
   var client = new Twitter({
     consumer_key: process.env.TW_KEY,
     consumer_secret: process.env.TW_SECRET,
@@ -100,7 +102,7 @@ module.exports.tweet = function(client, message, cb) {
   var params = {
     status: message
   };
-
+  console.log('in tweet function - twitter');
   client.post('https://api.twitter.com/1.1/statuses/update.json', 
     params, cb) 
 
