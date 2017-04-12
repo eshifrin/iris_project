@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import NavBar from './components/NavBar.jsx';
 import Main from './components/Main.jsx';
 import FuturePostList from './components/FuturePostList.jsx';
-import DateTimePicker from './components/DateTimePicker.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 
@@ -22,7 +21,8 @@ class App extends React.Component {
       img: '',
       imgUrl: '',
       scheduledPosts: [],
-      pastPosts: []
+      pastPosts: [],
+      scheduledDateTime: ''
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -30,7 +30,8 @@ class App extends React.Component {
     this.handleLogoClick = this.handleLogoClick.bind(this);
     this.handleNowSubmit = this.handleNowSubmit.bind(this);
     this.deletePost = this.deletePost.bind(this);
-  
+    this.scheduleNewPost = this.scheduleNewPost.bind(this);
+    this.handleScheduleChange = this.handleScheduleChange.bind(this);
   }
 
   componentWillMount(){
@@ -38,7 +39,6 @@ class App extends React.Component {
       //route to login...
     // util.checkLoggedIn()
     // .then()
-
     util.retrievePosts('scheduled', this.state.email)
     .then(results => {
       this.setState({
@@ -87,6 +87,13 @@ class App extends React.Component {
     this.setState({ text: text })
   }
 
+  handleScheduleChange(e) {
+    e.preventDefault();
+    let scheduledDateTime = e.target.value;
+    scheduledDateTime = new Date(scheduledDateTime);
+    this.setState({ scheduledDateTime: scheduledDateTime });
+  }
+
   handleLogoClick() {
     if (this.state.bgColor === 'grey') {
       this.setState({ bgColor: 'green' });
@@ -96,10 +103,10 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e, when) {
-    const { email, text, img, imgUrl, postToFacebook, postToTwitter } = this.state;
+    const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
 
     e.preventDefault();
-    util.submitNewPost(when, { email, text, img, imgUrl, postToFacebook, postToTwitter })
+    util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
     })
@@ -110,22 +117,24 @@ class App extends React.Component {
 
   handlePostSubmit(e) {
     e.preventDefault();
+    console.log('submitting SCHEDULED');
     this.scheduleNewPost(e, 'scheduled');
   }
 
   handleNowSubmit(e) {
     e.preventDefault();
+    console.log('submitting NOW!');
     this.scheduleNewPost(e, 'now');
   }
 
+
   render() {
     const { imgUrl, text, bgColor, scheduledPosts} = this.state;
-    const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick } = this;
+    const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
-        <a href="/twitter">verify twitter</a>
-        <a href="/facebook">verify facebook</a>
-        <DateTimePicker />
+        <div><a href="/twitter">verify twitter</a></div>
+        <div><a href="/facebook">verify facebook</a></div>
         <NavBar />
           <Main
           deletePost={deletePost}
@@ -139,6 +148,7 @@ class App extends React.Component {
           text={text}
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}
+          handleScheduleChange={handleScheduleChange}
           />
       </div>
     );

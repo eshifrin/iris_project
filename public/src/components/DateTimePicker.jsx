@@ -1,29 +1,16 @@
-var React = require('react');
-var DatePicker = require('react-datepicker');
-var moment = require('moment');
-// require('./datepicker-cssmodules.css');
-// require('iris/public/dist/datepicker-cssmodules.css');
+import React, { PropTypes } from 'react';
 
-var DateTimePicker = React.createClass({
-  displayName: 'Example',
+const propTypes = {
+  handleScheduleChange: PropTypes.func.isRequired,
+};
 
-  getInitialState: function() {
-    return {
-      startDate: moment()
-    };
-  },
-
-  handleChange: function(date) {
-    this.setState({
-      startDate: date
-    });
-  },
-
-  render: function() {
-    return <DatePicker
-        selected={this.state.startDate}
-        onChange={this.handleChange} />;
-  }
-});
+const DateTimePicker = ({ handleScheduleChange }) => {
+  return(
+    <div>
+        <label>Set Schedule</label>
+        <input type="datetime-local" name="bdaytime" onChange={handleScheduleChange}/>
+    </div>
+  )
+}
 
 export default DateTimePicker;

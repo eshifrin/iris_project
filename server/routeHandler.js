@@ -19,7 +19,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
-  dbh.retrieveUserId(req.body.email)
+  dbh.retrieveUserId(req.session.email)
   .then(id => {
     return dbh.savePost(id, req.body, req.body.status || 'scheduled')
   })
@@ -111,7 +111,7 @@ module.exports.sendPostsNow = (req, res, next) => {
 
 
 module.exports.userCheck = (req, res, next) => {
-  let email = req.user.displayName;
+  let email = req.session.email;
   return dbh.userExists(email)
   .then(data => {
     if (!data) return dbh.saveUser(email)
@@ -130,7 +130,7 @@ module.exports.deletePost = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
   const postId = url_parts.query._id;
 
-  return dbh.retrieveUserId(req.user.displayName)
+  return dbh.retrieveUserId(req.session.email)
   .then(userId => {
     return dbh.deletePost(userId, postId)
   })
@@ -143,4 +143,4 @@ module.exports.deletePost = (req, res, next) => {
     console.log(req.body);
   })
 
-}
+} 

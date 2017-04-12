@@ -11,7 +11,7 @@ db.on('error', (error) => {
 })
 
 db.once('open', (status) => {
-  console.log(status);
+  console.log('db is working!', status);
 });
 
 module.exports = db;
