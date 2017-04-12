@@ -141,7 +141,8 @@ module.exports.deletePost = (req, res, next) => {
   .catch(err => {
     console.log('err in routehandler', err);
     console.log(req.body);
-  })
+  });
+}
 
 }
 
