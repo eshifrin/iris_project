@@ -17,6 +17,7 @@ const NavBar = ({login, twitter, facebook}) => {
 	    { !facebook && !twitter && !login &&<h5>You have authorized both Facebook and Twitter to post on your behalf</h5>}
 	    { !facebook && twitter && <h5>You have authorized Facebook to post on your behalf</h5>}
 	    { facebook && !twitter && <h5>You have authorized Twitter to post on your behalf</h5>}
+	    { !login && <a href="https://www.iubenda.com/privacy-policy/8093701">Our Privacy Policy</a>}
 	  </div>
   );
 };
