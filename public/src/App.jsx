@@ -152,7 +152,7 @@ class App extends React.Component {
           facebook={!this.state.facebookAuthenticated}
           
         />
-          <Main
+          {this.state.isLoggedIn && <Main
           deletePost={deletePost}
           scheduledPosts={scheduledPosts}
           uploadImg={uploadImg}
@@ -165,7 +165,7 @@ class App extends React.Component {
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}
           handleScheduleChange={handleScheduleChange}
-          />
+          />}
       </div>
     );
   }
