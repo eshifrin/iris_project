@@ -76,7 +76,8 @@ module.exports.sendTwitterNow = (req, res, next) => {
   .then(tweet => {
     console.log('is tweet successful?', tweet);
     req.body.postedTwitterId = tweet.id;
-    return 'Twitter Sucessful'
+    let successMsgAndTweetId = ['Twitter Successful', tweet.id];
+    return successMsgAndTweetId;
   })
   .catch(err => {
     console.log('error in twitter posting', err)

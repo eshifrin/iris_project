@@ -7,6 +7,7 @@ cron.schedule('*/2 * * * * *', () => {
       console.log('what are the outstanding?', data);
       return User.findAsync({'_id': data[0].user_id})
       .then(userObj => {
+        console.log('what userObj?', userObj);
         socialMediaReqObj = {
           body: {
             text: data[0].text,
@@ -31,8 +32,6 @@ cron.schedule('*/2 * * * * *', () => {
     .catch(err => {
       console.log('error', err)
     })
-
-
     // // send posts now if there's any scheduled post
     // if (availableScheduledPosts.length > 0) {
     //   rh.sendPostNow(availableScheduledPosts);
