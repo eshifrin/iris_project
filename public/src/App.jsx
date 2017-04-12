@@ -14,7 +14,7 @@ class App extends React.Component {
     this.state = {
       isLoggedIn: false,
       twitterAuthenticated: false,
-      email: 'j@b.com',
+      email: 'test@test.com',
       postToTwitter: true,
       postToFacebook: true,
       text: '',
