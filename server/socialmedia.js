@@ -5,7 +5,7 @@ const axios = require('axios')
 
 const Twitter = require('twitter');
 const dbh = require('../db/db_helpers.js')
-
+const fs = require('fs');
 
 passport.use('twitter-authz', new TwitterStrategy({
     consumerKey: process.env.TW_KEY,
@@ -103,20 +103,42 @@ module.exports.facebookPost = (profileId, accessToken, message) => {
 
 
 
-module.exports.tweet = (client, message, cb) => {
-  // console.log('in tweet function - socialmedia');
+module.exports.tweet = (client, message, pictureData) => {
+  // console.log('in tweet function', pictureData);
+  // const data = require('fs').readFileSync('./server/calendar.jpg');
+  // console.log('dirname', __dirname)
+  // console.log('binary data', data)
+
   var params = {
     status: message
   };
+  const test = true;
+
+  if (pictureData) {
+    return client.post('media/upload', {media: pictureData})
+    // return client.post('media/upload', {media: data})
+
+    .then(media => {
+      console.log('successful picture post', media)
+      params.media_ids = media.media_id_string;
+      return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
+    })
+    .catch(err => {
+      console.log('error sending media to twitter', err)
+      return;
+    })
+  } else {
+    return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
+  }
 
 
-  return new Promise((resolve, reject) => {
-    return client.post('https://api.twitter.com/1.1/statuses/update.json', 
-      params, (err, tweet, results) => {
-        if (err) reject(err);
-        else resolve(tweet);
-      });
-  }); 
+  // return new Promise((resolve, reject) => {
+  //   return client.post('https://api.twitter.com/1.1/statuses/update.json', 
+  //     params, (err, tweet, results) => {
+  //       if (err) reject(err);
+  //       else resolve(tweet);
+  //     });
+  // }); 
 };
 
 
