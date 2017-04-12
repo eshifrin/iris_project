@@ -50,7 +50,7 @@ module.exports.retrieveUserId = (email) => {
   });
 }
 
-module.exports.userExists = (email) => {
+module.exports.getUser = (email) => {
   return User.findOneAsync({email: email});
 }
 
@@ -82,28 +82,6 @@ module.exports.checkScheduledEvent = (dateTime) => {
     console.log('the data', data);
     return data;
   })
-}
-
-module.exports.getUser = (email) => {
-  console.log('in getTwitterId, email: ', email);
-  return User.findOneAsync({email:email});
-  // .then(data => {
-  //   console.log('');
-  //   console.log('data in getTwitterId: ', data);
-  //   console.log('');
-  //   return data;
-  // })
-}
-
-module.exports.getFacebook = (email) => {
-  console.log('in getTwitterId, email: ', email);
-  return User.findOneAsync({email:email});
-  // .then(data => {
-  //   console.log('');
-  //   console.log('data in getTwitterId: ', data);
-  //   console.log('');
-  //   return data;
-  // })
 }
 
 module.exports.moveScheduledToPosted = () => {

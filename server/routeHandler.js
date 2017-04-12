@@ -35,7 +35,7 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
 module.exports.sendFacebookNow = (req, res, next) => {
   let email = req.session.email;
   let message = req.body.text;
-  return dbh.userExists(email)
+  return dbh.getUser(email)
   .then(data => {
     if (!data) throw 'invalid user'
     // else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
@@ -58,7 +58,7 @@ module.exports.sendTwitterNow = (req, res, next) => {
   let email = req.session.email
   let message = req.body.text;
 
-  return dbh.userExists(email)
+  return dbh.getUser(email)
   .then(data => {
     if (!data) throw 'invalid user';
     else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
@@ -109,7 +109,7 @@ module.exports.sendPostsNow = (req, res, next) => {
 
 module.exports.userCheck = (req, res, next) => {
   let email = req.session.email;
-  return dbh.userExists(email)
+  return dbh.getUser(email)
   .then(data => {
     console.log('usercheck if user exists, data : ', data);
     if (!data) return dbh.saveUser(email)
