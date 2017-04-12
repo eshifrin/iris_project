@@ -8,7 +8,8 @@ const propTypes = {
   uploadImg: PropTypes.func.isRequired,
   imgUrl: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  bgColor: PropTypes.string.isRequired,
+  postToTwitter: PropTypes.bool.isRequired,
+  postToFacebook: PropTypes.bool.isRequired,
   scheduleNewpost: PropTypes.func.isRequired,
   handlePostSubmit: PropTypes.func.isRequired,
   handleTextChange: PropTypes.func.isRequired,
@@ -16,7 +17,7 @@ const propTypes = {
   handleScheduleChange: PropTypes.func.isRequired,
 };
 
-const Main = ({ uploadImg, imgUrl, text, bgColor, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange }) => {
+const Main = ({ postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange }) => {
   return(
     <div>
       <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost}/>
@@ -25,13 +26,14 @@ const Main = ({ uploadImg, imgUrl, text, bgColor, scheduleNewpost, deletePost, h
         uploadImg={uploadImg}
         imgUrl={imgUrl}
         text={text}
-        bgColor={bgColor}
         scheduleNewpost={scheduleNewpost}
         handleNowSubmit={handleNowSubmit}
         handlePostSubmit={handlePostSubmit}
         handleTextChange={handleTextChange}
         handleLogoClick={handleLogoClick}
         handleScheduleChange={handleScheduleChange}
+        postToTwitter={postToTwitter}
+        postToFacebook={postToFacebook}
       />
     </div>
   )
