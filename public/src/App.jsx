@@ -121,9 +121,10 @@ class App extends React.Component {
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
+      this.componentWillMount();
     })
-    .catch({
-      //error handling needs to go here
+    .catch((err) => {
+      console.log('issue with posting scheduled posts', err);
     })
   }
 
