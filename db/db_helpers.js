@@ -76,10 +76,12 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
 
 module.exports.checkScheduledEvent = (dateTime) => {
   return Post.findAsync(
-    { 'scheduledDateTime': { $lte: dateTime }}
+    { 'scheduledDateTime': { $lte: dateTime }},
+    { $or: { postedFacebookId: null,
+             postedTwitterId: null }}
   )
   .then(data => {
-    // console.log('the data', data);
+    console.log('the data', data);
     return data;
   })
 }
