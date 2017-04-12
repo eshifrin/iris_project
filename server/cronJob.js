@@ -7,10 +7,10 @@ cron.schedule('*/2 * * * * *', () => {
     let currentDateTime = new Date().toISOString();
     return dbh.checkScheduledEvent(currentDateTime)
     .then(data => {
-      console.log('here are the avail posts', data)
+      // console.log('here are the avail posts', data)
     })
     .catch(err => {
-      console.log('error', err)
+      console.log('error in check scheduled events', err);
     })
     // // send posts now if there's any scheduled post
     // if (availableScheduledPosts.length > 0) {

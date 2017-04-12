@@ -15,10 +15,15 @@ const submitNewPost = (type, newPost) => {
   return axios.post(routes[type], newPost);
 }
 
+
 const deletePost = (postId) => {
   return axios.delete(routes['scheduled'], 
           {params: {_id: postId }});
 }
 
+const getCurrentUserCred = () => {
+  return axios.get('/usercred');
+}
 
-export { retrievePosts, submitNewPost, deletePost };
+export { retrievePosts, submitNewPost, getCurrentUserCred, deletePost };
+

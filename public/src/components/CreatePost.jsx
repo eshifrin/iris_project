@@ -20,7 +20,7 @@ const CreatePost = ({ imgUrl, text, bgColor, uploadImg, handleNowSubmit, handleP
   return (
   <div>
     <form onSubmit={(e) => handlePostSubmit(e)}>
-      <h1>Schedule New Post</h1>
+      <h4>Schedule New Post</h4>
       <img src={imgUrl} style={{width: 100}} />
       <WriteMessage
         text={text}

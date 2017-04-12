@@ -12,8 +12,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      twitterAuthenticated: false,
-      email: 'test@test.com',
+      twitterAuthenticated: true,
+      facebookAuthenticated: true,
+      email: '',
       postToTwitter: true,
       postToFacebook: true,
       text: '',
@@ -35,19 +36,29 @@ class App extends React.Component {
   }
 
   componentWillMount(){
-    //need to start with retrieving user info, if none
-      //route to login...
-    // util.checkLoggedIn()
-    // .then()
-    util.retrievePosts('scheduled', this.state.email)
-    .then(results => {
-      this.setState({
-        scheduledPosts: results.data
-      })
+    util.getCurrentUserCred()
+    .then((res) => {
+      // console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
+      if (res.data.email.length !== 0){
+        this.setState({email: res.data.email,
+          isLoggedIn: true,
+          twitterAuthenticated: res.data.twitter,
+          facebookAuthenticated: res.data.facebook
+        });
+        util.retrievePosts('scheduled', res.data.email)
+        .then(results => {
+          this.setState({
+            scheduledPosts: results.data
+          })
+        })
+        .catch((err) => {
+          console.log('there was error in retreiving posts of the current user, err : ', err);
+        })
+      }
     })
-    .catch({
-      //error handling needs to go here
-    })
+    .catch((err) => {
+      console.log('error in getting user email, err :', err);
+    });
   }
 
   uploadImg(e) {
@@ -100,6 +111,7 @@ class App extends React.Component {
     } else {
       this.setState({ bgColor: 'grey' });
     }
+    // (this.bgColor === 'grey') ? this.setState({ bgColor: 'green' }) : this.setState({ bgColor: 'grey' });
   }
 
   scheduleNewPost(e, when) {
@@ -109,9 +121,10 @@ class App extends React.Component {
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
+      this.componentWillMount();
     })
-    .catch({
-      //error handling needs to go here
+    .catch((err) => {
+      console.log('issue with posting scheduled posts', err);
     })
   }
 
@@ -133,9 +146,12 @@ class App extends React.Component {
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
-        <div><a href="/twitter">verify twitter</a></div>
-        <div><a href="/facebook">verify facebook</a></div>
-        <NavBar />
+        <NavBar 
+          login={!this.state.isLoggedIn}
+          twitter={!this.state.twitterAuthenticated}
+          facebook={!this.state.facebookAuthenticated}
+          
+        />
           <Main
           deletePost={deletePost}
           scheduledPosts={scheduledPosts}

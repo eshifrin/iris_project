@@ -1,4 +1,4 @@
-const dbh = require('../db/db_helpers');
+  const dbh = require('../db/db_helpers');
 const url = require('url');
 const sm = require('./socialmedia.js')
 
@@ -32,13 +32,10 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
   })
 }
 
-
-
 module.exports.sendFacebookNow = (req, res, next) => {
   let email = req.session.email;
   let message = req.body.text;
-
-  return dbh.userExists(email)
+  return dbh.getUser(email)
   .then(data => {
     if (!data) throw 'invalid user'
     // else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
@@ -61,7 +58,7 @@ module.exports.sendTwitterNow = (req, res, next) => {
   let email = req.session.email
   let message = req.body.text;
 
-  return dbh.userExists(email)
+  return dbh.getUser(email)
   .then(data => {
     if (!data) throw 'invalid user';
     else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
@@ -112,12 +109,15 @@ module.exports.sendPostsNow = (req, res, next) => {
 
 module.exports.userCheck = (req, res, next) => {
   let email = req.session.email;
-  return dbh.userExists(email)
+  return dbh.getUser(email)
   .then(data => {
+    // console.log('usercheck if user exists, data : ', data);
     if (!data) return dbh.saveUser(email)
     else return
   })
   .then(() => {
+    // console.log(' checking cookies in req: ', req.cookies);
+    // res.cookie('email', email);
     res.redirect('/');
   })
   .catch((err) => {
@@ -141,6 +141,26 @@ module.exports.deletePost = (req, res, next) => {
   .catch(err => {
     console.log('err in routehandler', err);
     console.log(req.body);
-  })
+  });
+}
 
-} 
+
+module.exports.getUserCred = (req, res, next) => {
+  // console.log('getUserCred req cookies: ', req.cookies);
+  // console.log('getUserCred req user: ', req.user);
+  // console.log('getUserCred req session: ', req.session);
+
+  if (req.user) {
+    let userCred = {};
+    userCred.email = req.user.displayName;
+    dbh.getUser(userCred.email)
+    .then((data) => {
+      // console.log('data from get user : ', data);
+      userCred.twitter = (data.twitter_token) ? true : false;
+      userCred.facebook = (data.facebook_id) ? true : false;
+      res.send(userCred);
+    })
+  } else {
+    res.send({email: '', twitter: true, facebook: true});
+  }
+}
