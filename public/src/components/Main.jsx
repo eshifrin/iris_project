@@ -15,7 +15,9 @@ const propTypes = {
   handleTextChange: PropTypes.func.isRequired,
   handleLogoClick: PropTypes.func.isRequired,
   handleScheduleChange: PropTypes.func.isRequired,
+  scheduledDateTime: PropTypes.instanceOf(Date),
 };
+
 
 const Main = ({ postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange, pastPosts }) => {
   return(
@@ -34,6 +36,7 @@ const Main = ({ postToFacebook, postToTwitter, uploadImg, imgUrl, text, schedule
         handleScheduleChange={handleScheduleChange}
         postToTwitter={postToTwitter}
         postToFacebook={postToFacebook}
+        scheduledDateTime={scheduledDateTime}
       />
     </div>
   )

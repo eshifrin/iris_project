@@ -75,7 +75,6 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
 }
 
 module.exports.checkScheduledEvent = (dateTime) => {
-  console.log('!!!!!+', dateTime);
   return Post.findAsync(
     { 'scheduledDateTime': { $lte: dateTime }}
   )

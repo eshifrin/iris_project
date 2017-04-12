@@ -23,7 +23,7 @@ class App extends React.Component {
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: [],
-      scheduledDateTime: ''
+      scheduledDateTime: new Date
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -114,8 +114,14 @@ class App extends React.Component {
     e.preventDefault();
     let scheduledDateTime = e.target.value;
     scheduledDateTime = new Date(scheduledDateTime);
+<<<<<<< HEAD
     this.setState({ scheduledDateTime: scheduledDateTime });
     console.log('on change of scheduled time, this state : ', this.state.scheduledDateTime);
+||||||| merged common ancestors
+    this.setState({ scheduledDateTime: scheduledDateTime });
+=======
+    this.setState({ scheduledDateTime: scheduledDateTime.toUTCString() });
+>>>>>>> Fix date-time picker storage and auto-post twitter feeds
   }
 
   handleLogoClick(e) {
@@ -163,7 +169,13 @@ class App extends React.Component {
 
 
   render() {
+<<<<<<< HEAD
     const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook} = this.state;
+||||||| merged common ancestors
+    const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook} = this.state;
+=======
+    const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
+>>>>>>> Fix date-time picker storage and auto-post twitter feeds
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
@@ -184,6 +196,7 @@ class App extends React.Component {
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
           handleNowSubmit={handleNowSubmit}
+          scheduledDateTime={scheduledDateTime}
           text={text}
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}

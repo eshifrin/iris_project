@@ -88,6 +88,7 @@ module.exports.populateTwitterClient = (token, tokenSecret) => {
   return client;
 };
 
+
 module.exports.facebookPost = (profileId, accessToken, message, photoUrl) => {
   let params = {
     'message': message,
@@ -95,7 +96,6 @@ module.exports.facebookPost = (profileId, accessToken, message, photoUrl) => {
   };
 
   if (photoUrl) params.link = photoUrl;
-
   return axios.request({
     url: `https://graph.facebook.com/${profileId}/feed`,
     method: 'post',
@@ -107,7 +107,6 @@ module.exports.tweet = (client, message, pictureData) => {
   var params = {
     status: message
   };
-
   if (pictureData) {
     //this is what the client sends over...b64 strips out image/jpeg;base64
     // image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ
