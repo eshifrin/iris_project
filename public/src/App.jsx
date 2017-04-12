@@ -12,7 +12,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      twitterAuthenticated: false,
+      twitterAuthenticated: true,
+      facebookAuthenticated: true,
       email: '',
       postToTwitter: true,
       postToFacebook: true,
@@ -35,18 +36,14 @@ class App extends React.Component {
   }
 
   componentWillMount(){
-    //need to start with retrieving user info, if none
-      //show login button
-    // util.checkLoggedIn()
-    // .then()
-
     util.getCurrentUserCred()
     .then((res) => {
       console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
       if (res.data.email.length !== 0){
         this.setState({email: res.data.email,
-          postToTwitter: res.data.twitter,
-          postToFacebook: res.data.facebook
+          isLoggedIn: true,
+          twitterAuthenticated: res.data.twitter,
+          facebookAuthenticated: res.data.facebook
         });
         util.retrievePosts('scheduled', res.data.email)
         .then(results => {
@@ -149,9 +146,9 @@ class App extends React.Component {
     return (
       <div>
         <NavBar 
-          login={this.state.email.length === 0}
-          twitter={!this.state.postToTwitter}
-          facebook={!this.state.postToFacebook}
+          login={!this.state.isLoggedIn}
+          twitter={!this.state.twitterAuthenticated}
+          facebook={!this.state.facebookAuthenticated}
           
         />
           <Main

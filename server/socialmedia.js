@@ -15,7 +15,7 @@ passport.use('twitter-authz', new TwitterStrategy({
   },
   function(req, token, tokenSecret, profile, cb) {
     //we might want to do something w/the profile
-    console.log('in twitter authz - socialmedia');
+    // console.log('in twitter authz - socialmedia');
     return dbh.updateUserTwitter({
       email: req.session.email,
       token: token,
@@ -40,9 +40,9 @@ passport.use('facebook-authz', new FacebookStrategy({
   },
   function(req, accessToken, refreshToken, profile, cb) {
 
-    console.log('in facebook authz - socialmedia');
-    console.log('here are the cookies', req.cookies)
-    console.log('here is the req.user', req.user)
+    // console.log('in facebook authz - socialmedia');
+    // console.log('here are the cookies', req.cookies)
+    // console.log('here is the req.user', req.user)
     return dbh.updateUserFacebook(req.session.email, accessToken, profile.id)
     .then(() => {
       return cb(null, profile); 
@@ -77,7 +77,7 @@ module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRe
 
 // Module.exports functions //
 module.exports.populateTwitterClient = (token, tokenSecret) => {
-  console.log('in populate twitter client - socialmedia');
+  // console.log('in populate twitter client - socialmedia');
   var client = new Twitter({
     consumer_key: process.env.TW_KEY,
     consumer_secret: process.env.TW_SECRET,
@@ -89,7 +89,7 @@ module.exports.populateTwitterClient = (token, tokenSecret) => {
 };
 
 module.exports.facebookPost = (profileId, accessToken, message) => {
-  console.log('in facebook post - socialmedia');
+  // console.log('in facebook post - socialmedia');
   return axios.request({
     url: `https://graph.facebook.com/${profileId}/feed`,
     method: 'post',
@@ -102,7 +102,7 @@ module.exports.facebookPost = (profileId, accessToken, message) => {
 
 
 module.exports.tweet = (client, message, cb) => {
-  console.log('in tweet function - socialmedia');
+  // console.log('in tweet function - socialmedia');
   var params = {
     status: message
   };

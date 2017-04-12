@@ -111,7 +111,7 @@ module.exports.userCheck = (req, res, next) => {
   let email = req.session.email;
   return dbh.getUser(email)
   .then(data => {
-    console.log('usercheck if user exists, data : ', data);
+    // console.log('usercheck if user exists, data : ', data);
     if (!data) return dbh.saveUser(email)
     else return
   })
@@ -146,15 +146,16 @@ module.exports.deletePost = (req, res, next) => {
 
 
 module.exports.getUserCred = (req, res, next) => {
-  console.log('getUser req cookies: ', req.cookies);
-  console.log('getUser req user: ', req.user);
-  console.log('getUser req session: ', req.session);
+  console.log('getUserCred req cookies: ', req.cookies);
+  console.log('getUserCred req user: ', req.user);
+  console.log('getUserCred req session: ', req.session);
 
   if (req.user) {
     let userCred = {};
     userCred.email = req.user.displayName;
     dbh.getUser(userCred.email)
     .then((data) => {
+      console.log('data from get user : ', data);
       userCred.twitter = (data.twitter_token) ? true : false;
       userCred.facebook = (data.facebook_id) ? true : false;
       res.send(userCred);

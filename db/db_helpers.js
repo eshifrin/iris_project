@@ -51,6 +51,7 @@ module.exports.retrieveUserId = (email) => {
 }
 
 module.exports.getUser = (email) => {
+  console.log('in dbh get user : email: ', email);
   return User.findOneAsync({email: email});
 }
 
