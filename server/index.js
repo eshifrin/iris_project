@@ -69,7 +69,7 @@ app.post('/api/image/imgLink', (req, res) => {
     })
 })
 
-app.get('/user', rh.getUser);
+app.get('/usercred', rh.getUserCred);
 
 //conditionally do this after passing them through Auth0
 app.post('/api/user/now', rh.sendPostsNow)

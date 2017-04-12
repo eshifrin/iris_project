@@ -14,7 +14,7 @@ class App extends React.Component {
       isLoggedIn: false,
       twitterAuthenticated: false,
       email: '',
-      postToTwitter: false,
+      postToTwitter: true,
       postToFacebook: true,
       text: '',
       bgColor: 'grey',
@@ -40,12 +40,15 @@ class App extends React.Component {
     // util.checkLoggedIn()
     // .then()
 
-    util.getCurrentUserEmail()
-    .then((email) => {
-      console.log('result data in then of getCurrentUserEmail', JSON.stringify(email.data));
-      if (email.data.length !== 0){
-        this.setState({email: email.data});
-        util.retrievePosts('scheduled', email.data)
+    util.getCurrentUserCred()
+    .then((res) => {
+      console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
+      if (res.data.email.length !== 0){
+        this.setState({email: res.data.email,
+          postToTwitter: res.data.twitter,
+          postToFacebook: res.data.facebook
+        });
+        util.retrievePosts('scheduled', res.data.email)
         .then(results => {
           this.setState({
             scheduledPosts: results.data
@@ -145,9 +148,19 @@ class App extends React.Component {
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
+<<<<<<< HEAD
         <div><a href="/twitter">verify twitter</a></div>
         <div><a href="/facebook">verify facebook</a></div>
         <NavBar />
+=======
+        <DateTimePicker />
+        <NavBar 
+          login={this.state.email.length === 0}
+          twitter={!this.state.postToTwitter}
+          facebook={!this.state.postToFacebook}
+          
+        />
+>>>>>>> corrected routing on homepage
           <Main
           deletePost={deletePost}
           scheduledPosts={scheduledPosts}
