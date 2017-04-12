@@ -15,9 +15,9 @@ passport.use('twitter-authz', new TwitterStrategy({
   },
   function(req, token, tokenSecret, profile, cb) {
     //we might want to do something w/the profile
-    console.log('the req.user.displayName will be related to facebook', req.user.displayName);
+
     return dbh.updateUserTwitter({
-      email: req.user.displayName,
+      email: req.session.email,
       token: token,
       tokenSecret: tokenSecret
     })
@@ -39,8 +39,7 @@ passport.use('facebook-authz', new FacebookStrategy({
     passReqToCallback: true
   },
   function(req, accessToken, refreshToken, profile, cb) {
-
-    return dbh.updateUserFacebook(req.user.displayName, accessToken, profile.id)
+    return dbh.updateUserFacebook(req.session.email, accessToken, profile.id)
     .then(() => {
       return cb(null, profile); 
     })
@@ -65,9 +64,9 @@ passport.deserializeUser(function(obj, cb) {
 
 
 //rename this!
-module.exports.TWtoAuth = passport.authenticate('twitter-authz');
+module.exports.TWtoAuth = passport.authorize('twitter-authz');
 module.exports.TWfromAuth = passport.authenticate('twitter-authz', { failureRedirect: '/', successRedirect: '/'})
-module.exports.FBtoAuth = passport.authenticate('facebook-authz', { scope: ['publish_actions'] });
+module.exports.FBtoAuth = passport.authorize('facebook-authz', { scope: ['publish_actions'] });
 module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/', successRedirect: '/'});
 
 

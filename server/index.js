@@ -38,17 +38,28 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/../public/dist'));
 
+
+/************************** Authorization ******************************/
+
 app.use('/login', Auth0.login);
 app.use('/callback', Auth0.authVerify, rh.userCheck);
 app.use('/logout', Auth0.logout);
 
+/************************** Social media auth ******************************/
+
+app.get('/twitter', sm.TWtoAuth);
+app.get('/twitter/return', sm.TWfromAuth);
+
+app.get('/facebook', sm.FBtoAuth);
+app.get('/facebook/return', sm.FBfromAuth);
+
 /************************** paths ******************************/
 
-app.post('/api/image/imgLink', (req, res) => {
-    cloudinary.uploader.upload(req.body.image, (result) => {
-      res.send(result.secure_url);
-    })
-})
+// app.post('/api/image/imgLink', (req, res) => {
+//     cloudinary.uploader.upload(req.body.image, (result) => {
+//       res.send(result.secure_url);
+//     })
+// })
 
 //conditionally do this after passing them through Auth0
 app.post('/api/user/now', rh.sendPostsNow)
@@ -58,13 +69,10 @@ app.route('/api/user/:post_type')
   .post(rh.scheduleOrSavePosts)
   .delete(rh.deletePost)
 
-app.get('/twitter', sm.TWtoAuth);
-app.get('/twitter/return', sm.TWfromAuth);
-
-app.get('/facebook', sm.FBtoAuth);
-app.get('/facebook/return', sm.FBfromAuth);
 
 
+
+/************************** catch all ******************************/
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/dist/index.html'))

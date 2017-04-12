@@ -35,7 +35,7 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
 
 
 module.exports.sendFacebookNow = (req, res, next) => {
-  let email = req.body.email;
+  let email = req.session.email;
   let message = req.body.text;
 
   return dbh.userExists(email)
@@ -58,10 +58,10 @@ module.exports.sendFacebookNow = (req, res, next) => {
 
 
 module.exports.sendTwitterNow = (req, res, next) => {
-  let email = req.body.email
+  let email = req.session.email
   let message = req.body.text;
 
-  return dbh.userExists('e@f.com')
+  return dbh.userExists(email)
   .then(data => {
     if (!data) throw 'invalid user';
     else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
@@ -142,11 +142,5 @@ module.exports.deletePost = (req, res, next) => {
     console.log('err in routehandler', err);
     console.log(req.body);
   })
-
-
-
-
-
-
 
 }
