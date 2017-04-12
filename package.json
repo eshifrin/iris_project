@@ -9,7 +9,7 @@
   },
   "scripts": {
     "postinstall": "webpack -p",
-    "start": "nodemon server/index.js",
+    "start": "node server/index.js",
     "webpack": "webpack -w"
   },
   "dependencies": {
