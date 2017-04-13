@@ -15,8 +15,8 @@ class App extends React.Component {
       twitterAuthenticated: true,
       facebookAuthenticated: true,
       email: '',
-      postToTwitter: true,
-      postToFacebook: true,
+      postToTwitter: false,
+      postToFacebook: false,
       text: '',
       img: '',
       imgUrl: '',
@@ -102,6 +102,7 @@ class App extends React.Component {
     let scheduledDateTime = e.target.value;
     scheduledDateTime = new Date(scheduledDateTime);
     this.setState({ scheduledDateTime: scheduledDateTime });
+    console.log('on change of scheduled time, this state : ', this.state.scheduledDateTime);
   }
 
   handleLogoClick(e) {
@@ -118,9 +119,16 @@ class App extends React.Component {
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
     // console.log('state before schedule post: ', this.state);
     e.preventDefault();
+    // console.log('when in schedule post: ', when);
+    // console.log('e target in schedule post: ', e.target);
+    // console.log('scheduledDateTime in state before scheduled posting: ', scheduledDateTime);
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
+      this.setState({
+        text: '',
+        scheduledDateTime: new Date()
+      })
       this.componentWillMount();
     })
     .catch((err) => {

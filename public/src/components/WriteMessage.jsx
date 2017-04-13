@@ -18,7 +18,8 @@ const WriteMessage = ({ text, handleTextChange, handleLogoClick, postToFacebook,
       type="checkbox" name="socialSites" value="Twitter"
       onChange={handleLogoClick} checked={postToTwitter}
     />Twitter
-    <h4>Message:</h4>
+    <br/>
+    <label>Message:</label>
     <input
       type="text"
       name="text"
@@ -26,6 +27,7 @@ const WriteMessage = ({ text, handleTextChange, handleLogoClick, postToFacebook,
       value={text}
       onChange={handleTextChange}
     />
+
   </div>
 );
 

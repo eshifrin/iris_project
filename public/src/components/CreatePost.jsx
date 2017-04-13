@@ -18,6 +18,9 @@ const propTypes = {
 
 const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange }) => {
   // console.log('!!!!',imgUrl);
+  var style = {
+    color: 'red'
+  }
   return (
   <div>
     <form onSubmit={(e) => handlePostSubmit(e)}>
@@ -33,8 +36,9 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
       <DateTimePicker handleScheduleChange={handleScheduleChange}/>
       <PhotoUpload uploadImg={uploadImg} />
     </form>
-      <button value="postnow" onClick={handleNowSubmit}>Post Now</button>
-      <button value="schedulepost" onClick={handlePostSubmit}>Schedule Post</button>
+      <button value="postnow" onClick={(postToFacebook || postToTwitter) && handleNowSubmit}>Post Now</button>
+      <button value="schedulepost" onClick={(postToFacebook || postToTwitter) && handlePostSubmit}>Schedule Post</button>
+      {!postToTwitter && !postToFacebook && <h5 style={style}>Please choose at least one social site to share your post</h5>}
   </div>
 );
 };
