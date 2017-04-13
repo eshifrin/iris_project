@@ -89,26 +89,18 @@ module.exports.populateTwitterClient = (token, tokenSecret) => {
 };
 
 module.exports.facebookPost = (profileId, accessToken, message, photoUrl) => {
-  console.log('in facebook post - socialmedia', photoUrl);
-  
+  let params = {
+    'message': message,
+    'access_token': accessToken 
+  };
 
-  if (!photoUrl) {
-    return axios.request({
-      url: `https://graph.facebook.com/${profileId}/feed`,
-      method: 'post',
-      params: {'message': message,
-        'access_token': accessToken}
-    });
-  } else {
-    return axios.request({
-      url: `https://graph.facebook.com/${profileId}/photos`,
-      method: 'post',
-      params: {
-        'url': photoUrl,
-        'caption': message,
-        'access_token': accessToken}
-    });
-  }
+  if (photoUrl) params.link = photoUrl;
+
+  return axios.request({
+    url: `https://graph.facebook.com/${profileId}/feed`,
+    method: 'post',
+    params
+  });
 }
 
 module.exports.tweet = (client, message, pictureData) => {
