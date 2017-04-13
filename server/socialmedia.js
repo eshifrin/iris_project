@@ -5,7 +5,7 @@ const axios = require('axios')
 
 const Twitter = require('twitter');
 const dbh = require('../db/db_helpers.js')
-
+const fs = require('fs');
 
 passport.use('twitter-authz', new TwitterStrategy({
     consumerKey: process.env.TW_KEY,
@@ -30,13 +30,12 @@ passport.use('twitter-authz', new TwitterStrategy({
     });
 }));
 
-
-
 passport.use('facebook-authz', new FacebookStrategy({
     clientID: process.env.FB_ID,
     clientSecret: process.env.FB_SECRET,
     callbackURL: "http://localhost:3000/facebook/return",
-    passReqToCallback: true
+    passReqToCallback: true,
+    enableProof: true
   },
   function(req, accessToken, refreshToken, profile, cb) {
 
@@ -70,8 +69,9 @@ passport.deserializeUser(function(obj, cb) {
 //rename this!
 module.exports.TWtoAuth = passport.authorize('twitter-authz');
 module.exports.TWfromAuth = passport.authenticate('twitter-authz', { failureRedirect: '/', successRedirect: '/'})
-module.exports.FBtoAuth = passport.authorize('facebook-authz', { scope: ['publish_actions'] });
-module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/', successRedirect: '/'});
+module.exports.FBtoAuth = passport.authenticate('facebook-authz', { scope: ['publish_actions'] });
+module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/login',
+successRedirect: '/'});
 
 
 
@@ -88,33 +88,45 @@ module.exports.populateTwitterClient = (token, tokenSecret) => {
   return client;
 };
 
-module.exports.facebookPost = (profileId, accessToken, message) => {
-  // console.log('in facebook post - socialmedia');
+module.exports.facebookPost = (profileId, accessToken, message, photoUrl) => {
+  let params = {
+    'message': message,
+    'access_token': accessToken 
+  };
+
+  if (photoUrl) params.link = photoUrl;
+
   return axios.request({
     url: `https://graph.facebook.com/${profileId}/feed`,
     method: 'post',
-    params: {'message': message,
-      'access_token': accessToken}
-    })
+    params
+  });
 }
 
-
-
-
-module.exports.tweet = (client, message, cb) => {
-  // console.log('in tweet function - socialmedia');
+module.exports.tweet = (client, message, pictureData) => {
   var params = {
     status: message
   };
 
+  if (pictureData) {
+    //this is what the client sends over...b64 strips out image/jpeg;base64
+    // image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ
+    const b64 = pictureData.replace(/^data:image\/[a-z]+;base64,/, "");
+    const pictureDatainBinary = Buffer.from(b64, 'base64'); 
+    return client.post('media/upload', {media: pictureDatainBinary})
 
-  return new Promise((resolve, reject) => {
-    return client.post('https://api.twitter.com/1.1/statuses/update.json', 
-      params, (err, tweet, results) => {
-        if (err) reject(err);
-        else resolve(tweet);
-      });
-  }); 
+    .then(media => {
+      console.log('successful picture post', media)
+      params.media_ids = media.media_id_string;
+      return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
+    })
+    .catch(err => {
+      console.log('error sending media to twitter', err)
+      return;
+    })
+  } else {
+    return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
+  }
 };
 
 

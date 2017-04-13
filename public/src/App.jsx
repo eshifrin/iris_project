@@ -7,6 +7,7 @@ import FuturePostList from './components/FuturePostList.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -75,15 +76,16 @@ class App extends React.Component {
     e.preventDefault();
     let file = e.target.files[0];
     let reader = new FileReader(file);  
-    reader.readAsDataURL(file);
+    reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
       this.setState({
         img: reader.result
       })
-      axios.post('/api/image/imgLink', {image: reader.result})
-      .then(res =>
-        this.setState({ imgUrl: res.data })
-      );
+      console.log('binary blob', reader.result);
+      // axios.post('/api/image/imgLink', {image: reader.result})
+      // .then(res =>
+      //   this.setState({ imgUrl: res.data })
+      // );
     }
   }
 

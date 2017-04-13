@@ -35,11 +35,12 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
 module.exports.sendFacebookNow = (req, res, next) => {
   let email = req.session.email;
   let message = req.body.text;
+  let image = req.body.imgUrl;
+    console.log('in send facebook now', image)
   return dbh.getUser(email)
   .then(data => {
     if (!data) throw 'invalid user'
-    // else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
-    else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
+    else return sm.facebookPost(data.facebook_id, data.facebook_token, message, req.body.imgUrl);
 
   })
   .then(fbpost => {
@@ -47,6 +48,7 @@ module.exports.sendFacebookNow = (req, res, next) => {
     return 'Facebook Successful'
   })
   .catch(err => {
+    console.log('error in facebook posting', err)
     return err;
   })
 }
@@ -57,6 +59,7 @@ module.exports.sendFacebookNow = (req, res, next) => {
 module.exports.sendTwitterNow = (req, res, next) => {
   let email = req.session.email
   let message = req.body.text;
+  let img = req.body.img;
 
   return dbh.getUser(email)
   .then(data => {
@@ -64,13 +67,15 @@ module.exports.sendTwitterNow = (req, res, next) => {
     else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
   })
   .then(client => {
-    return sm.tweet(client, message)
+
+    return sm.tweet(client, message, req.body.img)
   })
   .then(tweet => {
     req.body.postedTwitterId = tweet.id;
     return 'Twitter Sucessful'
   })
   .catch(err => {
+    console.log('error in twitter posting', err)
     return err;
   })
 };
@@ -102,6 +107,8 @@ module.exports.sendPostsNow = (req, res, next) => {
     res.end();
   })
   .catch((err) => {
+    console.log('error posting', err);
+    res.end('err')
     //send back database error
   })
 }
