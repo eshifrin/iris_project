@@ -117,30 +117,12 @@ class App extends React.Component {
 
   updatePost(e, post) {
     e.preventDefault();
-    console.log('in update post, post : ', post);
-    console.log('update post img : ', post.img);
-    // console.log('date of post: ', post.scheduledDateTime)
-    // const dateObj = moment(post.scheduledDateTime)
-
-    /*let file = e.target.files[0];
-    let reader = new FileReader(file);  
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      this.setState({
-        img: reader.result
-      })
-      axios.post('/api/image/imgLink', {image: reader.result})
-      .then(res =>
-        this.setState({ imgUrl: res.data })
-      );
-    }*/
-
     this.setState({
       text: post.text,
       postToFacebook: post.postToFacebook,
       postToTwitter: post.postToTwitter,
       scheduledDateTime: post.scheduledDateTime,
-      img: post.img
+      imgUrl: post.imgUrl
     })
   }
 
