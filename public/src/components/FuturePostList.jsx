@@ -7,6 +7,7 @@ const propTypes = {
 
 
 const FuturePostList = ({scheduledPosts, deletePost}) => {
+
   const posts = scheduledPosts.map(post => 
      <li key={post._id}>
         <FuturePostListItem post={post} />
@@ -15,6 +16,8 @@ const FuturePostList = ({scheduledPosts, deletePost}) => {
 
   return (
   <div>
+    {(scheduledPosts.length !== 0) && <h4>To be posted:</h4>}
+      {(scheduledPosts.length === 0) && <h5>You have not scheduled any messages yet!</h5>}
       <ul>
         {posts}
       </ul>

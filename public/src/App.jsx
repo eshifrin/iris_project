@@ -15,8 +15,8 @@ class App extends React.Component {
       twitterAuthenticated: true,
       facebookAuthenticated: true,
       email: '',
-      postToTwitter: true,
-      postToFacebook: true,
+      postToTwitter: false,
+      postToFacebook: false,
       text: '',
       img: '',
       imgUrl: '',
@@ -44,6 +44,7 @@ class App extends React.Component {
           twitterAuthenticated: res.data.twitter,
           facebookAuthenticated: res.data.facebook
         });
+
         util.retrievePosts('scheduled', res.data.email)
         .then(results => {
           this.setState({
@@ -51,7 +52,17 @@ class App extends React.Component {
           })
         })
         .catch((err) => {
-          console.log('there was error in retreiving posts of the current user, err : ', err);
+          console.log('there was error in retreiving scheduledposts of the current user, err : ', err);
+        })
+
+        util.retrievePosts('posted', res.data.email)
+        .then(results => {
+          this.setState({
+            pastPosts: results.data
+          })
+        })
+        .catch((err) => {
+          console.log('there was error in retreiving pastposts of the current user, err : ', err);
         })
       }
     })
@@ -102,6 +113,7 @@ class App extends React.Component {
     let scheduledDateTime = e.target.value;
     scheduledDateTime = new Date(scheduledDateTime);
     this.setState({ scheduledDateTime: scheduledDateTime });
+    console.log('on change of scheduled time, this state : ', this.state.scheduledDateTime);
   }
 
   handleLogoClick(e) {
@@ -118,9 +130,16 @@ class App extends React.Component {
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
     // console.log('state before schedule post: ', this.state);
     e.preventDefault();
+    // console.log('when in schedule post: ', when);
+    // console.log('e target in schedule post: ', e.target);
+    // console.log('scheduledDateTime in state before scheduled posting: ', scheduledDateTime);
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
+      this.setState({
+        text: '',
+        scheduledDateTime: new Date()
+      })
       this.componentWillMount();
     })
     .catch((err) => {
@@ -142,7 +161,7 @@ class App extends React.Component {
 
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook} = this.state;
+    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook} = this.state;
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
@@ -155,6 +174,7 @@ class App extends React.Component {
           {this.state.isLoggedIn && <Main
           deletePost={deletePost}
           scheduledPosts={scheduledPosts}
+          pastPosts={pastPosts}
           uploadImg={uploadImg}
           imgUrl={imgUrl}
           postToFacebook={postToFacebook}

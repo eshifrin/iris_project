@@ -17,11 +17,11 @@ const propTypes = {
   handleScheduleChange: PropTypes.func.isRequired,
 };
 
-const Main = ({ postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange }) => {
+const Main = ({ postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange, pastPosts }) => {
   return(
     <div>
       <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost}/>
-      <PastPostList />
+      <PastPostList pastPosts={pastPosts}/>
       <CreatePost
         uploadImg={uploadImg}
         imgUrl={imgUrl}
