@@ -76,7 +76,7 @@ app.route('/api/user/:post_type')
   .post(rh.scheduleOrSavePosts)
   .delete(rh.deletePost)
 
-app.get('/usercred', rh.getUserCred);
+app.get('/userinfo', rh.getUserInfo);
 
 app.get('/twitter', sm.TWtoAuth);
 app.get('/twitter/return', sm.TWfromAuth);

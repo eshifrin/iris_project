@@ -22,9 +22,9 @@ const deletePost = (postId) => {
           {params: {_id: postId }});
 }
 
-const getCurrentUserCred = () => {
-  return axios.get('/usercred');
+const getCurrentUserInfo = () => {
+  return axios.get('/userinfo');
 }
 
-export { retrievePosts, submitNewPost, getCurrentUserCred, deletePost };
+export { retrievePosts, submitNewPost, getCurrentUserInfo, deletePost };
 

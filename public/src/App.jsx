@@ -39,7 +39,7 @@ class App extends React.Component {
   }
 
   componentWillMount(){
-    util.getCurrentUserCred()
+    util.getCurrentUserInfo()
     .then((res) => {
       // console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
       if (res.data.email.length !== 0){
@@ -139,8 +139,7 @@ class App extends React.Component {
     .then(results => {
       console.log('Submit new post - status code:', results.status);
       this.setState({
-        text: '',
-        scheduledDateTime: new Date()
+        text: ''
       })
       this.componentWillMount();
     })
