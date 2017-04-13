@@ -18,8 +18,6 @@ class App extends React.Component {
       email: '',
       postToTwitter: false,
       postToFacebook: false,
-      postToTwitter: true,
-      postToFacebook: true,
       text: '',
       img: '',
       imgUrl: '',
@@ -120,23 +118,28 @@ class App extends React.Component {
   updatePost(e, post) {
     e.preventDefault();
     console.log('in update post, post : ', post);
-
-    // let file = post.img;
     console.log('update post img : ', post.img);
+    // console.log('date of post: ', post.scheduledDateTime)
+    // const dateObj = moment(post.scheduledDateTime)
 
-    // let reader = new FileReader(file);  
-    // reader.readAsArrayBuffer(file);
-    // reader.onloadend = () => {
-    //   this.setState({
-    //     img: reader.result
-    //   });
-    // }
-      // console.log('binary blob in update post', reader.result);
+    /*let file = e.target.files[0];
+    let reader = new FileReader(file);  
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      this.setState({
+        img: reader.result
+      })
+      axios.post('/api/image/imgLink', {image: reader.result})
+      .then(res =>
+        this.setState({ imgUrl: res.data })
+      );
+    }*/
+
     this.setState({
       text: post.text,
       postToFacebook: post.postToFacebook,
       postToTwitter: post.postToTwitter,
-      scheduledDateTime: post.date,
+      scheduledDateTime: post.scheduledDateTime,
       img: post.img
     })
   }
@@ -148,13 +151,13 @@ class App extends React.Component {
 
   handleScheduleChange(e) {
     e.preventDefault();
+    // console.log('time sent by datepicker', e.target.value)
     let scheduledDateTime = moment(e.target.value).utc().toISOString();
+    // console.log('date created by datepicker using moment - handleschedule change: ', scheduledDateTime)
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
 
   handleLogoClick(e) {
-    // console.log('print event checked: ', e.target.checked);
-    // console.log('print event value: ', e.target.value);
     if (e.target.value === 'Facebook') {
       this.setState({postToFacebook: e.target.checked});
     } else {
@@ -164,16 +167,13 @@ class App extends React.Component {
 
   scheduleNewPost(e, when) {
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
-    // console.log('state before schedule post: ', this.state);
     e.preventDefault();
-    // console.log('when in schedule post: ', when);
-    // console.log('e target in schedule post: ', e.target);
-    // console.log('scheduledDateTime in state before scheduled posting: ', scheduledDateTime);
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
       this.setState({
-        text: ''
+        text: '',
+        scheduledDateTime: ''
       })
       this.getScheduledPosts();
     })

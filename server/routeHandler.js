@@ -10,7 +10,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 
   dbh.showUserPosts(email, req.params.post_type)
   .then(results => {
-    console.log('results in showuserposts: ', results)
+    // console.log('results in showuserposts: ', results)
     res.status(200).json(results);
   })
   .catch(err => {
@@ -188,7 +188,7 @@ module.exports.getUserInfo = (req, res, next) => {
     userCred.email = req.session.email;
     dbh.getUser(userCred.email)
     .then((data) => {
-      console.log('data from get user : ', data);
+      // console.log('data from get user : ', data);
       userCred.twitter = (data.twitter_token) ? true : false;
       userCred.facebook = (data.facebook_id) ? true : false;
 
