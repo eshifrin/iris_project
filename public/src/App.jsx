@@ -6,6 +6,8 @@ import Main from './components/Main.jsx';
 import FuturePostList from './components/FuturePostList.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
+import moment from 'moment';
+
 
 
 class App extends React.Component {
@@ -25,7 +27,8 @@ class App extends React.Component {
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: [],
-      scheduledDateTime: new Date
+      scheduledDateTime: '',
+
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -114,11 +117,8 @@ class App extends React.Component {
 
   handleScheduleChange(e) {
     e.preventDefault();
-    let scheduledDateTime = e.target.value;
-    scheduledDateTime = new Date(scheduledDateTime);
-
+    let scheduledDateTime = moment(e.target.value).utc().toISOString();
     this.setState({ scheduledDateTime: scheduledDateTime });
-    console.log('on change of scheduled time, this state : ', this.state.scheduledDateTime);
   }
 
   handleLogoClick(e) {
@@ -166,13 +166,7 @@ class App extends React.Component {
 
 
   render() {
-<<<<<<< HEAD
-    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook} = this.state;
-||||||| merged common ancestors
-    const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook} = this.state;
-=======
     const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
->>>>>>> Fix date-time picker storage and auto-post twitter feeds
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
@@ -180,7 +174,6 @@ class App extends React.Component {
           login={!this.state.isLoggedIn}
           twitter={!this.state.twitterAuthenticated}
           facebook={!this.state.facebookAuthenticated}
-          
         />
           {this.state.isLoggedIn && <Main
           deletePost={deletePost}

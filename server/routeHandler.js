@@ -20,17 +20,18 @@ module.exports.sendUserPosts = (req, res, next) => {
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   console.log('whats the req body here?', req.body);
-  let scheduledPostIds = req.body.scheduledPostIds;
-
+  // let scheduledPostIds = req.body.scheduledPostIds;
+  // dbh.retrieveUserId(req.email)
   dbh.retrieveUserId(req.session.email)
   .then(id => {
-    dbh.deletePost(id, scheduledPostIds);
+    // dbh.deletePost(id, scheduledPostIds);
     return dbh.savePost(id, req.body, req.body.status || 'scheduled')
   })
   .then(() => {
     res.status(200).end();
   })
   .catch(err => {
+    console.log(err)
     if (err === 'invalid user') res.status(404).end();
     else res.status(500).end();
   })
@@ -91,16 +92,17 @@ module.exports.sendTwitterNow = (req, res, next) => {
 
 module.exports.sendPostsNow = (req, res, next) => {
   let posts = [];
-  let scheduledPostIds = req.scheduledPostIds[0];
+  console.log('what is this req?', req);
+  // let scheduledPostIds = req.scheduledPostIds[0];
   console.log('what is in req', req.body.email, req.body.postToFacebook);
   if (req.body.postToFacebook) posts.push(module.exports.sendFacebookNow(req, res, next));
   if (req.body.postToTwitter) posts.push(module.exports.sendTwitterNow(req, res, next));
   console.log('what are the posts?', posts);
 
   Promise.all(posts)
-  // .catch(e => {
-  //   return posts
-  // })
+  .catch(e => {
+    return posts
+  })
   .then(postResults => {
     console.log('post results??', postResults);
     req.body.status = 'posted';

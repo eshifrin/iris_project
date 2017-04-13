@@ -1,23 +1,30 @@
-cron.schedule('*/2 * * * * *', () => {
+const cron = require('node-cron');
+const dbh = require('./../db/db_helpers.js')
+const rh = require('./routeHandler.js');
+const User = require('./../db/models/user')
+const moment = require('moment');
+
+cron.schedule('1 * * * * *', () => {
     // get posts less than or equal to current time
     let socialMediaReqObj = {};
-    let currentDateTime = new Date().toUTCString();
+    let currentDateTime = moment(new Date()).utc().toISOString();
+    console.log('in cron, whats the currentDT', currentDateTime);
     let postIds = [];
     return dbh.checkScheduledEvent(currentDateTime)
     .then(data => {
       console.log('what are the outstanding?', data);
-      return User.findAsync({'_id': data[0].user_id})
+      return User.findAsync({'_id': data[1].user_id})
       .then(userObj => {
         socialMediaReqObj = {
           body: {
-            text: data[0].text,
-            postToFacebook: data[0].postToFacebook,
-            postToTwitter: data[0].postToTwitter
+            text: data[1].text,
+            postToFacebook: data[1].postToFacebook,
+            postToTwitter: data[1].postToTwitter
           },
           session: {
             email: userObj[0].email
           },
-          scheduledPostIds: [data[0]._id]
+          scheduledPostIds: [data[1]._id]
         }
         return socialMediaReqObj;
       })

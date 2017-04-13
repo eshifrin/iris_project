@@ -73,11 +73,14 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
       { $set:  {facebook_token: token,
                 facebook_id: facebook_id }})
 }
-
+// 'Thu, 13 Apr 2017 02:39:48 GMT'
 module.exports.checkScheduledEvent = (dateTime) => {
+  // console.log('what dateTime is being passed down?', dateTime);
+  // dateTime = 'ISODate("' + dateTime + '")';
+  // console.log('what is the ISODate?', dateTime);
   return Post.findAsync(
     { $and: [
-        { 'scheduledDateTime': { $lte: dateTime } },
+        { 'scheduledDateTime': { $lte: new Date() } },
         { 'status': 'scheduled' },
         // { $or: [{ postedFacebookId: null,
         //          postedTwitterId: null }]}
