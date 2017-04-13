@@ -1,4 +1,4 @@
-  const dbh = require('../db/db_helpers');
+const dbh = require('../db/db_helpers');
 const url = require('url');
 const sm = require('./socialmedia.js')
 
@@ -19,31 +19,39 @@ module.exports.sendUserPosts = (req, res, next) => {
 
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
+  console.log('whats the req body here?', req.body);
+  // let scheduledPostIds = req.body.scheduledPostIds;
+  // dbh.retrieveUserId(req.email)
   dbh.retrieveUserId(req.session.email)
   .then(id => {
+    // dbh.deletePost(id, scheduledPostIds);
     return dbh.savePost(id, req.body, req.body.status || 'scheduled')
   })
   .then(() => {
     res.status(200).end();
   })
   .catch(err => {
+    console.log(err)
     if (err === 'invalid user') res.status(404).end();
     else res.status(500).end();
   })
 }
 
 module.exports.sendFacebookNow = (req, res, next) => {
+  console.log('FB email format: ', req.session.email);
+  console.log('FB message format: ', req.body.text);
   let email = req.session.email;
   let message = req.body.text;
   let image = req.body.imgUrl;
     console.log('in send facebook now', image)
   return dbh.getUser(email)
   .then(data => {
+    console.log('what is this data?', data);
     if (!data) throw 'invalid user'
     else return sm.facebookPost(data.facebook_id, data.facebook_token, message, req.body.imgUrl);
-
   })
   .then(fbpost => {
+    console.log('what is this fbpost thing?', fbpost);
     req.body.postedFacebookId = fbpost.data.id;
     return 'Facebook Successful'
   })
@@ -53,10 +61,9 @@ module.exports.sendFacebookNow = (req, res, next) => {
   })
 }
 
-
-
-
 module.exports.sendTwitterNow = (req, res, next) => {
+  console.log('Twitter email format: ', req.session.email);
+  console.log('Twitter message format: ', req.body.text);
   let email = req.session.email
   let message = req.body.text;
   let img = req.body.img;
@@ -67,12 +74,15 @@ module.exports.sendTwitterNow = (req, res, next) => {
     else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
   })
   .then(client => {
-
     return sm.tweet(client, message, req.body.img)
+    console.log('what is Tw client?', client);
   })
   .then(tweet => {
+    console.log('is tweet successful?', tweet);
     req.body.postedTwitterId = tweet.id;
-    return 'Twitter Sucessful'
+    let successMsgAndTweetId = ['Twitter Successful', tweet.id];
+    console.log('tw sucecss??', successMsgAndTweetId);
+    return successMsgAndTweetId;
   })
   .catch(err => {
     console.log('error in twitter posting', err)
@@ -82,15 +92,23 @@ module.exports.sendTwitterNow = (req, res, next) => {
 
 module.exports.sendPostsNow = (req, res, next) => {
   let posts = [];
+  console.log('what is this req?', req);
+  // let scheduledPostIds = req.scheduledPostIds[0];
+  console.log('what is in req', req.body.email, req.body.postToFacebook);
   if (req.body.postToFacebook) posts.push(module.exports.sendFacebookNow(req, res, next));
   if (req.body.postToTwitter) posts.push(module.exports.sendTwitterNow(req, res, next));
+  console.log('what are the posts?', posts);
 
   Promise.all(posts)
   .catch(e => {
     return posts
   })
   .then(postResults => {
+    console.log('post results??', postResults);
     req.body.status = 'posted';
+    req.body.scheduledPostIds = scheduledPostIds;
+    console.log('whats the req.body now?', req.body);
+    // req.body.postId = 
     return module.exports.scheduleOrSavePosts(req, res, next);
   })
   .then(() => {

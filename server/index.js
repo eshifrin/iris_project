@@ -39,8 +39,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/../public/dist'));
 
-
-
 /************************** Authorization ******************************/
 
 app.use('/login', Auth0.login);
@@ -68,8 +66,6 @@ app.post('/api/image/imgLink', (req, res) => {
       res.send(result.secure_url);
     })
 })
-
-
 
 //conditionally do this after passing them through Auth0
 app.post('/api/user/now', rh.sendPostsNow)

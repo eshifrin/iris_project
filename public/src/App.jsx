@@ -6,7 +6,7 @@ import Main from './components/Main.jsx';
 import FuturePostList from './components/FuturePostList.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
-
+import moment from 'moment';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,12 +18,15 @@ class App extends React.Component {
       email: '',
       postToTwitter: false,
       postToFacebook: false,
+      postToTwitter: true,
+      postToFacebook: true,
       text: '',
       img: '',
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: [],
-      scheduledDateTime: ''
+      scheduledDateTime: '',
+
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -112,10 +115,8 @@ class App extends React.Component {
 
   handleScheduleChange(e) {
     e.preventDefault();
-    let scheduledDateTime = e.target.value;
-    scheduledDateTime = new Date(scheduledDateTime);
+    let scheduledDateTime = moment(e.target.value).utc().toISOString();
     this.setState({ scheduledDateTime: scheduledDateTime });
-    console.log('on change of scheduled time, this state : ', this.state.scheduledDateTime);
   }
 
   handleLogoClick(e) {
@@ -163,7 +164,7 @@ class App extends React.Component {
 
 
   render() {
-    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook} = this.state;
+    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
@@ -171,7 +172,6 @@ class App extends React.Component {
           login={!this.state.isLoggedIn}
           twitter={!this.state.twitterAuthenticated}
           facebook={!this.state.facebookAuthenticated}
-          
         />
           {this.state.isLoggedIn && <Main
           deletePost={deletePost}
@@ -184,6 +184,7 @@ class App extends React.Component {
           scheduleNewPost={scheduleNewPost}
           handlePostSubmit={handlePostSubmit}
           handleNowSubmit={handleNowSubmit}
+          scheduledDateTime={scheduledDateTime}
           text={text}
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}

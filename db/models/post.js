@@ -10,7 +10,7 @@ const PostSchema = mongoose.Schema({
   postToFacebook: Boolean,
   postedFacebookId: {type: String, default: null},
   date: { type: Date, default: Date.now },
-  scheduledDateTime: String,
+  scheduledDateTime: Date,
   status: String
 });
 //status: scheduled, approved, posting, posted

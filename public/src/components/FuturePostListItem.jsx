@@ -7,10 +7,10 @@ const propTypes = {
 
 
 const FuturePostListItem = ({post}) => {
-  const dateObj = moment(post.date)
+  const dateObj = moment(post.scheduledDateTime)
   const monthDay = dateObj.format('M/D');
   const time = dateObj.format('hh:mma');
-
+  console.log('what ist he post?', post);
   return (
   <div>
   <span> {monthDay} </span>
@@ -25,5 +25,3 @@ const FuturePostListItem = ({post}) => {
 
 
 export default FuturePostListItem;
-
-
