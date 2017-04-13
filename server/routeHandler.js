@@ -35,11 +35,12 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
 module.exports.sendFacebookNow = (req, res, next) => {
   let email = req.session.email;
   let message = req.body.text;
+  let image = req.body.imgUrl;
+    console.log('in send facebook now', image)
   return dbh.getUser(email)
   .then(data => {
     if (!data) throw 'invalid user'
-    // else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
-    else return sm.facebookPost(data.facebook_id, data.facebook_token, message);
+    else return sm.facebookPost(data.facebook_id, data.facebook_token, message, req.body.imgUrl);
 
   })
   .then(fbpost => {
@@ -59,7 +60,6 @@ module.exports.sendTwitterNow = (req, res, next) => {
   let email = req.session.email
   let message = req.body.text;
   let img = req.body.img;
-  console.log('here is the picture', img)
 
   return dbh.getUser(email)
   .then(data => {

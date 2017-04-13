@@ -30,8 +30,6 @@ passport.use('twitter-authz', new TwitterStrategy({
     });
 }));
 
-
-
 passport.use('facebook-authz', new FacebookStrategy({
     clientID: process.env.FB_ID,
     clientSecret: process.env.FB_SECRET,
@@ -90,33 +88,40 @@ module.exports.populateTwitterClient = (token, tokenSecret) => {
   return client;
 };
 
-module.exports.facebookPost = (profileId, accessToken, message) => {
-  // console.log('in facebook post - socialmedia');
-  return axios.request({
-    url: `https://graph.facebook.com/${profileId}/feed`,
-    method: 'post',
-    params: {'message': message,
-      'access_token': accessToken}
-    })
+module.exports.facebookPost = (profileId, accessToken, message, photoUrl) => {
+  console.log('in facebook post - socialmedia', photoUrl);
+  
+
+  if (!photoUrl) {
+    return axios.request({
+      url: `https://graph.facebook.com/${profileId}/feed`,
+      method: 'post',
+      params: {'message': message,
+        'access_token': accessToken}
+    });
+  } else {
+    return axios.request({
+      url: `https://graph.facebook.com/${profileId}/photos`,
+      method: 'post',
+      params: {
+        'url': photoUrl,
+        'caption': message,
+        'access_token': accessToken}
+    });
+  }
 }
 
-
-
-
 module.exports.tweet = (client, message, pictureData) => {
-  // console.log('in tweet function', pictureData);
-  // const data = require('fs').readFileSync('./server/calendar.jpg');
-  // console.log('dirname', __dirname)
-  // console.log('binary data', data)
-
   var params = {
     status: message
   };
-  const test = true;
 
   if (pictureData) {
-    return client.post('media/upload', {media: pictureData})
-    // return client.post('media/upload', {media: data})
+    //this is what the client sends over...b64 strips out image/jpeg;base64
+    // image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ
+    const b64 = pictureData.replace(/^data:image\/[a-z]+;base64,/, "");
+    const pictureDatainBinary = Buffer.from(b64, 'base64'); 
+    return client.post('media/upload', {media: pictureDatainBinary})
 
     .then(media => {
       console.log('successful picture post', media)
@@ -130,15 +135,6 @@ module.exports.tweet = (client, message, pictureData) => {
   } else {
     return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
   }
-
-
-  // return new Promise((resolve, reject) => {
-  //   return client.post('https://api.twitter.com/1.1/statuses/update.json', 
-  //     params, (err, tweet, results) => {
-  //       if (err) reject(err);
-  //       else resolve(tweet);
-  //     });
-  // }); 
 };
 
 
