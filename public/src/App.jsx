@@ -8,8 +8,6 @@ import axios from 'axios';
 import * as util from './lib/util.js'
 import moment from 'moment';
 
-
-
 class App extends React.Component {
   constructor(props) {
     super(props);

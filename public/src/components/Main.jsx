@@ -19,7 +19,7 @@ const propTypes = {
 };
 
 
-const Main = ({ postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange, pastPosts }) => {
+const Main = ({ postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange, pastPosts, scheduledDateTime }) => {
   return(
     <div>
       <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost}/>
