@@ -17,18 +17,10 @@ const propTypes = {
   scheduledDateTime: PropTypes.instanceOf(Date),
 };
 
-<<<<<<< HEAD
-const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange }) => {
-  // console.log('!!!!',imgUrl);
-  var style = {
+const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, scheduledDateTime }) => {
+    var style = {
     color: 'red'
   }
-||||||| merged common ancestors
-const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange }) => {
-  // console.log('!!!!',imgUrl);
-=======
-const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, scheduledDateTime }) => {
->>>>>>> Fix date-time picker storage and auto-post twitter feeds
   return (
   <div>
     <form onSubmit={(e) => handlePostSubmit(e)}>

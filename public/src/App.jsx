@@ -166,7 +166,7 @@ class App extends React.Component {
 
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
+    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
