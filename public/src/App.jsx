@@ -65,7 +65,6 @@ class App extends React.Component {
   uploadImg(e) {
     e.preventDefault();
     let file = e.target.files[0];
-    console.log('e.taget files in upload img : ', e.target.files)
     let reader = new FileReader(file);  
     reader.readAsDataURL(file);
     reader.onloadend = () => {
