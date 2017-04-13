@@ -36,6 +36,11 @@ class App extends React.Component {
     this.deletePost = this.deletePost.bind(this);
     this.scheduleNewPost = this.scheduleNewPost.bind(this);
     this.handleScheduleChange = this.handleScheduleChange.bind(this);
+    this.getPastPosts = this.getPastPosts.bind(this);
+    this.getScheduledPosts = this.getScheduledPosts.bind(this);
+    this.getPosts = this.getPosts.bind(this);
+    this.updatePost = this.updatePost.bind(this);
+
   }
 
   componentWillMount(){
@@ -48,26 +53,8 @@ class App extends React.Component {
           twitterAuthenticated: res.data.twitter,
           facebookAuthenticated: res.data.facebook
         });
-
-        util.retrievePosts('scheduled', res.data.email)
-        .then(results => {
-          this.setState({
-            scheduledPosts: results.data
-          })
-        })
-        .catch((err) => {
-          console.log('there was error in retreiving scheduledposts of the current user, err : ', err);
-        })
-
-        util.retrievePosts('posted', res.data.email)
-        .then(results => {
-          this.setState({
-            pastPosts: results.data
-          })
-        })
-        .catch((err) => {
-          console.log('there was error in retreiving pastposts of the current user, err : ', err);
-        })
+        this.getScheduledPosts();
+        this.getPastPosts();
       }
     })
     .catch((err) => {
@@ -78,6 +65,7 @@ class App extends React.Component {
   uploadImg(e) {
     e.preventDefault();
     let file = e.target.files[0];
+    console.log('e.taget files in upload img : ', e.target.files)
     let reader = new FileReader(file);  
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -91,20 +79,67 @@ class App extends React.Component {
     }
   }
 
+  getScheduledPosts() {
+    this.getPosts('scheduled');
+  }
+
+  getPastPosts() {
+    this.getPosts('posted');
+  }
+
+  getPosts(type) {
+    // console.log('in get posts, type : ', type)
+    util.retrievePosts(type, this.state.email)
+    .then(results => {
+      // console.log('in get posts, results: ', results);
+      if (type === 'scheduled') {
+        this.setState({
+          scheduledPosts: results.data
+        })
+      } else {
+        this.setState({
+          pastPosts: results.data
+        })
+      }
+    })
+    .catch((err) => {
+      console.log('there was error in retreiving scheduledposts of the current user, err : ', err);
+    })
+  }
+
   deletePost(e, post) {
     e.preventDefault();
     util.deletePost(post._id)
     .then(() => {
-      return util.retrievePosts('scheduled', this.state.email)
-    })
-    .then(results => {
-      this.setState({
-        scheduledPosts: results.data
-      })
+      this.getScheduledPosts();
     })
     .catch(err => {
-      //error handling
+      console.log('error while deleting');
     });
+  }
+
+  updatePost(e, post) {
+    e.preventDefault();
+    console.log('in update post, post : ', post);
+
+    // let file = post.img;
+    console.log('update post img : ', post.img);
+
+    // let reader = new FileReader(file);  
+    // reader.readAsArrayBuffer(file);
+    // reader.onloadend = () => {
+    //   this.setState({
+    //     img: reader.result
+    //   });
+    // }
+      // console.log('binary blob in update post', reader.result);
+    this.setState({
+      text: post.text,
+      postToFacebook: post.postToFacebook,
+      postToTwitter: post.postToTwitter,
+      scheduledDateTime: post.date,
+      img: post.img
+    })
   }
 
   handleTextChange(e) {
@@ -141,7 +176,7 @@ class App extends React.Component {
       this.setState({
         text: ''
       })
-      this.componentWillMount();
+      this.getScheduledPosts();
     })
     .catch((err) => {
       console.log('issue with posting scheduled posts', err);
@@ -162,8 +197,8 @@ class App extends React.Component {
 
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
-    const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
+    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
+    const { updatePost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
         <NavBar 
@@ -187,6 +222,7 @@ class App extends React.Component {
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}
           handleScheduleChange={handleScheduleChange}
+          updatePost={updatePost}
           />}
       </div>
     );

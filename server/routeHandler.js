@@ -33,7 +33,7 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
     res.status(200).end();
   })
   .catch(err => {
-    console.log(err)
+    console.log('err in schduleor save posts - rh : ', err);
     if (err === 'invalid user') res.status(404).end();
     else res.status(500).end();
   })
