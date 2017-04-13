@@ -25,7 +25,7 @@ module.exports.deletePost = (userId, postId) => {
     {$pull: {'scheduled': postId}})
   .then(results => {
     //need error handling
-    console.log('deleted from user in db', results);
+    // console.log('deleted from user in db', results);
     return Post.removeAsync({_id: postId})
   })
 }

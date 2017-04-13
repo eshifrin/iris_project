@@ -44,6 +44,7 @@ class App extends React.Component {
           twitterAuthenticated: res.data.twitter,
           facebookAuthenticated: res.data.facebook
         });
+
         util.retrievePosts('scheduled', res.data.email)
         .then(results => {
           this.setState({
@@ -51,7 +52,17 @@ class App extends React.Component {
           })
         })
         .catch((err) => {
-          console.log('there was error in retreiving posts of the current user, err : ', err);
+          console.log('there was error in retreiving scheduledposts of the current user, err : ', err);
+        })
+
+        util.retrievePosts('posted', res.data.email)
+        .then(results => {
+          this.setState({
+            pastPosts: results.data
+          })
+        })
+        .catch((err) => {
+          console.log('there was error in retreiving pastposts of the current user, err : ', err);
         })
       }
     })
@@ -150,7 +161,7 @@ class App extends React.Component {
 
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, postToFacebook} = this.state;
+    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook} = this.state;
     const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
@@ -163,6 +174,7 @@ class App extends React.Component {
           {this.state.isLoggedIn && <Main
           deletePost={deletePost}
           scheduledPosts={scheduledPosts}
+          pastPosts={pastPosts}
           uploadImg={uploadImg}
           imgUrl={imgUrl}
           postToFacebook={postToFacebook}
