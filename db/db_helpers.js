@@ -77,9 +77,10 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
 module.exports.checkScheduledEvent = (dateTime) => {
   return Post.findAsync(
     { $and: [
-      { 'scheduledDateTime': { $lte: dateTime } },
-      { $or: [{ postedFacebookId: null,
-               postedTwitterId: null }]}
+        { 'scheduledDateTime': { $lte: dateTime } },
+        { 'status': 'scheduled' },
+        // { $or: [{ postedFacebookId: null,
+        //          postedTwitterId: null }]}
       ]
     }
   )
@@ -87,6 +88,14 @@ module.exports.checkScheduledEvent = (dateTime) => {
     console.log('what is the data we get?', data);
     return data;
   })
+}
+
+module.exports.changePostStatusToPosting = () => {
+  return 
+}
+
+module.exports.changePostStatusToPosted = () => {
+
 }
 
 module.exports.moveScheduledToPosted = () => {

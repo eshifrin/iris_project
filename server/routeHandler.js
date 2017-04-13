@@ -19,8 +19,12 @@ module.exports.sendUserPosts = (req, res, next) => {
 
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
+  console.log('whats the req body here?', req.body);
+  let scheduledPostIds = req.body.scheduledPostIds;
+
   dbh.retrieveUserId(req.session.email)
   .then(id => {
+    dbh.deletePost(id, scheduledPostIds);
     return dbh.savePost(id, req.body, req.body.status || 'scheduled')
   })
   .then(() => {
@@ -44,7 +48,6 @@ module.exports.sendFacebookNow = (req, res, next) => {
     console.log('what is this data?', data);
     if (!data) throw 'invalid user'
     else return sm.facebookPost(data.facebook_id, data.facebook_token, message, req.body.imgUrl);
-
   })
   .then(fbpost => {
     console.log('what is this fbpost thing?', fbpost);
@@ -88,6 +91,7 @@ module.exports.sendTwitterNow = (req, res, next) => {
 
 module.exports.sendPostsNow = (req, res, next) => {
   let posts = [];
+  let scheduledPostIds = req.scheduledPostIds[0];
   console.log('what is in req', req.body.email, req.body.postToFacebook);
   if (req.body.postToFacebook) posts.push(module.exports.sendFacebookNow(req, res, next));
   if (req.body.postToTwitter) posts.push(module.exports.sendTwitterNow(req, res, next));
@@ -100,6 +104,9 @@ module.exports.sendPostsNow = (req, res, next) => {
   .then(postResults => {
     console.log('post results??', postResults);
     req.body.status = 'posted';
+    req.body.scheduledPostIds = scheduledPostIds;
+    console.log('whats the req.body now?', req.body);
+    // req.body.postId = 
     return module.exports.scheduleOrSavePosts(req, res, next);
   })
   .then(() => {

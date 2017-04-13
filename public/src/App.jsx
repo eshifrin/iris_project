@@ -18,6 +18,8 @@ class App extends React.Component {
       email: '',
       postToTwitter: false,
       postToFacebook: false,
+      postToTwitter: true,
+      postToFacebook: true,
       text: '',
       img: '',
       imgUrl: '',
@@ -114,14 +116,9 @@ class App extends React.Component {
     e.preventDefault();
     let scheduledDateTime = e.target.value;
     scheduledDateTime = new Date(scheduledDateTime);
-<<<<<<< HEAD
+
     this.setState({ scheduledDateTime: scheduledDateTime });
     console.log('on change of scheduled time, this state : ', this.state.scheduledDateTime);
-||||||| merged common ancestors
-    this.setState({ scheduledDateTime: scheduledDateTime });
-=======
-    this.setState({ scheduledDateTime: scheduledDateTime.toUTCString() });
->>>>>>> Fix date-time picker storage and auto-post twitter feeds
   }
 
   handleLogoClick(e) {

@@ -8,7 +8,6 @@ cron.schedule('*/2 * * * * *', () => {
       console.log('what are the outstanding?', data);
       return User.findAsync({'_id': data[0].user_id})
       .then(userObj => {
-        console.log('what userObj?', userObj);
         socialMediaReqObj = {
           body: {
             text: data[0].text,
@@ -17,18 +16,14 @@ cron.schedule('*/2 * * * * *', () => {
           },
           session: {
             email: userObj[0].email
-          }
+          },
+          scheduledPostIds: [data[0]._id]
         }
         return socialMediaReqObj;
       })
       .then(socialMediaReqObj => {
-        // TODO: 
-        // check if FB id is null, if is, post to FB;
-        // check if TW id is null, if is, post to TW;
-        // if both are null, post to both
-        // rh.sendPostsNow(socialMediaReqObj);
-        return rh.sendTwitterNow(socialMediaReqObj);
-        // rh.sendFacebookNow(socialMediaReqObj);
+        console.log('log socialMediaReqObj', socialMediaReqObj);
+        return rh.sendPostsNow(socialMediaReqObj);
       })
       .then(success => {
         postIds.push(data._id);
@@ -52,3 +47,6 @@ cron.schedule('*/2 * * * * *', () => {
     // change status from user's scheduled -> posted
     // remove from posts's scheduled -> postedObject.keys(x).sort((a, b) => x[b] - x[a]);
 });
+
+
+
