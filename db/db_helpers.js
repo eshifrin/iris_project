@@ -12,6 +12,7 @@ module.exports.savePost = (userId, postData, postType) => {
   postData.status = postType;
   return Post(postData).saveAsync()
   .then(post => {
+    postData._id = post._id;
     return User.updateAsync(
             {_id: postData.user_id}, 
             {$push: {[postType]: post._id}});
@@ -19,13 +20,10 @@ module.exports.savePost = (userId, postData, postType) => {
 }
 
 module.exports.deletePost = (userId, postId) => {
-  //error handling
   return User.updateAsync(
     {_id: userId},
     {$pull: {'scheduled': postId}})
   .then(results => {
-    //need error handling
-    // console.log('deleted from user in db', results);
     return Post.removeAsync({_id: postId})
   })
 }
@@ -51,15 +49,17 @@ module.exports.retrieveUserId = (email) => {
 }
 
 module.exports.getUser = (email) => {
-  // console.log('in dbh get user : email: ', email);
   return User.findOneAsync({email: email});
+}
+
+module.exports.getUserbyId = (id) => {
+  return User.findOneAsync({_id: id});
 }
 
 module.exports.saveUser = (email) => {
   return User({email: email}).saveAsync();
 }
 
-//can abstract this to update other info
 module.exports.updateUserTwitter = ({email, token, tokenSecret}) => {
  return User.updateAsync(
       { email: email},
@@ -73,6 +73,7 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
       { $set:  {facebook_token: token,
                 facebook_id: facebook_id }})
 }
+<<<<<<< HEAD
 // 'Thu, 13 Apr 2017 02:39:48 GMT'
 module.exports.checkScheduledEvent = (dateTime) => {
   // console.log('what dateTime is being passed down?', dateTime);
@@ -105,21 +106,28 @@ module.exports.moveScheduledToPosted = () => {
   // take post IDs as parameters
   // shift() to remove from scheduled
   // push to insert into posted
+=======
+
+module.exports.getScheduledEvents = () => {
+  return Post.findAsync(
+    { $and: [
+        { 'scheduledDateTime': { $lte: new Date() } },
+        { 'status': 'scheduled' }
+      ]
+    }
+  )
 }
 
-// module.exports.populateSampleData = () => {
-//     return User(user1).saveAsync()
-//     .then(user => {
-//       return Promise.all([
-//         module.exports.savePost(user._id, user1_scheduledPost, 'scheduled'),
-//         module.exports.savePost(user._id, user1_scheduledPost2, 'scheduled'),
-//         module.exports.savePost(user._id, user1_postedPost, 'posted')
-//       ])
-//     })
-//     .then(() => {
-//       console.log('successfully populated sample data');
-//     })
-//     .catch(err => {
-//       console.error('error in aggregate sample data posting', err)
-//     })
-// }
+module.exports.updatePostFields = (postId, field, newval) => {
+  return Post.updateAsync({_id: postId}, {[field]: newval})
+}
+
+module.exports.moveScheduledToPosted = (userId, postId) => {
+  return User.updateAsync(
+    { _id: userId },
+    { $pull: {'scheduled': postId },
+      $push: {'posted': postId}
+  })
+>>>>>>> refactored sending code
+}
+

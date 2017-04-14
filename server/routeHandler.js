@@ -1,6 +1,7 @@
 const dbh = require('../db/db_helpers');
 const url = require('url');
 const sm = require('./socialmedia.js')
+const Promise = require('bluebird');
 
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
@@ -37,99 +38,109 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
   })
 }
 
-module.exports.sendFacebookNow = (req, res, next) => {
-  console.log('FB email format: ', req.session.email);
-  console.log('FB message format: ', req.body.text);
-  let email = req.session.email;
-  let message = req.body.text;
-  let image = req.body.imgUrl;
-    console.log('in send facebook now', image)
-  return dbh.getUser(email)
-  .then(data => {
-    console.log('what is this data?', data);
-    if (!data) throw 'invalid user'
-    else return sm.facebookPost(data.facebook_id, data.facebook_token, message, req.body.imgUrl);
-  })
-  .then(fbpost => {
-    console.log('what is this fbpost thing?', fbpost);
-    req.body.postedFacebookId = fbpost.data.id;
-    return 'Facebook Successful'
+
+module.exports.sendTweet = (userCred, postInfo) => {
+  console.log('here is post info inside sendtweet', postInfo)
+  return sm.tweet(userCred, postInfo.text, postInfo.img)
+    .then(tweet => {
+      dbh.updatePostFields(postInfo._id, 'postedTwitterId', tweet.id)
+      return 'Successful Tweet';
+    })
+    .catch(err => {
+      console.log('Error in tweet', err)
+      return 'Unsuccessful Tweet';
+    })
+}
+
+module.exports.sendFBPost = (userCred, postInfo) => {
+  return sm.FBPost(userCred.facebook_id, userCred.facebook_token, postInfo.text, postInfo.imgUrl)
+    .then(fbpost => {
+      dbh.updatePostFields(postInfo._id, 'postedFacebookId', fbpost.data.id)
+      return 'Successful FBPost';
+    })
+    .catch(err => {
+      console.log('Error in tweet', err)
+      return 'Unsuccessful Post';
+    })
+}
+
+module.exports.sendScheduledPosts = () => {
+  dbh.getScheduledEvents()
+  .then((scheduledPosts) => {
+    console.log('here are the scheduledPosts', scheduledPosts)
+    return Promise.map(scheduledPosts, (post) => {
+      return module.exports.sendScheduledPost(post);
+    })
   })
   .catch(err => {
-    console.log('error in facebook posting', err)
-    return err;
+    console.log('error for sendingScheduledPost in rh', err);
   })
 }
 
-module.exports.sendTwitterNow = (req, res, next) => {
-  console.log('Twitter email format: ', req.session.email);
-  console.log('Twitter message format: ', req.body.text);
-  let email = req.session.email
-  let message = req.body.text;
-  let img = req.body.img;
+module.exports.sendScheduledPost = (post) => {
+  let userCredentials = '';
 
-  return dbh.getUser(email)
-  .then(data => {
-    if (!data) throw 'invalid user';
-    else return sm.populateTwitterClient(data.twitter_token, data.twitter_secret);
+  return dbh.getUserbyId(post.user_id)
+  .catch(err => {
+    throw 'Error in getting user by id' + err;
   })
-  .then(client => {
-    return sm.tweet(client, message, req.body.img)
-    console.log('what is Tw client?', client);
-  })
-  .then(tweet => {
-    console.log('is tweet successful?', tweet);
-    req.body.postedTwitterId = tweet.id;
-    let successMsgAndTweetId = ['Twitter Successful', tweet.id];
-    console.log('tw sucecss??', successMsgAndTweetId);
-    return successMsgAndTweetId;
+  .then(userInfo => {
+    userCredentials = userInfo;
+    return dbh.updatePostFields(post._id, 'status', 'posted')
   })
   .catch(err => {
-    console.log('error in twitter posting', err)
-    return err;
-  })
-};
-
-module.exports.sendPostsNow = (req, res, next) => {
-  let posts = [];
-  console.log('what is this req?', req);
-  // let scheduledPostIds = req.scheduledPostIds[0];
-  console.log('what is in req', req.body.email, req.body.postToFacebook);
-  if (req.body.postToFacebook) posts.push(module.exports.sendFacebookNow(req, res, next));
-  if (req.body.postToTwitter) posts.push(module.exports.sendTwitterNow(req, res, next));
-  console.log('what are the posts?', posts);
-
-  Promise.all(posts)
-  .catch(e => {
-    return posts
-  })
-  .then(postResults => {
-    console.log('post results??', postResults);
-    req.body.status = 'posted';
-    req.body.scheduledPostIds = scheduledPostIds;
-    console.log('whats the req.body now?', req.body);
-    // req.body.postId = 
-    return module.exports.scheduleOrSavePosts(req, res, next);
+    throw 'Error updating post fields from scheduled to posted' + err;
   })
   .then(() => {
-    // req.postToTwitter && dont have req.postedtwitterid = twitter failed
-    // same for fb
-    // this is the logic you need to figure out which message to send back
-    // there are 8 possibilities:
-    // twitter failed
-    // twitter succeeded
-    // facebook failed
-    // facebook succeeded
-    // twitter failed & facebook succeeded
-    // etc.
-    res.end();
+    return dbh.moveScheduledToPosted(post.user_id, post._id);
+  })
+  .catch(err => {
+    throw 'Error moving scheduled post to posted' + err;
+  })
+  .then(() => {
+    let posts = [];
+    if (post.postToFacebook) posts.push(module.exports.sendFBPost(userCredentials, post))
+    if (post.postToTwitter) posts.push(module.exports.sendTweet(userCredentials, post))
+    return Promise.all(posts);
   })
   .catch((err) => {
-    console.log('error posting', err);
-    res.end('err')
-    //send back database error
+    console.log(err)
+    return;
   })
 }
+
+module.exports.sendPostsNow = (req, res, next) => {
+  let email = req.body.email;
+  let postInfo = {
+    text: req.body.text,
+    img: req.body.img,
+    imgUrl: req.body.imgUrl,
+    postToTwitter: req.body.postToTwitter,
+    postToFacebook: req.body.postToFacebook,
+    status: 'posted'
+  }
+  let userCredentials = '';
+
+  dbh.getUser(email)
+  .then(userInfo => {
+    userCredentials = userInfo;
+    return dbh.savePost(userInfo._id, postInfo, 'posted')
+  })
+  .then(() => {
+    let posts = [];
+    if (postInfo.postToFacebook) posts.push(module.exports.sendFBPost(userCredentials, postInfo))
+    if (postInfo.postToTwitter) posts.push(module.exports.sendTweet(userCredentials, postInfo))
+    return Promise.all(posts);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(404).send('Not found');
+  })
+  .then(posts => {
+    res.send(posts);
+  })
+}
+
 
 
 module.exports.userCheck = (req, res, next) => {
@@ -166,6 +177,7 @@ module.exports.deletePost = (req, res, next) => {
   .catch(err => {
     console.log('err in routehandler', err);
     console.log(req.body);
+    res.status(404).send('Not found');
   });
 }
 
