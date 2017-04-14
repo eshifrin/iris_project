@@ -15,7 +15,9 @@ const sm = require('./socialmedia.js');
 const rh = require('./routeHandler')
 const cronJob = require('./cronJob.js');
 
-// const user = require('./routes/user');
+// rh.sendScheduledPosts();
+
+// const user = require('./routes/usercred');
 const cloudinary = require('cloudinary');
 cloudinary.config({ 
   cloud_name: 'dzk49mshl', 
@@ -61,7 +63,6 @@ app.get('/facebook/return', sm.FBfromAuth);
   res.render('index', { title: 'Broasis!', env: env });
 });*/
 
-
 app.post('/api/image/imgLink', (req, res) => {
     cloudinary.uploader.upload(req.body.image, (result) => {
       res.send(result.secure_url);
@@ -93,4 +94,4 @@ app.get('*', (req, res) => {
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Listening on port 3000.');
-}); 
+});
