@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const PostSchema = mongoose.Schema({
   user_id: String,
   text: String,
-  img: { type: Buffer, contentType: String },
+  img: String,
   imgUrl: String,
   postToTwitter: Boolean,
   postedTwitterId: {type: String, default: null},

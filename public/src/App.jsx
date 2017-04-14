@@ -79,16 +79,15 @@ class App extends React.Component {
     e.preventDefault();
     let file = e.target.files[0];
     let reader = new FileReader(file);  
-    reader.readAsArrayBuffer(file);
+    reader.readAsDataURL(file);
     reader.onloadend = () => {
       this.setState({
         img: reader.result
       })
-      console.log('binary blob', reader.result);
-      // axios.post('/api/image/imgLink', {image: reader.result})
-      // .then(res =>
-      //   this.setState({ imgUrl: res.data })
-      // );
+      axios.post('/api/image/imgLink', {image: reader.result})
+      .then(res =>
+        this.setState({ imgUrl: res.data })
+      );
     }
   }
 

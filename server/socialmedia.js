@@ -89,10 +89,11 @@ module.exports.populateTwitterClient = (token, tokenSecret) => {
 };
 
 
-module.exports.facebookPost = (profileId, accessToken, message, photoUrl) => {
+
+module.exports.FBPost = (profileId, accessToken, message, photoUrl) => {
   let params = {
     'message': message,
-    'access_token': accessToken 
+    'access_token': accessToken
   };
 
   if (photoUrl) params.link = photoUrl;
@@ -103,32 +104,29 @@ module.exports.facebookPost = (profileId, accessToken, message, photoUrl) => {
   });
 }
 
-module.exports.tweet = (client, message, pictureData) => {
-  var params = {
+
+module.exports.tweet = (userCred, message, pictureData) => {
+  let client = module.exports.populateTwitterClient(userCred.twitter_token, userCred.twitter_secret)
+
+  let params = {
     status: message
-  };
+  }
+    /* pictureData starts off in base 64
+      but the client sends over the string starting with 'image/jpeg;base64'
+      the code below strips that out */
+      
   if (pictureData) {
-    //this is what the client sends over...b64 strips out image/jpeg;base64
-    // image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ
     const b64 = pictureData.replace(/^data:image\/[a-z]+;base64,/, "");
     const pictureDatainBinary = Buffer.from(b64, 'base64'); 
     return client.post('media/upload', {media: pictureDatainBinary})
-
     .then(media => {
-      console.log('successful picture post', media)
       params.media_ids = media.media_id_string;
       return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
-    })
-    .catch(err => {
-      console.log('error sending media to twitter', err)
-      return;
     })
   } else {
     return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
   }
-};
-
-
+}
 
 
 
