@@ -24,6 +24,7 @@ class App extends React.Component {
       scheduledPosts: [],
       pastPosts: [],
       scheduledDateTime: '',
+      updating: false
 
     };
     this.uploadImg = this.uploadImg.bind(this);
@@ -37,6 +38,7 @@ class App extends React.Component {
     this.getPastPosts = this.getPastPosts.bind(this);
     this.getScheduledPosts = this.getScheduledPosts.bind(this);
     this.getPosts = this.getPosts.bind(this);
+    this.editPost = this.editPost.bind(this);
     this.updatePost = this.updatePost.bind(this);
 
   }
@@ -115,15 +117,36 @@ class App extends React.Component {
     });
   }
 
-  updatePost(e, post) {
+  editPost(e, post) {
+
+    console.log('e target value in update post: ', e.target.value);
     e.preventDefault();
     this.setState({
       text: post.text,
       postToFacebook: post.postToFacebook,
       postToTwitter: post.postToTwitter,
       scheduledDateTime: post.scheduledDateTime,
-      imgUrl: post.imgUrl
+      imgUrl: post.imgUrl,
+      updating: true
     })
+
+    /*const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
+    util.updatePost('update', { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
+    .then(results => {
+      console.log('update post - status code:', results.status);
+      this.setState({
+        text: '',
+        scheduledDateTime: ''
+      })
+      this.getScheduledPosts();
+    })
+    .catch((err) => {
+      console.log('issue with posting scheduled posts', err);
+    })*/
+  }
+
+  updatePost(when, post) {
+
   }
 
   handleTextChange(e) {
@@ -148,6 +171,9 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e, when) {
+    
+    when = (this.state.updating) ? 'update' : when;
+    console.log('when in schedul new post :', when)
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
     e.preventDefault();
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
@@ -179,7 +205,7 @@ class App extends React.Component {
 
   render() {
     const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
-    const { updatePost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
+    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
         <NavBar 
@@ -203,7 +229,7 @@ class App extends React.Component {
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}
           handleScheduleChange={handleScheduleChange}
-          updatePost={updatePost}
+          editPost={editPost}
           />}
       </div>
     );

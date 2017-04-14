@@ -3,18 +3,18 @@ import FuturePostListItem from './FuturePostListItem.jsx'
 
 const propTypes = {
   scheduledPosts: PropTypes.array.isRequired,
-  updatePost: PropTypes.func.isRequired,
+  editPost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired
 };
 
 
-const FuturePostList = ({scheduledPosts, deletePost, updatePost}) => {
+const FuturePostList = ({scheduledPosts, deletePost, editPost}) => {
 
   const posts = scheduledPosts.map(post => 
      <li key={post._id}>
         <FuturePostListItem post={post} />
-        <a href="#" onClick={e => deletePost(e, post)}>delete</a>
-        <a href="#" onClick={e => updatePost(e, post)}>update</a>
+        <a href="#" onClick={e => deletePost(e, post)}>delete </a>
+        <a href="#" onClick={e => editPost(e, post)}>edit</a>
     </li>)
 
   return (
