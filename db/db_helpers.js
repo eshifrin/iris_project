@@ -74,6 +74,23 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
                 facebook_id: facebook_id }})
 }
 
+module.exports.checkScheduledEvent = (dateTime) => {
+  return Post.findAsync(
+    { $and: [
+        { 'scheduledDateTime': { $lte: new Date() } },
+        { 'status': 'scheduled' },
+        // { $or: [{ postedFacebookId: null,
+        //          postedTwitterId: null }]}
+      ]
+    }
+  )
+  .then(data => {
+    console.log('what is the data we get?', data);
+    return data;
+  })
+}
+>>>>>>> Fix cron job
+
 
 module.exports.getScheduledEvents = () => {
   return Post.findAsync(
@@ -95,4 +112,3 @@ module.exports.moveScheduledToPosted = (userId, postId) => {
       $push: {'posted': postId}
   });
 }
-
