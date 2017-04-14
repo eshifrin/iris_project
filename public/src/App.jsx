@@ -25,7 +25,6 @@ class App extends React.Component {
       pastPosts: [],
       scheduledDateTime: '',
       updatingPostId: undefined
-
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -39,13 +38,13 @@ class App extends React.Component {
     this.getScheduledPosts = this.getScheduledPosts.bind(this);
     this.getPosts = this.getPosts.bind(this);
     this.editPost = this.editPost.bind(this);
-
+    this.updatePost = this.updatePost.bind(this);
+    this.handleResubmitClick = this.handleResubmitClick.bind(this);
   }
 
   componentWillMount(){
     util.getCurrentUserInfo()
     .then((res) => {
-      // console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
       if (res.data.email.length !== 0){
         this.setState({email: res.data.email,
           isLoggedIn: true,
@@ -86,10 +85,8 @@ class App extends React.Component {
   }
 
   getPosts(type) {
-    // console.log('in get posts, type : ', type)
     util.retrievePosts(type, this.state.email)
     .then(results => {
-      // console.log('in get posts, results: ', results);
       if (type === 'scheduled') {
         this.setState({
           scheduledPosts: results.data
@@ -136,9 +133,7 @@ class App extends React.Component {
 
   handleScheduleChange(e) {
     e.preventDefault();
-    // console.log('time sent by datepicker', e.target.value)
     let scheduledDateTime = moment(e.target.value).utc().toISOString();
-    // console.log('date created by datepicker using moment - handleschedule change: ', scheduledDateTime)
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
 
@@ -151,9 +146,7 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e, when) {
-    
     // when = (this.state.updatingPostNum) ? 'update' : when;
-    console.log('when in schedul new post :', when)
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
     e.preventDefault();
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
@@ -184,10 +177,16 @@ class App extends React.Component {
     this.scheduleNewPost(e, 'now');
   }
 
+  handleResubmitClick(e) {
+    e.preventDefault();
+    console.log('this is the post id thatthats being clicked on', e.target.value);
+    console.log('re-submitting now');
+  }
 
   render() {
-    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
-    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
+    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
+    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, handleResubmitClick } = this;
+
     return (
       <div>
         <NavBar 
@@ -212,6 +211,7 @@ class App extends React.Component {
           handleLogoClick={handleLogoClick}
           handleScheduleChange={handleScheduleChange}
           editPost={editPost}
+          handleResubmitClick={handleResubmitClick}
           />}
       </div>
     );

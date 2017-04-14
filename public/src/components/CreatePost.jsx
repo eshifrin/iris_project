@@ -15,9 +15,10 @@ const propTypes = {
   handleLogoClick: PropTypes.func.isRequired,
   handleScheduleChange: PropTypes.func.isRequired,
   scheduledDateTime: PropTypes.instanceOf(Date),
+  handleResubmitClick: PropTypes.func.isRequired,
 };
 
-const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, scheduledDateTime }) => {
+const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, scheduledDateTime, handleResubmitClick }) => {
     var style = {
     color: 'red'
   }
