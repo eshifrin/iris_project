@@ -38,7 +38,6 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
   })
 }
 
-
 module.exports.sendTweet = (userCred, postInfo) => {
   return sm.tweet(userCred, postInfo.text, postInfo.img)
     .then(tweet => {
@@ -64,7 +63,7 @@ module.exports.sendFBPost = (userCred, postInfo) => {
 }
 
 module.exports.sendScheduledPosts = () => {
-  dbh.getScheduledEvents()
+  return dbh.getScheduledEvents()
   .then((scheduledPosts) => {
     console.log('here are the scheduledPosts', scheduledPosts)
     return Promise.map(scheduledPosts, (post) => {
@@ -140,8 +139,6 @@ module.exports.sendPostsNow = (req, res, next) => {
   })
 }
 
-
-
 module.exports.userCheck = (req, res, next) => {
   let email = req.session.email;
   return dbh.getUser(email)
@@ -179,7 +176,6 @@ module.exports.deletePost = (req, res, next) => {
     res.status(404).send('Not found');
   });
 }
-
 
 module.exports.getUserCred = (req, res, next) => {
   // console.log('getUserCred req cookies: ', req.cookies);

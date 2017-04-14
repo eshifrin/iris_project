@@ -89,8 +89,6 @@ module.exports.checkScheduledEvent = (dateTime) => {
     return data;
   })
 }
->>>>>>> Fix cron job
-
 
 module.exports.getScheduledEvents = () => {
   return Post.findAsync(
