@@ -10,6 +10,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 
   dbh.showUserPosts(email, req.params.post_type)
   .then(results => {
+    // console.log('results in showuserposts: ', results)
     res.status(200).json(results);
   })
   .catch(err => {
@@ -21,6 +22,8 @@ module.exports.sendUserPosts = (req, res, next) => {
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   console.log('whats the req body here?', req.body);
+  console.log('post_type : ', req.params.post_type);
+  console.log('body status in scheduled or save posts rh : ', req.body.status)
   // let scheduledPostIds = req.body.scheduledPostIds;
   // dbh.retrieveUserId(req.email)
   dbh.retrieveUserId(req.session.email)
@@ -32,7 +35,7 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
     res.status(200).end();
   })
   .catch(err => {
-    console.log(err)
+    console.log('err in schduleor save posts - rh : ', err);
     if (err === 'invalid user') res.status(404).end();
     else res.status(500).end();
   })
@@ -177,7 +180,7 @@ module.exports.deletePost = (req, res, next) => {
   });
 }
 
-module.exports.getUserCred = (req, res, next) => {
+module.exports.getUserInfo = (req, res, next) => {
   // console.log('getUserCred req cookies: ', req.cookies);
   // console.log('getUserCred req user: ', req.user);
   console.log('getUserCred req session: ', req.session.email);
@@ -190,7 +193,27 @@ module.exports.getUserCred = (req, res, next) => {
       // console.log('data from get user : ', data);
       userCred.twitter = (data.twitter_token) ? true : false;
       userCred.facebook = (data.facebook_id) ? true : false;
-      res.send(userCred);
+
+      dbh.showUserPosts(userCred.email, 'scheduled')
+      .then(results => {
+        userCred.scheduledPosts = results;
+        dbh.showUserPosts(userCred.email, 'posted')
+        .then(posts => {
+          userCred.pastPosts = posts;
+          res.send(userCred);
+        })
+        .catch(err => {
+          console.log('err in getting past results : ', err);
+          if (err === 'invalid user') res.status(404).end();
+          else res.status(500).end();
+        });
+      })
+      .catch(err => {
+        console.log('error in getting scheduled results ');
+        if (err === 'invalid user') res.status(404).end();
+        else res.status(500).end();
+      });
+
     })
   } else {
     res.send({email: '', twitter: true, facebook: true});

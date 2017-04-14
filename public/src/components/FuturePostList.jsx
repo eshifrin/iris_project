@@ -2,16 +2,19 @@ import React, { PropTypes } from 'react';
 import FuturePostListItem from './FuturePostListItem.jsx'
 
 const propTypes = {
-  scheduledPosts: PropTypes.array.isRequired
+  scheduledPosts: PropTypes.array.isRequired,
+  editPost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired
 };
 
 
-const FuturePostList = ({scheduledPosts, deletePost}) => {
+const FuturePostList = ({scheduledPosts, deletePost, editPost}) => {
 
   const posts = scheduledPosts.map(post => 
      <li key={post._id}>
         <FuturePostListItem post={post} />
-        <a href="#" onClick={e => deletePost(e, post)}>delete this Post</a>
+        <a href="#" onClick={e => deletePost(e, post)}>delete </a>
+        <a href="#" onClick={e => editPost(e, post)}>edit</a>
     </li>)
 
   return (

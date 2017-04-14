@@ -18,14 +18,13 @@ class App extends React.Component {
       email: '',
       postToTwitter: false,
       postToFacebook: false,
-      postToTwitter: true,
-      postToFacebook: true,
       text: '',
       img: '',
       imgUrl: '',
       scheduledPosts: [],
       pastPosts: [],
       scheduledDateTime: '',
+      updating: false
 
     };
     this.uploadImg = this.uploadImg.bind(this);
@@ -36,10 +35,16 @@ class App extends React.Component {
     this.deletePost = this.deletePost.bind(this);
     this.scheduleNewPost = this.scheduleNewPost.bind(this);
     this.handleScheduleChange = this.handleScheduleChange.bind(this);
+    this.getPastPosts = this.getPastPosts.bind(this);
+    this.getScheduledPosts = this.getScheduledPosts.bind(this);
+    this.getPosts = this.getPosts.bind(this);
+    this.editPost = this.editPost.bind(this);
+    this.updatePost = this.updatePost.bind(this);
+
   }
 
   componentWillMount(){
-    util.getCurrentUserCred()
+    util.getCurrentUserInfo()
     .then((res) => {
       // console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
       if (res.data.email.length !== 0){
@@ -48,26 +53,8 @@ class App extends React.Component {
           twitterAuthenticated: res.data.twitter,
           facebookAuthenticated: res.data.facebook
         });
-
-        util.retrievePosts('scheduled', res.data.email)
-        .then(results => {
-          this.setState({
-            scheduledPosts: results.data
-          })
-        })
-        .catch((err) => {
-          console.log('there was error in retreiving scheduledposts of the current user, err : ', err);
-        })
-
-        util.retrievePosts('posted', res.data.email)
-        .then(results => {
-          this.setState({
-            pastPosts: results.data
-          })
-        })
-        .catch((err) => {
-          console.log('there was error in retreiving pastposts of the current user, err : ', err);
-        })
+        this.getScheduledPosts();
+        this.getPastPosts();
       }
     })
     .catch((err) => {
@@ -91,20 +78,75 @@ class App extends React.Component {
     }
   }
 
+  getScheduledPosts() {
+    this.getPosts('scheduled');
+  }
+
+  getPastPosts() {
+    this.getPosts('posted');
+  }
+
+  getPosts(type) {
+    // console.log('in get posts, type : ', type)
+    util.retrievePosts(type, this.state.email)
+    .then(results => {
+      // console.log('in get posts, results: ', results);
+      if (type === 'scheduled') {
+        this.setState({
+          scheduledPosts: results.data
+        })
+      } else {
+        this.setState({
+          pastPosts: results.data
+        })
+      }
+    })
+    .catch((err) => {
+      console.log('there was error in retreiving scheduledposts of the current user, err : ', err);
+    })
+  }
+
   deletePost(e, post) {
     e.preventDefault();
     util.deletePost(post._id)
     .then(() => {
-      return util.retrievePosts('scheduled', this.state.email)
-    })
-    .then(results => {
-      this.setState({
-        scheduledPosts: results.data
-      })
+      this.getScheduledPosts();
     })
     .catch(err => {
-      //error handling
+      console.log('error while deleting');
     });
+  }
+
+  editPost(e, post) {
+
+    console.log('e target value in update post: ', e.target.value);
+    e.preventDefault();
+    this.setState({
+      text: post.text,
+      postToFacebook: post.postToFacebook,
+      postToTwitter: post.postToTwitter,
+      scheduledDateTime: post.scheduledDateTime,
+      imgUrl: post.imgUrl,
+      updating: true
+    })
+
+    /*const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
+    util.updatePost('update', { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
+    .then(results => {
+      console.log('update post - status code:', results.status);
+      this.setState({
+        text: '',
+        scheduledDateTime: ''
+      })
+      this.getScheduledPosts();
+    })
+    .catch((err) => {
+      console.log('issue with posting scheduled posts', err);
+    })*/
+  }
+
+  updatePost(when, post) {
+
   }
 
   handleTextChange(e) {
@@ -114,13 +156,13 @@ class App extends React.Component {
 
   handleScheduleChange(e) {
     e.preventDefault();
+    // console.log('time sent by datepicker', e.target.value)
     let scheduledDateTime = moment(e.target.value).utc().toISOString();
+    // console.log('date created by datepicker using moment - handleschedule change: ', scheduledDateTime)
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
 
   handleLogoClick(e) {
-    // console.log('print event checked: ', e.target.checked);
-    // console.log('print event value: ', e.target.value);
     if (e.target.value === 'Facebook') {
       this.setState({postToFacebook: e.target.checked});
     } else {
@@ -129,20 +171,19 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e, when) {
+    
+    when = (this.state.updating) ? 'update' : when;
+    console.log('when in schedul new post :', when)
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
-    // console.log('state before schedule post: ', this.state);
     e.preventDefault();
-    // console.log('when in schedule post: ', when);
-    // console.log('e target in schedule post: ', e.target);
-    // console.log('scheduledDateTime in state before scheduled posting: ', scheduledDateTime);
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
       this.setState({
         text: '',
-        scheduledDateTime: new Date()
+        scheduledDateTime: ''
       })
-      this.componentWillMount();
+      this.getScheduledPosts();
     })
     .catch((err) => {
       console.log('issue with posting scheduled posts', err);
@@ -163,8 +204,8 @@ class App extends React.Component {
 
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
-    const { deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
+    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
+    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
     return (
       <div>
         <NavBar 
@@ -188,6 +229,7 @@ class App extends React.Component {
           handleTextChange={handleTextChange}
           handleLogoClick={handleLogoClick}
           handleScheduleChange={handleScheduleChange}
+          editPost={editPost}
           />}
       </div>
     );
