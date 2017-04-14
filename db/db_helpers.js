@@ -73,53 +73,19 @@ module.exports.updateUserFacebook = (email, token, facebook_id) => {
       { $set:  {facebook_token: token,
                 facebook_id: facebook_id }})
 }
-<<<<<<< HEAD
-// 'Thu, 13 Apr 2017 02:39:48 GMT'
-module.exports.checkScheduledEvent = (dateTime) => {
-  // console.log('what dateTime is being passed down?', dateTime);
-  // dateTime = 'ISODate("' + dateTime + '")';
-  // console.log('what is the ISODate?', dateTime);
-  return Post.findAsync(
-    { $and: [
-        { 'scheduledDateTime': { $lte: new Date() } },
-        { 'status': 'scheduled' },
-        // { $or: [{ postedFacebookId: null,
-        //          postedTwitterId: null }]}
-      ]
-    }
-  )
-  .then(data => {
-    console.log('what is the data we get?', data);
-    return data;
-  })
-}
 
-module.exports.changePostStatusToPosting = () => {
-  return 
-}
-
-module.exports.changePostStatusToPosted = () => {
-
-}
-
-module.exports.moveScheduledToPosted = () => {
-  // take post IDs as parameters
-  // shift() to remove from scheduled
-  // push to insert into posted
-=======
 
 module.exports.getScheduledEvents = () => {
   return Post.findAsync(
-    { $and: [
-        { 'scheduledDateTime': { $lte: new Date() } },
-        { 'status': 'scheduled' }
-      ]
+    { $and: 
+      [ { 'scheduledDateTime': { $lte: new Date() } },
+        { 'status': 'scheduled' } ]
     }
-  )
-}
+  );
+};
 
 module.exports.updatePostFields = (postId, field, newval) => {
-  return Post.updateAsync({_id: postId}, {[field]: newval})
+  return Post.updateAsync({_id: postId}, {[field]: newval});
 }
 
 module.exports.moveScheduledToPosted = (userId, postId) => {
@@ -127,7 +93,6 @@ module.exports.moveScheduledToPosted = (userId, postId) => {
     { _id: userId },
     { $pull: {'scheduled': postId },
       $push: {'posted': postId}
-  })
->>>>>>> refactored sending code
+  });
 }
 

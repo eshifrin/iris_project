@@ -40,7 +40,6 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
 
 
 module.exports.sendTweet = (userCred, postInfo) => {
-  console.log('here is post info inside sendtweet', postInfo)
   return sm.tweet(userCred, postInfo.text, postInfo.img)
     .then(tweet => {
       dbh.updatePostFields(postInfo._id, 'postedTwitterId', tweet.id)
