@@ -10,6 +10,10 @@ const PastPostListItem = ({post}) => {
   const dateObj = moment(post.date)
   const monthDay = dateObj.format('M/D');
   const time = dateObj.format('hh:mma');
+  const status = (sourceBoolean, sourceId) => {
+    if (!sourceBoolean) { return 'na'; }
+    return !!sourceId ? 'sent' : 'error';
+  }
 
   return (
   <div>
@@ -17,8 +21,8 @@ const PastPostListItem = ({post}) => {
   <span> {time} </span>
   <span> {post.text} </span>
     {post.imgUrl && <img src={post.imgUrl} />}
-  <span> Twitter: {post.postToTwitter.toString()} </span>
-  <span> Facebook: {post.postToFacebook.toString()} </span>
+  <span> Twitter: {status(post.postToTwitter, post.postedTwitterId)} </span>
+  <span> Facebook: {status(post.postToFacebook, post.postedFacebookId)} </span>
   </div>
 )
 };
