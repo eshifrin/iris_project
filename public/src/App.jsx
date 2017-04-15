@@ -7,6 +7,8 @@ import FuturePostList from './components/FuturePostList.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 import moment from 'moment';
+import './../../node_modules/elemental/less/elemental.less';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -147,11 +149,12 @@ class App extends React.Component {
   }
 
   handleLogoClick(e) {
-    if (e.target.value === 'Facebook') {
-      this.setState({postToFacebook: e.target.checked});
-    } else {
-      this.setState({postToTwitter: e.target.checked});
-    }
+    console.log('----', e.target.value);
+    // if (e.target.value === 'Facebook') {
+    //   this.setState({postToFacebook: e.target.checked});
+    // } else {
+    //   this.setState({postToTwitter: e.target.checked});
+    // }
   }
 
   scheduleNewPost(e, when) {

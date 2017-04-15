@@ -29,7 +29,7 @@ module.exports.deletePost = (userId, postId) => {
 }
 
 module.exports.retrievePosts = (postIds) => {
-  return Post.findAsync({_id: {$in: postIds} })
+  return Post.findAsync({_id: {$in: postIds} });
 }
 
 module.exports.showUserPosts = (email, typeofPost) => {
