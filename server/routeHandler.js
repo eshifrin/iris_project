@@ -21,24 +21,35 @@ module.exports.sendUserPosts = (req, res, next) => {
 
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
-  console.log('whats the req body here?', req.body);
-  console.log('post_type : ', req.params.post_type);
-  console.log('body status in scheduled or save posts rh : ', req.body.status)
-  // let scheduledPostIds = req.body.scheduledPostIds;
-  // dbh.retrieveUserId(req.email)
-  dbh.retrieveUserId(req.session.email)
-  .then(id => {
-    // dbh.deletePost(id, scheduledPostIds);
-    return dbh.savePost(id, req.body, req.body.status || 'scheduled')
-  })
-  .then(() => {
-    res.status(200).end();
-  })
-  .catch(err => {
-    console.log('err in schduleor save posts - rh : ', err);
-    if (err === 'invalid user') res.status(404).end();
-    else res.status(500).end();
-  })
+  if (req.params.post_type === 'scheduled') {
+    console.log('whats the req body here in scheduled?', req.body);
+    console.log('post_type : ', req.params.post_type);
+    console.log('body status in scheduled or save posts rh : ', req.body.status)
+    // let scheduledPostIds = req.body.scheduledPostIds;
+    // dbh.retrieveUserId(req.email)
+    let id = '';
+    dbh.retrieveUserId(req.session.email)
+    .then(postid => {
+      id = postid;
+      dbh.deletePost(id, req.body.updatingPostId)
+    })
+    .catch((err) => {
+      console.log('There was no such record with id : ', id, ' , err : ', err);
+    })
+    .then(() => {
+      return dbh.savePost(id, req.body, req.body.status || 'scheduled')
+    })
+    .then(() => {
+      res.status(200).end();
+    })
+    .catch(err => {
+      console.log('err in schduleor save posts - rh : ', err);
+      if (err === 'invalid user') res.status(404).end();
+      else res.status(500).end();
+    })
+  } else if (req.params.post_type === 'now') {
+    module.exports.sendPostsNow(req, res, next);
+  } 
 }
 
 module.exports.sendTweet = (userCred, postInfo) => {
@@ -125,7 +136,13 @@ module.exports.sendPostsNow = (req, res, next) => {
   dbh.getUser(email)
   .then(userInfo => {
     userCredentials = userInfo;
-    return dbh.savePost(userInfo._id, postInfo, 'posted')
+    dbh.deletePost(userInfo._id, req.body.updatingPostId)
+  })
+  .catch((err) => {
+    console.log('err while deleting rh - ', err);
+  })
+  .then(() => {
+    dbh.savePost(userCredentials._id, postInfo, 'posted')
   })
   .then(() => {
     let posts = [];
@@ -170,7 +187,7 @@ module.exports.deletePost = (req, res, next) => {
     return dbh.deletePost(userId, postId)
   })
   .then(results => {
-    console.log('deletedPost in routehandler', results);
+    // console.log('deletedPost in routehandler', results);
     res.end()
   })
   .catch(err => {
