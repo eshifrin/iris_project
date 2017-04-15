@@ -30,7 +30,8 @@ class App extends React.Component {
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleLogoClick = this.handleLogoClick.bind(this);
+    this.handleFbLogoClick = this.handleFbLogoClick.bind(this);
+    this.handleTwLogoClick = this.handleTwLogoClick.bind(this);
     this.handleNowSubmit = this.handleNowSubmit.bind(this);
     this.deletePost = this.deletePost.bind(this);
     this.scheduleNewPost = this.scheduleNewPost.bind(this);
@@ -147,8 +148,12 @@ class App extends React.Component {
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
 
-  handleLogoClick(e) {
+  handleFbLogoClick(e) {
     this.setState({ postToFacebook: !this.state.postToFacebook });
+  }
+
+  handleTwLogoClick(e) {
+    this.setState({ postToTwitter: !this.state.postToTwitter });
   }
 
   scheduleNewPost(e, when) {
@@ -207,7 +212,7 @@ class App extends React.Component {
 
   render() {
     const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
-    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields } = this;
+    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
 
     return (
       <div>
@@ -230,7 +235,8 @@ class App extends React.Component {
           scheduledDateTime={scheduledDateTime}
           text={text}
           handleTextChange={handleTextChange}
-          handleLogoClick={handleLogoClick}
+          handleFbLogoClick={handleFbLogoClick}
+          handleTwLogoClick={handleTwLogoClick}
           handleScheduleChange={handleScheduleChange}
           editPost={editPost}
           handleResubmitClick={handleResubmitClick}

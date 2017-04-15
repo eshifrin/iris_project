@@ -12,15 +12,16 @@ const propTypes = {
   postToFacebook: PropTypes.bool.isRequired,
   handlePostSubmit: PropTypes.func.isRequired,
   handleTextChange: PropTypes.func.isRequired,
-  handleLogoClick: PropTypes.func.isRequired,
+  handleFbLogoClick: PropTypes.func.isRequired,
   handleScheduleChange: PropTypes.func.isRequired,
   scheduledDateTime: PropTypes.instanceOf(Date),
   handleResubmitClick: PropTypes.func.isRequired,
   handleClearImg: PropTypes.func.isRequired,
   handleResetPostFields: PropTypes.func.isRequired,
+  handleTwLogoClick: PropTypes.func.isRequired,
 };
 
-const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, scheduledDateTime, handleResubmitClick, handleClearImg, handleResetPostFields }) => {
+const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleTwLogoClick, handleScheduleChange, scheduledDateTime, handleResubmitClick, handleClearImg, handleResetPostFields }) => {
     var style = {
     color: 'red'
   }
@@ -34,7 +35,8 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
         postToTwitter={postToTwitter}
         postToFacebook={postToFacebook}
         handleTextChange={handleTextChange}
-        handleLogoClick={handleLogoClick}
+        handleFbLogoClick={handleFbLogoClick}
+        handleTwLogoClick={handleTwLogoClick}
       />
       <DateTimePicker handleScheduleChange={handleScheduleChange} scheduledDateTime={scheduledDateTime}/>
       <PhotoUpload
