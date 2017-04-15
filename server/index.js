@@ -70,7 +70,6 @@ app.post('/api/image/imgLink', (req, res) => {
 })
 
 //conditionally do this after passing them through Auth0
-app.post('/api/user/now', rh.sendPostsNow)
 app.route('/api/user/:post_type')
   .get(rh.sendUserPosts)
   .post(rh.scheduleOrSavePosts)

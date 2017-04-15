@@ -110,3 +110,7 @@ module.exports.moveScheduledToPosted = (userId, postId) => {
       $push: {'posted': postId}
   });
 }
+
+// module.exports.updatePost = (userId, postData, postType) => {
+  
+// }

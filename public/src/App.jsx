@@ -24,7 +24,7 @@ class App extends React.Component {
       scheduledPosts: [],
       pastPosts: [],
       scheduledDateTime: '',
-      updating: false
+      updatingPostId: undefined
 
     };
     this.uploadImg = this.uploadImg.bind(this);
@@ -39,7 +39,6 @@ class App extends React.Component {
     this.getScheduledPosts = this.getScheduledPosts.bind(this);
     this.getPosts = this.getPosts.bind(this);
     this.editPost = this.editPost.bind(this);
-    this.updatePost = this.updatePost.bind(this);
 
   }
 
@@ -118,8 +117,7 @@ class App extends React.Component {
   }
 
   editPost(e, post) {
-
-    console.log('e target value in update post: ', e.target.value);
+    console.log('post in edit post ---- : ', post);
     e.preventDefault();
     this.setState({
       text: post.text,
@@ -127,26 +125,8 @@ class App extends React.Component {
       postToTwitter: post.postToTwitter,
       scheduledDateTime: post.scheduledDateTime,
       imgUrl: post.imgUrl,
-      updating: true
+      updatingPostId: post._id
     })
-
-    /*const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
-    util.updatePost('update', { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
-    .then(results => {
-      console.log('update post - status code:', results.status);
-      this.setState({
-        text: '',
-        scheduledDateTime: ''
-      })
-      this.getScheduledPosts();
-    })
-    .catch((err) => {
-      console.log('issue with posting scheduled posts', err);
-    })*/
-  }
-
-  updatePost(when, post) {
-
   }
 
   handleTextChange(e) {
@@ -172,16 +152,17 @@ class App extends React.Component {
 
   scheduleNewPost(e, when) {
     
-    when = (this.state.updating) ? 'update' : when;
+    // when = (this.state.updatingPostNum) ? 'update' : when;
     console.log('when in schedul new post :', when)
-    const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter } = this.state;
+    const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
     e.preventDefault();
-    util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter })
+    util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
     .then(results => {
       console.log('Submit new post - status code:', results.status);
       this.setState({
         text: '',
-        scheduledDateTime: ''
+        scheduledDateTime: '',
+        updatingPostId: undefined
       })
       this.getScheduledPosts();
     })
