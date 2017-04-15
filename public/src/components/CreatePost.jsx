@@ -16,9 +16,11 @@ const propTypes = {
   handleScheduleChange: PropTypes.func.isRequired,
   scheduledDateTime: PropTypes.instanceOf(Date),
   handleResubmitClick: PropTypes.func.isRequired,
+  handleClearImg: PropTypes.func.isRequired,
+  handleResetPostFields: PropTypes.func.isRequired,
 };
 
-const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, scheduledDateTime, handleResubmitClick }) => {
+const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, scheduledDateTime, handleResubmitClick, handleClearImg, handleResetPostFields }) => {
     var style = {
     color: 'red'
   }
@@ -35,8 +37,12 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
         handleLogoClick={handleLogoClick}
       />
       <DateTimePicker handleScheduleChange={handleScheduleChange} scheduledDateTime={scheduledDateTime}/>
-      <PhotoUpload uploadImg={uploadImg} />
+      <PhotoUpload
+        uploadImg={uploadImg}
+        handleClearImg={handleClearImg}
+      />
     </form>
+      <button onClick={handleResetPostFields}>Reset Fields</button>
       <button value="postnow" onClick={(postToFacebook || postToTwitter) && handleNowSubmit}>Post Now</button>
       <button value="schedulepost" onClick={(postToFacebook || postToTwitter) && handlePostSubmit}>Schedule Post</button>
       {!postToTwitter && !postToFacebook && <h5 style={style}>Please choose at least one social site to share your post</h5>}

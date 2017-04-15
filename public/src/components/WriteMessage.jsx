@@ -5,10 +5,10 @@ const propTypes = {
   handleTextChange: PropTypes.func.isRequired,
   handleLogoClick: PropTypes.func.isRequired,
   postToFacebook: PropTypes.bool.isRequired,
-  postToTwitter: PropTypes.bool.isRequired
+  postToTwitter: PropTypes.bool.isRequired,
 };
 
-const WriteMessage = ({ text, handleTextChange, handleLogoClick, postToFacebook, postToTwitter }) => (
+const WriteMessage = ({ text, handleTextChange, handleLogoClick, postToFacebook, postToTwitter, handleClearImg, handleResetPostFields }) => (
   <div id='message'>
     <input
       type="checkbox" name="socialSites" value="Facebook"

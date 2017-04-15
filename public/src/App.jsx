@@ -16,8 +16,8 @@ class App extends React.Component {
       twitterAuthenticated: true,
       facebookAuthenticated: true,
       email: '',
-      postToTwitter: false,
-      postToFacebook: false,
+      postToTwitter: true,
+      postToFacebook: true,
       text: '',
       img: '',
       imgUrl: '',
@@ -38,9 +38,10 @@ class App extends React.Component {
     this.getScheduledPosts = this.getScheduledPosts.bind(this);
     this.getPosts = this.getPosts.bind(this);
     this.editPost = this.editPost.bind(this);
-    this.updatePost = this.updatePost.bind(this);
     this.handleResubmitClick = this.handleResubmitClick.bind(this);
     this.getPostById = this.getPostById.bind(this);
+    this.handleClearImg = this.handleClearImg.bind(this);
+    this.handleResetPostFields = this.handleResetPostFields.bind(this);
   }
 
   componentWillMount(){
@@ -193,9 +194,26 @@ class App extends React.Component {
     this.getPostById(postId);
   }
 
+  handleClearImg(e) {
+    e.preventDefault();
+    this.setState({ img: '', imgUrl: '' });
+  }
+
+  handleResetPostFields(e) {
+    e.preventDefault();
+    this.setState({
+      postToTwitter: true,
+      postToFacebook: true,
+      text: '',
+      img: '',
+      imgUrl: '',
+      scheduledDateTime: ''
+    })
+  }
+
   render() {
     const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
-    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, handleResubmitClick } = this;
+    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields } = this;
 
     return (
       <div>
@@ -222,6 +240,8 @@ class App extends React.Component {
           handleScheduleChange={handleScheduleChange}
           editPost={editPost}
           handleResubmitClick={handleResubmitClick}
+          handleClearImg={handleClearImg}
+          handleResetPostFields={handleResetPostFields}
           />}
       </div>
     );

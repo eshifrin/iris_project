@@ -18,9 +18,11 @@ const propTypes = {
   scheduledDateTime: PropTypes.instanceOf(Date),
   editPost: PropTypes.func.isRequired,
   handleResubmitClick: PropTypes.func.isRequired,
+  handleClearImg: PropTypes.func.isRequired,
+  handleResetPostFields: PropTypes.func.isRequired,
 };
 
-const Main = ({ editPost, postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange, pastPosts, scheduledDateTime, handleResubmitClick}) => {
+const Main = ({ editPost, postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleLogoClick, handleScheduleChange, pastPosts, scheduledDateTime, handleResubmitClick, handleClearImg, handleResetPostFields }) => {
   return(
     <div>
       <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost} editPost={editPost}/>
@@ -39,6 +41,8 @@ const Main = ({ editPost, postToFacebook, postToTwitter, uploadImg, imgUrl, text
         postToFacebook={postToFacebook}
         scheduledDateTime={scheduledDateTime}
         handleResubmitClick={handleResubmitClick}
+        handleClearImg={handleClearImg}
+        handleResetPostFields={handleResetPostFields}
       />
     </div>
   )
