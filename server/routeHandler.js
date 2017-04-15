@@ -136,7 +136,13 @@ module.exports.sendPostsNow = (req, res, next) => {
   dbh.getUser(email)
   .then(userInfo => {
     userCredentials = userInfo;
-    return dbh.savePost(userInfo._id, postInfo, 'posted')
+    dbh.deletePost(userInfo._id, req.body.updatingPostId)
+  })
+  .catch((err) => {
+    console.log('err while deleting rh - ', err);
+  })
+  .then(() => {
+    dbh.savePost(userCredentials._id, postInfo, 'posted')
   })
   .then(() => {
     let posts = [];

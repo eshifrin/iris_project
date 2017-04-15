@@ -165,6 +165,7 @@ class App extends React.Component {
         updatingPostId: undefined
       })
       this.getScheduledPosts();
+      this.getPastPosts();
     })
     .catch((err) => {
       console.log('issue with posting scheduled posts', err);
