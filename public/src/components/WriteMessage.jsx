@@ -9,7 +9,7 @@ const propTypes = {
 };
 
 const WriteMessage = ({ text, handleTextChange, handleLogoClick, postToFacebook, postToTwitter }) => (
-  <div>
+  <div id='message'>
     <input
       type="checkbox" name="socialSites" value="Facebook"
       onChange={handleLogoClick} checked={postToFacebook}

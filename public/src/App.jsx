@@ -40,6 +40,7 @@ class App extends React.Component {
     this.editPost = this.editPost.bind(this);
     this.updatePost = this.updatePost.bind(this);
     this.handleResubmitClick = this.handleResubmitClick.bind(this);
+    this.getPostById = this.getPostById.bind(this);
   }
 
   componentWillMount(){
@@ -102,6 +103,14 @@ class App extends React.Component {
     })
   }
 
+  getPostById(postId) {
+    util.getPostByPostId(postId)
+    .then((post) => {
+      const { text, img, imgUrl, postToFacebook, postToTwitter } = post.data[0];
+      this.setState({ text, img, imgUrl, postToFacebook, postToTwitter });
+    });
+  }
+
   deletePost(e, post) {
     e.preventDefault();
     util.deletePost(post._id)
@@ -114,7 +123,6 @@ class App extends React.Component {
   }
 
   editPost(e, post) {
-    console.log('post in edit post ---- : ', post);
     e.preventDefault();
     this.setState({
       text: post.text,
@@ -179,8 +187,10 @@ class App extends React.Component {
 
   handleResubmitClick(e) {
     e.preventDefault();
-    console.log('this is the post id thatthats being clicked on', e.target.value);
-    console.log('re-submitting now');
+    document.getElementById('message').scrollIntoView();
+    const postId = e.target.value;
+    console.log('this is postId', postId);
+    this.getPostById(postId);
   }
 
   render() {

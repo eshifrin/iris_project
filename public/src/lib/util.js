@@ -6,6 +6,10 @@ const routes = {
   'posted': '/api/user/posted'
 }
 
+const getPostByPostId = (postId) => {
+  return axios.get('/api/post/resubmit', { params: { postId } });
+}
+
 const retrievePosts = (type, email) => {
   return axios.get(routes[type], 
             { params: { email: email,
@@ -16,11 +20,6 @@ const submitNewPost = (type, newPost) => {
   return axios.post(routes[type], newPost);
 }
 
-// const updatePost = (type, updatedPost) => {
-//   return axios.post(routes[type], updatedPost);
-// }
-
-
 const deletePost = (postId) => {
   return axios.delete(routes['scheduled'], 
           {params: {_id: postId }});
@@ -30,5 +29,4 @@ const getCurrentUserInfo = () => {
   return axios.get('/userinfo');
 }
 
-export { retrievePosts, submitNewPost, getCurrentUserInfo, deletePost };
-
+export { getPostByPostId, retrievePosts, submitNewPost, deletePost, getCurrentUserInfo };

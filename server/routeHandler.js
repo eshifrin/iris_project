@@ -3,6 +3,15 @@ const url = require('url');
 const sm = require('./socialmedia.js')
 const Promise = require('bluebird');
 
+module.exports.getPostsById = (req, res, next) => {
+  const postId = req.query.postId;
+  return dbh.retrievePosts(postId)
+  .then(results => {
+    res.status(200).json(results);
+  })
+  .catch(err => console.log('Error in getting posts by id in rh' + err));
+}
+
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
@@ -25,8 +34,6 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
     console.log('whats the req body here in scheduled?', req.body);
     console.log('post_type : ', req.params.post_type);
     console.log('body status in scheduled or save posts rh : ', req.body.status)
-    // let scheduledPostIds = req.body.scheduledPostIds;
-    // dbh.retrieveUserId(req.email)
     let id = '';
     dbh.retrieveUserId(req.session.email)
     .then(postid => {

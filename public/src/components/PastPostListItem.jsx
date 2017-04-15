@@ -13,6 +13,14 @@ const PastPostListItem = ({post, handleResubmitClick}) => {
     if (!sourceBoolean) { return 'na'; }
     return !!sourceId ? 'sent' : 'error';
   }
+  // const repostMessage = {
+  //   monthDay: monthDay,
+  //   time: time,
+  //   text: post.text,
+  //   imgUrl: post.imgUrl,
+  //   postToTwitter: post.postToTwitter,
+  //   postToFacebook: post.postToFacebook
+  // };
   return (
     <div>
       <span> {monthDay} </span>
@@ -21,7 +29,7 @@ const PastPostListItem = ({post, handleResubmitClick}) => {
       {post.imgUrl && <img src={post.imgUrl} />}
       <span> Twitter: {status(post.postToTwitter, post.postedTwitterId)} </span>
       <span> Facebook: {status(post.postToFacebook, post.postedFacebookId)} </span>
-      <span onClick={handleResubmitClick} value={post._id}> Resend: {post._id}</span>
+      <button onClick={handleResubmitClick} value={post._id} >Repost</button>
     </div>
   )
 };
