@@ -11,9 +11,10 @@ const propTypes = {
 
 const WriteMessage = ({ text, handleTextChange, handleFbLogoClick, postToFacebook, postToTwitter, handleClearImg, handleResetPostFields, handleTwLogoClick }) => {
 
+  // Styling scrips for Facebook and Twitter logos's onClick actions
   let fbLogoStyle = {};
-  if (!postToFacebook) fbLogoStyle = { opacity: 0.2 }; 
   let twLogoStyle = {};
+  if (!postToFacebook) fbLogoStyle = { opacity: 0.2 }; 
   if (!postToTwitter) twLogoStyle = { opacity: 0.2 }; 
 
   return (

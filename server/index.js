@@ -15,7 +15,7 @@ const sm = require('./socialmedia.js');
 const rh = require('./routeHandler')
 const cronJob = require('./cronJob.js');
 
-// rh.sendScheduledPosts();
+// sm.getPostsStats();
 
 // const user = require('./routes/usercred');
 const cloudinary = require('cloudinary');

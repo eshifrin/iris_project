@@ -31,9 +31,6 @@ module.exports.sendUserPosts = (req, res, next) => {
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   if (req.params.post_type === 'scheduled') {
-    console.log('whats the req body here in scheduled?', req.body);
-    console.log('post_type : ', req.params.post_type);
-    console.log('body status in scheduled or save posts rh : ', req.body.status)
     let id = '';
     dbh.retrieveUserId(req.session.email)
     .then(postid => {
@@ -220,6 +217,7 @@ module.exports.getUserInfo = (req, res, next) => {
 
       dbh.showUserPosts(userCred.email, 'scheduled')
       .then(results => {
+        console.log('-----------------', results);
         userCred.scheduledPosts = results;
         dbh.showUserPosts(userCred.email, 'posted')
         .then(posts => {

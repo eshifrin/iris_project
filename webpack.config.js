@@ -23,16 +23,6 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: 'style!css!sass?outputStyle=expanded',
-      },
-      {
-        test: /\.less$/,
-        use: [{
-            loader: "style-loader" // creates style nodes from JS strings
-        }, {
-            loader: "css-loader" // translates CSS into CommonJS
-        }, {
-            loader: "less-loader" // compiles Less to CSS
-        }]
       }
     ]
   }

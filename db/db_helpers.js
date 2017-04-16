@@ -29,13 +29,13 @@ module.exports.deletePost = (userId, postId) => {
 }
 
 module.exports.retrievePosts = (postIds) => {
-  return Post.findAsync({_id: {$in: postIds} })
-  // return Post.aggregateAsync({ $sort: { date: -1 } })
+  return Post.findAsync({_id: {$in: postIds} });
 }
 
 module.exports.showUserPosts = (email, typeofPost) => {
   return User.findOneAsync({email: email})
   .then(data => {
+    console.log('data pls', data);
     if (!data) throw ('invalid user');
     else return module.exports.retrievePosts(data[typeofPost])
   })
