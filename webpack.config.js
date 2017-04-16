@@ -21,8 +21,8 @@ module.exports = {
         }
       },
       {
-          test: /\.scss$/,
-          loader: 'style!css!sass?outputStyle=expanded',
+        test: /\.scss$/,
+        loader: 'style!css!sass?outputStyle=expanded',
       }
     ]
   }

@@ -7,9 +7,7 @@ const propTypes = {
 };
 
 const DateTimePicker = ({ handleScheduleChange, scheduledDateTime }) => {
-  // console.log('date to display at date picker: ', scheduledDateTime)
   const dateObj = (moment(scheduledDateTime)).format('YYYY-MM-DDTHH:mm');
-  // console.log('dateObj : ', dateObj )
   return(
     <div>
         <label>Set Schedule : </label>

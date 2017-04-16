@@ -15,7 +15,7 @@ const sm = require('./socialmedia.js');
 const rh = require('./routeHandler')
 const cronJob = require('./cronJob.js');
 
-// rh.sendScheduledPosts();
+// sm.getPostsStats();
 
 // const user = require('./routes/usercred');
 const cloudinary = require('cloudinary');
@@ -74,6 +74,9 @@ app.route('/api/user/:post_type')
   .get(rh.sendUserPosts)
   .post(rh.scheduleOrSavePosts)
   .delete(rh.deletePost)
+
+app.route('/api/post/:action')
+  .get(rh.getPostsById);
 
 app.get('/userinfo', rh.getUserInfo);
 

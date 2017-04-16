@@ -15,7 +15,6 @@ passport.use('twitter-authz', new TwitterStrategy({
   },
   function(req, token, tokenSecret, profile, cb) {
     //we might want to do something w/the profile
-    // console.log('in twitter authz - socialmedia');
     return dbh.updateUserTwitter({
       email: req.session.email,
       token: token,
@@ -38,10 +37,6 @@ passport.use('facebook-authz', new FacebookStrategy({
     enableProof: true
   },
   function(req, accessToken, refreshToken, profile, cb) {
-
-    // console.log('in facebook authz - socialmedia');
-    // console.log('here are the cookies', req.cookies)
-    // console.log('here is the req.user', req.user)
     return dbh.updateUserFacebook(req.session.email, accessToken, profile.id)
     .then(() => {
       return cb(null, profile); 
@@ -53,9 +48,6 @@ passport.use('facebook-authz', new FacebookStrategy({
   }
 ));
 
-
-
-
 //need to look into what these do - right now nothing
 passport.serializeUser(function(user, cb) {
   cb(null, user);
@@ -65,7 +57,6 @@ passport.deserializeUser(function(obj, cb) {
   cb(null, obj);
 });
 
-
 //rename this!
 module.exports.TWtoAuth = passport.authorize('twitter-authz');
 module.exports.TWfromAuth = passport.authenticate('twitter-authz', { failureRedirect: '/', successRedirect: '/'})
@@ -73,22 +64,16 @@ module.exports.FBtoAuth = passport.authenticate('facebook-authz', { scope: ['pub
 module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/login',
 successRedirect: '/'});
 
-
-
 // Module.exports functions //
 module.exports.populateTwitterClient = (token, tokenSecret) => {
-  // console.log('in populate twitter client - socialmedia');
   var client = new Twitter({
     consumer_key: process.env.TW_KEY,
     consumer_secret: process.env.TW_SECRET,
     access_token_key: token,
     access_token_secret: tokenSecret
   });
-
   return client;
 };
-
-
 
 module.exports.FBPost = (profileId, accessToken, message, photoUrl) => {
   let params = {
@@ -104,7 +89,6 @@ module.exports.FBPost = (profileId, accessToken, message, photoUrl) => {
   });
 }
 
-
 module.exports.tweet = (userCred, message, pictureData) => {
   let client = module.exports.populateTwitterClient(userCred.twitter_token, userCred.twitter_secret)
 
@@ -114,7 +98,6 @@ module.exports.tweet = (userCred, message, pictureData) => {
     /* pictureData starts off in base 64
       but the client sends over the string starting with 'image/jpeg;base64'
       the code below strips that out */
-      
   if (pictureData) {
     const b64 = pictureData.replace(/^data:image\/[a-z]+;base64,/, "");
     const pictureDatainBinary = Buffer.from(b64, 'base64'); 
@@ -127,7 +110,3 @@ module.exports.tweet = (userCred, message, pictureData) => {
     return client.post('https://api.twitter.com/1.1/statuses/update.json', params)
   }
 }
-
-
-
-

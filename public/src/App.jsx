@@ -7,6 +7,7 @@ import FuturePostList from './components/FuturePostList.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 import moment from 'moment';
+// import './../../node_modules/elemental/less/elemental.less';
 
 class App extends React.Component {
   constructor(props) {
@@ -25,12 +26,12 @@ class App extends React.Component {
       pastPosts: [],
       scheduledDateTime: '',
       updatingPostId: undefined
-
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleLogoClick = this.handleLogoClick.bind(this);
+    this.handleFbLogoClick = this.handleFbLogoClick.bind(this);
+    this.handleTwLogoClick = this.handleTwLogoClick.bind(this);
     this.handleNowSubmit = this.handleNowSubmit.bind(this);
     this.deletePost = this.deletePost.bind(this);
     this.scheduleNewPost = this.scheduleNewPost.bind(this);
@@ -39,13 +40,15 @@ class App extends React.Component {
     this.getScheduledPosts = this.getScheduledPosts.bind(this);
     this.getPosts = this.getPosts.bind(this);
     this.editPost = this.editPost.bind(this);
-
+    this.handleResubmitClick = this.handleResubmitClick.bind(this);
+    this.getPostById = this.getPostById.bind(this);
+    this.handleClearImg = this.handleClearImg.bind(this);
+    this.handleResetPostFields = this.handleResetPostFields.bind(this);
   }
 
   componentWillMount(){
     util.getCurrentUserInfo()
     .then((res) => {
-      // console.log('result data in then of getCurrentUserCred', JSON.stringify(res.data));
       if (res.data.email.length !== 0){
         this.setState({email: res.data.email,
           isLoggedIn: true,
@@ -86,10 +89,8 @@ class App extends React.Component {
   }
 
   getPosts(type) {
-    // console.log('in get posts, type : ', type)
     util.retrievePosts(type, this.state.email)
     .then(results => {
-      // console.log('in get posts, results: ', results);
       if (type === 'scheduled') {
         this.setState({
           scheduledPosts: results.data
@@ -105,6 +106,14 @@ class App extends React.Component {
     })
   }
 
+  getPostById(postId) {
+    util.getPostByPostId(postId)
+    .then((post) => {
+      const { text, img, imgUrl, postToFacebook, postToTwitter } = post.data[0];
+      this.setState({ text, img, imgUrl, postToFacebook, postToTwitter });
+    });
+  }
+
   deletePost(e, post) {
     e.preventDefault();
     util.deletePost(post._id)
@@ -117,7 +126,6 @@ class App extends React.Component {
   }
 
   editPost(e, post) {
-    console.log('post in edit post ---- : ', post);
     e.preventDefault();
     this.setState({
       text: post.text,
@@ -136,24 +144,20 @@ class App extends React.Component {
 
   handleScheduleChange(e) {
     e.preventDefault();
-    // console.log('time sent by datepicker', e.target.value)
     let scheduledDateTime = moment(e.target.value).utc().toISOString();
-    // console.log('date created by datepicker using moment - handleschedule change: ', scheduledDateTime)
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
 
-  handleLogoClick(e) {
-    if (e.target.value === 'Facebook') {
-      this.setState({postToFacebook: e.target.checked});
-    } else {
-      this.setState({postToTwitter: e.target.checked});
-    }
+  handleFbLogoClick(e) {
+    this.setState({ postToFacebook: !this.state.postToFacebook });
+  }
+
+  handleTwLogoClick(e) {
+    this.setState({ postToTwitter: !this.state.postToTwitter });
   }
 
   scheduleNewPost(e, when) {
-    
     // when = (this.state.updatingPostNum) ? 'update' : when;
-    console.log('when in schedul new post :', when)
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
     e.preventDefault();
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
@@ -174,20 +178,42 @@ class App extends React.Component {
 
   handlePostSubmit(e) {
     e.preventDefault();
-    console.log('submitting SCHEDULED');
     this.scheduleNewPost(e, 'scheduled');
   }
 
   handleNowSubmit(e) {
     e.preventDefault();
-    console.log('submitting NOW!');
     this.scheduleNewPost(e, 'now');
   }
 
+  handleResubmitClick(e) {
+    e.preventDefault();
+    document.getElementById('message').scrollIntoView();
+    const postId = e.target.value;
+    this.getPostById(postId);
+  }
+
+  handleClearImg(e) {
+    e.preventDefault();
+    this.setState({ img: '', imgUrl: '' });
+  }
+
+  handleResetPostFields(e) {
+    e.preventDefault();
+    this.setState({
+      postToTwitter: true,
+      postToFacebook: true,
+      text: '',
+      img: '',
+      imgUrl: '',
+      scheduledDateTime: ''
+    })
+  }
 
   render() {
-    const { imgUrl, text, scheduledPosts, pastPosts, postToTwitter, postToFacebook, scheduledDateTime} = this.state;
-    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleLogoClick, handleScheduleChange } = this;
+    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
+    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
+
     return (
       <div>
         <NavBar 
@@ -209,9 +235,13 @@ class App extends React.Component {
           scheduledDateTime={scheduledDateTime}
           text={text}
           handleTextChange={handleTextChange}
-          handleLogoClick={handleLogoClick}
+          handleFbLogoClick={handleFbLogoClick}
+          handleTwLogoClick={handleTwLogoClick}
           handleScheduleChange={handleScheduleChange}
           editPost={editPost}
+          handleResubmitClick={handleResubmitClick}
+          handleClearImg={handleClearImg}
+          handleResetPostFields={handleResetPostFields}
           />}
       </div>
     );

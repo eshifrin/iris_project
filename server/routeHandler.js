@@ -3,6 +3,15 @@ const url = require('url');
 const sm = require('./socialmedia.js')
 const Promise = require('bluebird');
 
+module.exports.getPostsById = (req, res, next) => {
+  const postId = req.query.postId;
+  return dbh.retrievePosts(postId)
+  .then(results => {
+    res.status(200).json(results);
+  })
+  .catch(err => console.log('Error in getting posts by id in rh' + err));
+}
+
 //if authenticated, send posts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
@@ -10,7 +19,7 @@ module.exports.sendUserPosts = (req, res, next) => {
 
   dbh.showUserPosts(email, req.params.post_type)
   .then(results => {
-    // console.log('results in showuserposts: ', results)
+    console.log('-----', results);
     res.status(200).json(results);
   })
   .catch(err => {
@@ -22,11 +31,6 @@ module.exports.sendUserPosts = (req, res, next) => {
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   if (req.params.post_type === 'scheduled') {
-    console.log('whats the req body here in scheduled?', req.body);
-    console.log('post_type : ', req.params.post_type);
-    console.log('body status in scheduled or save posts rh : ', req.body.status)
-    // let scheduledPostIds = req.body.scheduledPostIds;
-    // dbh.retrieveUserId(req.email)
     let id = '';
     dbh.retrieveUserId(req.session.email)
     .then(postid => {
@@ -207,12 +211,13 @@ module.exports.getUserInfo = (req, res, next) => {
     userCred.email = req.session.email;
     dbh.getUser(userCred.email)
     .then((data) => {
-      // console.log('data from get user : ', data);
+      console.log('data from get user : ', data);
       userCred.twitter = (data.twitter_token) ? true : false;
       userCred.facebook = (data.facebook_id) ? true : false;
 
       dbh.showUserPosts(userCred.email, 'scheduled')
       .then(results => {
+        console.log('-----------------', results);
         userCred.scheduledPosts = results;
         dbh.showUserPosts(userCred.email, 'posted')
         .then(posts => {
@@ -230,7 +235,6 @@ module.exports.getUserInfo = (req, res, next) => {
         if (err === 'invalid user') res.status(404).end();
         else res.status(500).end();
       });
-
     })
   } else {
     res.send({email: '', twitter: true, facebook: true});
