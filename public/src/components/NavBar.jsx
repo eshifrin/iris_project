@@ -1,5 +1,8 @@
 import React, { PropTypes } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
+import AppBar from 'material-ui/AppBar';
+import IconMenu from 'material-ui/IconMenu';
+import FlatButton from 'material-ui/FlatButton'
 
 const propTypes = {
   login: PropTypes.bool.isRequired,
@@ -8,12 +11,21 @@ const propTypes = {
 };
 
 const NavBar = ({login, twitter, facebook}) => {
+	var ButtonStyle = {
+    backgroundColor: 'transparent',
+    color: 'white'
+  };
 	return (
-	  <div>
-	    <h2>Iris </h2>
-	    { twitter && <a href="/twitter">verify twitter</a>}  
-	    { facebook && <a href="/facebook">verify facebook</a>}
-	    { login && (<a href="/login">Login/Signup</a>)}
+		<div>
+		<AppBar title="Iris" >
+	  
+	    { twitter && <FlatButton href="/twitter" style={ButtonStyle} label="verify Twitter"/>}  
+	    { facebook && <FlatButton href="/facebook" style={ButtonStyle} label="verify Facebook"/>}
+	    { login && <FlatButton href="/login" style={ButtonStyle} label="Login/Signup"  />}
+	    
+	  
+	  </AppBar>
+
 	    { !facebook && !twitter && !login &&<h5>You have authorized both Facebook and Twitter to post on your behalf</h5>}
 	    { !facebook && twitter && <h5>You have authorized Facebook to post on your behalf</h5>}
 	    { facebook && !twitter && <h5>You have authorized Twitter to post on your behalf</h5>}

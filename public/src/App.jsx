@@ -7,6 +7,7 @@ import FuturePostList from './components/FuturePostList.jsx';
 import axios from 'axios';
 import * as util from './lib/util.js'
 import moment from 'moment';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // import './../../node_modules/elemental/less/elemental.less';
 //
 class App extends React.Component {
@@ -215,35 +216,37 @@ class App extends React.Component {
     const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
 
     return (
-      <div>
-        <NavBar 
-          login={!this.state.isLoggedIn}
-          twitter={!this.state.twitterAuthenticated}
-          facebook={!this.state.facebookAuthenticated}
-        />
-          {this.state.isLoggedIn && <Main
-          deletePost={deletePost}
-          scheduledPosts={scheduledPosts}
-          pastPosts={pastPosts}
-          uploadImg={uploadImg}
-          imgUrl={imgUrl}
-          postToFacebook={postToFacebook}
-          postToTwitter={postToTwitter}
-          scheduleNewPost={scheduleNewPost}
-          handlePostSubmit={handlePostSubmit}
-          handleNowSubmit={handleNowSubmit}
-          scheduledDateTime={scheduledDateTime}
-          text={text}
-          handleTextChange={handleTextChange}
-          handleFbLogoClick={handleFbLogoClick}
-          handleTwLogoClick={handleTwLogoClick}
-          handleScheduleChange={handleScheduleChange}
-          editPost={editPost}
-          handleResubmitClick={handleResubmitClick}
-          handleClearImg={handleClearImg}
-          handleResetPostFields={handleResetPostFields}
-          />}
-      </div>
+      <MuiThemeProvider>
+        <div>
+          <NavBar 
+            login={!this.state.isLoggedIn}
+            twitter={!this.state.twitterAuthenticated}
+            facebook={!this.state.facebookAuthenticated}
+          />
+            {this.state.isLoggedIn && <Main
+            deletePost={deletePost}
+            scheduledPosts={scheduledPosts}
+            pastPosts={pastPosts}
+            uploadImg={uploadImg}
+            imgUrl={imgUrl}
+            postToFacebook={postToFacebook}
+            postToTwitter={postToTwitter}
+            scheduleNewPost={scheduleNewPost}
+            handlePostSubmit={handlePostSubmit}
+            handleNowSubmit={handleNowSubmit}
+            scheduledDateTime={scheduledDateTime}
+            text={text}
+            handleTextChange={handleTextChange}
+            handleFbLogoClick={handleFbLogoClick}
+            handleTwLogoClick={handleTwLogoClick}
+            handleScheduleChange={handleScheduleChange}
+            editPost={editPost}
+            handleResubmitClick={handleResubmitClick}
+            handleClearImg={handleClearImg}
+            handleResetPostFields={handleResetPostFields}
+            />}
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
