@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import PhotoUpload from './PhotoUpload.jsx';
 import WriteMessage from './WriteMessage.jsx';
 import DateTimePicker from './DateTimePicker.jsx';
+import FlatButton from 'material-ui/FlatButton';
+
 
 const propTypes = {
   uploadImg: PropTypes.func.isRequired,
@@ -44,9 +46,9 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
         handleClearImg={handleClearImg}
       />
     </form>
-      <button onClick={handleResetPostFields}>Reset Fields</button>
-      <button value="postnow" onClick={(postToFacebook || postToTwitter) && handleNowSubmit}>Post Now</button>
-      <button value="schedulepost" onClick={(postToFacebook || postToTwitter) && handlePostSubmit}>Schedule Post</button>
+      <FlatButton primary={true} onClick={handleResetPostFields}>Reset Fields</FlatButton>
+      <FlatButton primary={true} value="postnow" onClick={(postToFacebook || postToTwitter) && handleNowSubmit}>Post Now</FlatButton>
+      <FlatButton primary={true} value="schedulepost" onClick={(postToFacebook || postToTwitter) && handlePostSubmit}>Schedule Post</FlatButton>
       {!postToTwitter && !postToFacebook && <h5 style={style}>Please choose at least one social site to share your post</h5>}
   </div>
 )};

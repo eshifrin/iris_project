@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
-import IconMenu from 'material-ui/IconMenu';
-import FlatButton from 'material-ui/FlatButton'
+import FlatButton from 'material-ui/FlatButton';
 
 const propTypes = {
   login: PropTypes.bool.isRequired,

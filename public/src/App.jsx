@@ -90,8 +90,10 @@ class App extends React.Component {
   }
 
   getPosts(type) {
+    console.log('type in getPosts : ', type);
     util.retrievePosts(type, this.state.email)
     .then(results => {
+      console.log('results in get posts: ', results);
       if (type === 'scheduled') {
         this.setState({
           scheduledPosts: results.data
@@ -103,7 +105,7 @@ class App extends React.Component {
       }
     })
     .catch((err) => {
-      console.log('there was error in retreiving scheduledposts of the current user, err : ', err);
+      console.log('there was error in retreiving scheduled/past posts of the current user, err : ', err);
     })
   }
 
