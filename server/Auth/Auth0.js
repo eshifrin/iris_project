@@ -2,7 +2,9 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 var dotenv = require('dotenv');
 dotenv.load();
-console.log('process.env', process.env.AUTH0_DOMAIN);
+console.log('process.env domain', process.env.AUTH0_DOMAIN);
+console.log('process.env callback', process.env.AUTH0_CALLBACK_URL);
+
 
 // This will configure Passport to use Auth0
 
