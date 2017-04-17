@@ -7,10 +7,12 @@ const Twitter = require('twitter');
 const dbh = require('../db/db_helpers.js')
 const fs = require('fs');
 
+console.log('fb callback', process.env.FB_CALLBACK)
+
 passport.use('twitter-authz', new TwitterStrategy({
     consumerKey: process.env.TW_KEY,
     consumerSecret: process.env.TW_SECRET,
-    callbackURL: 'http://localhost:3000/twitter/return',
+    callbackURL: process.env.TW_CALLBACK || 'http://localhost:3000/twitter/return',
     passReqToCallback: true
   },
   function(req, token, tokenSecret, profile, cb) {
@@ -32,7 +34,7 @@ passport.use('twitter-authz', new TwitterStrategy({
 passport.use('facebook-authz', new FacebookStrategy({
     clientID: process.env.FB_ID,
     clientSecret: process.env.FB_SECRET,
-    callbackURL: "http://localhost:3000/facebook/return",
+    callbackURL: process.env.FB_CALLBACK || "http://localhost:3000/facebook/return",
     passReqToCallback: true,
     enableProof: true
   },
