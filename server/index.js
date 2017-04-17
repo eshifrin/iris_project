@@ -16,6 +16,7 @@ const rh = require('./routeHandler')
 const cronJob = require('./cronJob.js');
 
 // sm.getPostsStats();
+console.log('here is the callback url', process.env.AUTH0_CALLBACK_URL)
 
 // const user = require('./routes/usercred');
 const cloudinary = require('cloudinary');
