@@ -66,6 +66,23 @@ module.exports.FBtoAuth = passport.authenticate('facebook-authz', { scope: ['pub
 module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/login',
 successRedirect: '/'});
 
+module.exports.getPostsStats = (postIds) => {
+  const client = new Twitter({
+    consumer_key: '3s9CiZ80clIGQCv8l8zvtZQ1P',
+    consumer_secret: '7YVCiQ22TdhfZzexHgnQe7L9lGSnSFtXC3AqXA7DQ12Wuu9kc8',
+    access_token_key: '3036412556-FmdcvgTr9wNZKznObdFleR1yiAjg9YiPxE7dA7e',
+    access_token_secret: 'dRHYmUwLX2x5gwPkBxmhn4gQ5fI4m0XoSX659yP2bWmyj'
+  });
+  return client.get('statuses/lookup', { 'id': postIds })
+  .then(results => {
+    console.log()
+    return results;
+  })
+  .catch(err => {
+    console.log('Error in getting Twitter post stats' + err);
+  })
+}
+
 // Module.exports functions //
 module.exports.populateTwitterClient = (token, tokenSecret) => {
   var client = new Twitter({
@@ -92,11 +109,9 @@ module.exports.FBPost = (profileId, accessToken, message, photoUrl) => {
 }
 
 module.exports.tweet = (userCred, message, pictureData) => {
-  let client = module.exports.populateTwitterClient(userCred.twitter_token, userCred.twitter_secret)
+  let client = module.exports.populateTwitterClient(userCred.twitter_token, userCred.twitter_secret);
 
-  let params = {
-    status: message
-  }
+  let params = { status: message }; 
     /* pictureData starts off in base 64
       but the client sends over the string starting with 'image/jpeg;base64'
       the code below strips that out */

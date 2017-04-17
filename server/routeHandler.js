@@ -10,7 +10,7 @@ module.exports.imageLink = (req, res, next) => {
   .catch(err =>  {
     console.log('error with cloudinary', err)
     res.status(500).end();
-  });  
+  });
 }
 
 module.exports.deauthorize = (req, res, next) => {
@@ -43,34 +43,61 @@ module.exports.deauthorize = (req, res, next) => {
 module.exports.getPostsById = (req, res, next) => {
   const postId = req.query.postId;
   return dbh.retrievePosts(postId)
-  .then(results => {
+  .then((results) => {
     res.status(200).json(results);
   })
-  .catch(err => console.log('Error in getting posts by id in rh' + err));
-}
+  .catch(err => console.log('Error in getting posts by id in rh', err));
+};
 
-//if authenticated, send posts
+// if authenticated, send posts
+// TOFIX: change function name to getPastPosts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
   const email = url_parts.query.email;
-
+  // let resultsWithStats = [];
   dbh.showUserPosts(email, req.params.post_type)
-  .then(results => {
-    console.log('-----', results);
+  .then((results) => {
+    // resultsWithStats = results;
+    // let postWithStats = '';
+  //   for (let i = 0; i < results.length; i++) {
+  //     postWithStats = postWithStats + results[i].postedTwitterId + ','
+  //   }
+  //   postWithStats = postWithStats.slice(0, -1);
+  //   return sm.getPostsStats(postWithStats)
+  // })
+  // .then(stats => {
+  //   console.log('what are the stats', stats);
+  //   for (let i = 0; i < stats.length; i++) {
+  //     console.log('this is my obj', resultsWithStats);
+  //     resultsWithStats[0]['apple'] = 1;
+  //     // resultsWithStats[0].twFavCount = 2;
+  //     // resultsWithStats[0].twRetweetCount = 3;
+  //     // resultsWithStats[i].twFavCount = stats[i]['favorite_count'];
+  //     // resultsWithStats[i].twRetweetCount = stats[i]['retweet_count'];
+  //     console.log('what is result i', resultsWithStats[0]);
+  //   }
+  //   console.log('resultsWithStats 1:', resultsWithStats);
+  //   return resultsWithStats;
+  // })
+  // .catch(err => {
+  //   console.log('Error compiling favorite and retweet stats', err);
+  // })
+  // .then(resultsWithStats => {
+  //   console.log('resultsWithStats 2!!!!!:', resultsWithStats);
     res.status(200).json(results);
   })
-  .catch(err => {
+  .catch((err) => {
     if (err === 'invalid user') res.status(404).end();
     else res.status(500).end();
   });
-}
+};
 
 //if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   if (req.params.post_type === 'scheduled') {
     let id = '';
     dbh.retrieveUserId(req.session.email)
-    .then(postid => {
+    .then((postid) => {
       id = postid;
       dbh.deletePost(id, req.body.updatingPostId)
     })
@@ -83,39 +110,40 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
     .then(() => {
       res.status(200).end();
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('err in schduleor save posts - rh : ', err);
       if (err === 'invalid user') res.status(404).end();
       else res.status(500).end();
-    })
+    });
   } else if (req.params.post_type === 'now') {
     module.exports.sendPostsNow(req, res, next);
-  } 
-}
+  }
+};
 
 module.exports.sendTweet = (userCred, postInfo) => {
   return sm.tweet(userCred, postInfo.text, postInfo.img)
-    .then(tweet => {
-      dbh.updatePostFields(postInfo._id, 'postedTwitterId', tweet.id)
+    .then((tweet) => {
+      console.log('whats inside the tweet----', tweet);
+      dbh.updatePostFields(postInfo._id, 'postedTwitterId', tweet.id_str)
       return 'Successful Tweet';
     })
-    .catch(err => {
-      console.log('Error in tweet', err)
+    .catch((err) => {
+      console.log('Error in tweet', err);
       return 'Unsuccessful Tweet';
-    })
-}
+    });
+};
 
 module.exports.sendFBPost = (userCred, postInfo) => {
   return sm.FBPost(userCred.facebook_id, userCred.facebook_token, postInfo.text, postInfo.imgUrl)
-    .then(fbpost => {
+    .then((fbpost) => {
       dbh.updatePostFields(postInfo._id, 'postedFacebookId', fbpost.data.id)
       return 'Successful FBPost';
     })
-    .catch(err => {
-      console.log('Error in tweet', err)
+    .catch((err) => {
+      console.log('Error in tweet', err);
       return 'Unsuccessful Post';
-    })
-}
+    });
+};
 
 module.exports.sendScheduledPosts = () => {
   return dbh.getScheduledEvents()
@@ -123,48 +151,49 @@ module.exports.sendScheduledPosts = () => {
     console.log('here are the scheduledPosts', scheduledPosts)
     return Promise.map(scheduledPosts, (post) => {
       return module.exports.sendScheduledPost(post);
-    })
+    });
   })
-  .catch(err => {
+  .catch((err) => {
     console.log('error for sendingScheduledPost in rh', err);
-  })
-}
+  });
+};
 
 module.exports.sendScheduledPost = (post) => {
   let userCredentials = '';
 
   return dbh.getUserbyId(post.user_id)
-  .catch(err => {
+  .catch((err) => {
     throw 'Error in getting user by id' + err;
   })
-  .then(userInfo => {
+  .then((userInfo) => {
     userCredentials = userInfo;
     return dbh.updatePostFields(post._id, 'status', 'posted')
   })
-  .catch(err => {
+  .catch((err) => {
     throw 'Error updating post fields from scheduled to posted' + err;
   })
   .then(() => {
     return dbh.moveScheduledToPosted(post.user_id, post._id);
   })
-  .catch(err => {
+  .catch((err) => {
     throw 'Error moving scheduled post to posted' + err;
   })
   .then(() => {
-    let posts = [];
+    const posts = [];
     if (post.postToFacebook) posts.push(module.exports.sendFBPost(userCredentials, post))
     if (post.postToTwitter) posts.push(module.exports.sendTweet(userCredentials, post))
     return Promise.all(posts);
   })
   .catch((err) => {
-    console.log(err)
+    console.log(err);
     return;
-  })
-}
+  });
+};
 
 module.exports.sendPostsNow = (req, res, next) => {
-  let email = req.body.email;
-  let postInfo = {
+  console.log('what is in this req.body?', req.body);
+  const email = req.body.email;
+  const postInfo = {
     text: req.body.text,
     img: req.body.img,
     imgUrl: req.body.imgUrl,
@@ -175,7 +204,7 @@ module.exports.sendPostsNow = (req, res, next) => {
   let userCredentials = '';
 
   dbh.getUser(email)
-  .then(userInfo => {
+  .then((userInfo) => {
     userCredentials = userInfo;
     dbh.deletePost(userInfo._id, req.body.updatingPostId)
   })
@@ -183,10 +212,11 @@ module.exports.sendPostsNow = (req, res, next) => {
     console.log('err while deleting rh - ', err);
   })
   .then(() => {
+    console.log('what is post Info from rh.sendpostnow', postInfo);
     dbh.savePost(userCredentials._id, postInfo, 'posted')
   })
   .then(() => {
-    let posts = [];
+    const posts = [];
     if (postInfo.postToFacebook) posts.push(module.exports.sendFBPost(userCredentials, postInfo))
     if (postInfo.postToTwitter) posts.push(module.exports.sendTweet(userCredentials, postInfo))
     return Promise.all(posts);
@@ -195,15 +225,15 @@ module.exports.sendPostsNow = (req, res, next) => {
     console.log(err);
     res.status(404).send('Not found');
   })
-  .then(posts => {
+  .then((posts) => {
     res.send(posts);
-  })
-}
+  });
+};
 
 module.exports.userCheck = (req, res, next) => {
   let email = req.session.email;
   return dbh.getUser(email)
-  .then(data => {
+  .then((data) => {
     // console.log('usercheck if user exists, data : ', data);
     if (!data) return dbh.saveUser(email)
     else return
@@ -224,19 +254,19 @@ module.exports.deletePost = (req, res, next) => {
   const postId = url_parts.query._id;
 
   return dbh.retrieveUserId(req.session.email)
-  .then(userId => {
+  .then((userId) => {
     return dbh.deletePost(userId, postId)
   })
-  .then(results => {
+  .then((results) => {
     // console.log('deletedPost in routehandler', results);
     res.end()
   })
-  .catch(err => {
+  .catch((err) => {
     console.log('err in routehandler', err);
     console.log(req.body);
     res.status(404).send('Not found');
   });
-}
+};
 
 module.exports.getUserInfo = (req, res, next) => {
   // console.log('getUserCred req cookies: ', req.cookies);
@@ -244,7 +274,7 @@ module.exports.getUserInfo = (req, res, next) => {
   console.log('getUserCred req session: ', req.session.email);
 
   if (req.user) {
-    let userCred = {};
+    const userCred = {};
     userCred.email = req.session.email;
     dbh.getUser(userCred.email)
     .then((data) => {
@@ -253,27 +283,27 @@ module.exports.getUserInfo = (req, res, next) => {
       userCred.facebook = (data.facebook_id) ? true : false;
 
       dbh.showUserPosts(userCred.email, 'scheduled')
-      .then(results => {
+      .then((results) => {
         console.log('-----------------', results);
         userCred.scheduledPosts = results;
         dbh.showUserPosts(userCred.email, 'posted')
-        .then(posts => {
+        .then((posts) => {
           userCred.pastPosts = posts;
           res.send(userCred);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log('err in getting past results : ', err);
           if (err === 'invalid user') res.status(404).end();
           else res.status(500).end();
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error in getting scheduled results ');
         if (err === 'invalid user') res.status(404).end();
         else res.status(500).end();
       });
-    })
+    });
   } else {
-    res.send({email: '', twitter: true, facebook: true});
+    res.send({ email: '', twitter: true, facebook: true });
   }
-}
+};

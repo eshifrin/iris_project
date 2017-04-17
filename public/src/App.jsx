@@ -11,9 +11,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-
-// import './../../node_modules/elemental/less/elemental.less';
-//
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +69,7 @@ class App extends React.Component {
   uploadImg(e) {
     e.preventDefault();
     let file = e.target.files[0];
-    let reader = new FileReader(file);  
+    let reader = new FileReader(file);
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       this.setState({
@@ -96,8 +93,7 @@ class App extends React.Component {
   getPosts(type) {
     console.log('type in getPosts : ', type);
     util.retrievePosts(type, this.state.email)
-    .then(results => {
-      console.log('results in get posts: ', results);
+    .then((results) => {
       if (type === 'scheduled') {
         this.setState({
           scheduledPosts: results.data
@@ -130,7 +126,7 @@ class App extends React.Component {
     .then(() => {
       this.getScheduledPosts();
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('error while deleting');
     });
   }
@@ -168,11 +164,10 @@ class App extends React.Component {
   }
 
   scheduleNewPost(e, when) {
-    // when = (this.state.updatingPostNum) ? 'update' : when;
     const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
     e.preventDefault();
     util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
-    .then(results => {
+    .then((results) => {
       console.log('Submit new post - status code:', results.status);
       this.setState({
         text: '',
@@ -231,13 +226,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime} = this.state;
+    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime } = this.state;
     const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
 
     return (
       <MuiThemeProvider>
         <div>
-          <NavBar 
+          <NavBar
             login={!this.state.isLoggedIn}
             twitter={!this.state.twitterAuthenticated}
             facebook={!this.state.facebookAuthenticated}
