@@ -113,7 +113,10 @@ class App extends React.Component {
     })
   }
 
+  //delete this func
+
   getPostById(postId) {
+    console.log('post id before :', postId)
     util.getPostByPostId(postId)
     .then((post) => {
       const { text, img, imgUrl, postToFacebook, postToTwitter } = post.data[0];
@@ -194,11 +197,20 @@ class App extends React.Component {
     this.scheduleNewPost(e, 'now');
   }
 
-  handleResubmitClick(e) {
+  handleResubmitClick(e, post) {
     e.preventDefault();
     document.getElementById('message').scrollIntoView();
     const postId = e.target.value;
-    this.getPostById(postId);
+    console.log('post in  handle resub click: ', post)
+    // this.getPostById(post._id);
+    this.setState({
+      text: post.text,
+      postToFacebook: post.postToFacebook,
+      postToTwitter: post.postToTwitter,
+      scheduledDateTime: post.scheduledDateTime,
+      imgUrl: post.imgUrl,
+      updatingPostId: post._id
+    })
   }
 
   handleClearImg(e) {

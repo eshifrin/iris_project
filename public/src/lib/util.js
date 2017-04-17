@@ -6,7 +6,9 @@ const routes = {
   'posted': '/api/user/posted'
 }
 
+//delete this func
 const getPostByPostId = (postId) => {
+  console.log('post id in util : ', postId)
   return axios.get('/api/post/resubmit', { params: { postId } });
 }
 
