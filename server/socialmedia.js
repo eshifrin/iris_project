@@ -32,7 +32,7 @@ passport.use('twitter-authz', new TwitterStrategy({
 passport.use('facebook-authz', new FacebookStrategy({
     clientID: process.env.FB_ID,
     clientSecret: process.env.FB_SECRET,
-    callbackURL: "http://localhost:3000/facebook/return",
+    callbackURL: process.env.FB_CALLBACK || "http://localhost:3000/facebook/return",
     passReqToCallback: true,
     enableProof: true
   },
