@@ -28,6 +28,21 @@ module.exports.deletePost = (userId, postId) => {
   })
 }
 
+module.exports.deleteCredentials = (email, provider) => {
+  let credentials = {
+    twitter: {
+      twitter_token: null,
+      twitter_secret: null
+    },
+    facebook: {
+      facebook_token: null,
+      facebook_id: null
+    }
+  };
+
+  return User.updateAsync({email: email}, {$set: credentials[provider]});
+}
+
 module.exports.retrievePosts = (postIds) => {
   return Post.findAsync({_id: {$in: postIds} });
 }

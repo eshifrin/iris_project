@@ -13,6 +13,34 @@ module.exports.imageLink = (req, res, next) => {
   });  
 }
 
+module.exports.deauthorize = (req, res, next) => {
+  console.log(' -------*****', 'got here')
+  let provider = req.params.provider;
+  let email = req.session.email;
+  let tokenName = `${provider}_token`;
+
+  console.log('in deauthorize', provider, email, tokenName)
+
+  if (!req.session.email) res.status(404).send();
+
+  return dbh.getUser(req.session.email)
+  .then(user => {
+    //if theres no user or they arent authorized
+    if (!user || !user[tokenName]) {
+      console.log('no user or relevant token')
+      res.redirect('/');
+    }
+    return dbh.deleteCredentials(email, provider);
+  })
+  .then(deleted => {
+    res.redirect('/');
+  })
+  .catch(err => {
+    console.log('error deleting credentials', err)
+    res.redirect('/');
+  })
+}
+
 module.exports.getPostsById = (req, res, next) => {
   const postId = req.query.postId;
   return dbh.retrievePosts(postId)

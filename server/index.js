@@ -78,6 +78,8 @@ app.get('/twitter/return', sm.TWfromAuth);
 app.get('/facebook', sm.FBtoAuth);
 app.get('/facebook/return', sm.FBfromAuth);
 
+app.get('/deauthorize/:provider', rh.deauthorize);
+
 /************************** catch all ******************************/
 
 app.get('*', (req, res) => {
