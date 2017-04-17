@@ -11,6 +11,7 @@ const PastPostListItem = ({post, handleResubmitClick}) => {
   const dateObj = moment(post.date);
   const monthDay = dateObj.format('M/D');
   const time = dateObj.format('hh:mma');
+  console.log('post id in item: ', post._id);
   
   return (
     <Card style={{width: 500}}>
@@ -25,7 +26,7 @@ const PastPostListItem = ({post, handleResubmitClick}) => {
       <CardText> {post.text} </CardText>
       {post.postToTwitter && <FlatButton secondary={!post.postedTwitterId}> Twitter</FlatButton>}
       {post.postToFacebook && <FlatButton secondary={!post.postedFacebookId}> Facebook</FlatButton>}
-      <FlatButton primary={true} onClick={handleResubmitClick} value={post._id} >Repost</FlatButton>
+      <FlatButton primary={true} onClick={e => handleResubmitClick(e, post)} >Repost</FlatButton>
     </Card>
   )
 };
