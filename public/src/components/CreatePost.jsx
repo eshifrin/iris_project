@@ -30,8 +30,8 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
   return (
   <div>
     <form onSubmit={(e) => handlePostSubmit(e)}>
-      <h4>Schedule New Post</h4>
-      <img src={imgUrl} style={{width: 100}} />
+      <h4>New Post</h4>
+      {(imgUrl.length !== 0) && <img src={imgUrl} style={{width: 100}} />}
       <WriteMessage
         text={text}
         postToTwitter={postToTwitter}

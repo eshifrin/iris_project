@@ -13,15 +13,15 @@ const FuturePostListItem = ({post, deletePost, editPost}) => {
   const dateObj = moment(post.scheduledDateTime)
   const monthDay = dateObj.format('M/D');
   const time = dateObj.format('hh:mma');
-  console.log('post : ', post);
-  console.log('post.imageurl - ', post.imgUrl.length);
+  // console.log('post : ', post);
+  // console.log('post.imageurl - ', post.imgUrl);
   return (
-  <Card>
+  <Card style={{width: 500}}>
   <CardHeader
       subtitle={monthDay + ' ' + time}
     />
   { (post.imgUrl.length !== 0) && <CardMedia>
-    <img src={post.imgUrl} />
+    <img src={post.imgUrl} style={{width: 100}}/>
   </CardMedia>}
   
   <CardText> {post.text} </CardText>

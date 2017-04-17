@@ -8,6 +8,10 @@ import axios from 'axios';
 import * as util from './lib/util.js'
 import moment from 'moment';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
+
 // import './../../node_modules/elemental/less/elemental.less';
 //
 class App extends React.Component {
@@ -147,6 +151,7 @@ class App extends React.Component {
 
   handleScheduleChange(e) {
     e.preventDefault();
+    console.log('schedule change args: ', arguments);
     let scheduledDateTime = moment(e.target.value).utc().toISOString();
     this.setState({ scheduledDateTime: scheduledDateTime });
   }
