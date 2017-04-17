@@ -20,8 +20,8 @@ const NavBar = ({login, twitter, facebook}) => {
 	    { twitter && <FlatButton href="/twitter" style={ButtonStyle} label="verify Twitter"/>}  
 	    { facebook && <FlatButton href="/facebook" style={ButtonStyle} label="verify Facebook"/>}
 	    { login && <FlatButton href="/login" style={ButtonStyle} label="Login/Signup"  />}
-      { !login && !twitter && <FlatButton href="/deauthorize/twitter" label="unlink Twitter"/>}
-      { !login && !facebook && <FlatButton href="/deauthorize/facebook" label="unlink Facebook" />}
+      { !login && !twitter && <FlatButton href="/deauthorize/twitter" style={ButtonStyle} label="unlink Twitter"/>}
+      { !login && !facebook && <FlatButton href="/deauthorize/facebook" style={ButtonStyle} label="unlink Facebook" />}
 	  </AppBar>
 
 	    { !facebook && !twitter && !login &&<h5>You have authorized both Facebook and Twitter to post on your behalf</h5>}
