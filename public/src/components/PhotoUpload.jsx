@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import FlatButton from 'material-ui/FlatButton';
 
 const propTypes = {
   uploadImg: PropTypes.func.isRequired,
@@ -7,9 +8,8 @@ const propTypes = {
 
 const PhotoUpload = ({ uploadImg, handleClearImg }) => (
   <div>
-    <h4>Upload file:</h4>
     <input type="file" id="userfile" name="userfile" onChange={uploadImg} />
-    <button onClick={handleClearImg}>Clear Image</button>
+    <FlatButton primary={true} onClick={handleClearImg}>Clear Image</FlatButton>
   </div>
 );
 

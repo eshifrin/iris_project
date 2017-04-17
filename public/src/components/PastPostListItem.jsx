@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
-import moment from 'moment'
+import moment from 'moment';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 const propTypes = {
   handleResubmitClick: PropTypes.func.isRequired,
@@ -9,28 +11,22 @@ const PastPostListItem = ({post, handleResubmitClick}) => {
   const dateObj = moment(post.date);
   const monthDay = dateObj.format('M/D');
   const time = dateObj.format('hh:mma');
-  const status = (sourceBoolean, sourceId) => {
-    if (!sourceBoolean) { return 'na'; }
-    return !!sourceId ? 'sent' : 'error';
-  }
-  // const repostMessage = {
-  //   monthDay: monthDay,
-  //   time: time,
-  //   text: post.text,
-  //   imgUrl: post.imgUrl,
-  //   postToTwitter: post.postToTwitter,
-  //   postToFacebook: post.postToFacebook
-  // };
+  
   return (
-    <div>
-      <span> {monthDay} </span>
-      <span> {time} </span>
-      <span> {post.text} </span>
-      {post.imgUrl && <img src={post.imgUrl} />}
-      <span> Twitter: {status(post.postToTwitter, post.postedTwitterId)} </span>
-      <span> Facebook: {status(post.postToFacebook, post.postedFacebookId)} </span>
-      <button onClick={handleResubmitClick} value={post._id} >Repost</button>
-    </div>
+    <Card style={{width: 500}}>
+      <CardHeader
+      subtitle={monthDay + ' ' + time}
+      />
+
+      { (post.imgUrl.length !== 0) && <CardMedia>
+        <img src={post.imgUrl} style={{width: 100}}/>
+      </CardMedia>}
+      
+      <CardText> {post.text} </CardText>
+      {post.postToTwitter && <FlatButton secondary={!post.postedTwitterId}> Twitter</FlatButton>}
+      {post.postToFacebook && <FlatButton secondary={!post.postedFacebookId}> Facebook</FlatButton>}
+      <FlatButton primary={true} onClick={handleResubmitClick} value={post._id} >Repost</FlatButton>
+    </Card>
   )
 };
 

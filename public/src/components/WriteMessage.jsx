@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import TextField from 'material-ui/TextField';
 
 const propTypes = {
   text: PropTypes.string.isRequired,
@@ -22,11 +23,11 @@ const WriteMessage = ({ text, handleTextChange, handleFbLogoClick, postToFaceboo
     <img style={fbLogoStyle} width="70px" height="auto" src="https://img.clipartfest.com/5f501c692bb9c6782efc7af0f4bcf349_facebook-icon-circle-vector-facebook-logo_512-512.png" value="Facebook" onClick={handleFbLogoClick} checked={postToFacebook}/>
     <img style={twLogoStyle} width="70px" height="auto" src="http://goinkscape.com/wp-content/uploads/2015/07/twitter-logo-final.png" value="Twitter" onClick={handleTwLogoClick} checked={postToTwitter}/>
     <br/>
-    <label>Message:</label>
-    <input
+    <TextField
       type="text"
       name="text"
-      placeholder="What do you want to share?"
+      hintText="What do you want to share?"
+      floatingLabelText="Post"
       value={text}
       onChange={handleTextChange}
     />
