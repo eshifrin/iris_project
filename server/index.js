@@ -14,16 +14,12 @@ const Auth0 = require('./Auth/Auth0Helpers');
 const sm = require('./socialmedia.js');
 const rh = require('./routeHandler')
 const cronJob = require('./cronJob.js');
+const cloudinaryUrl = require('./cloudinary.js')
+
 
 // sm.getPostsStats();
-
 // const user = require('./routes/usercred');
-const cloudinary = require('cloudinary');
-cloudinary.config({ 
-  cloud_name: 'dzk49mshl', 
-  api_key: '672315283378774', 
-  api_secret: 'Fr9x5K3tELc1z9kkUH4EvhbD6hs' 
-});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,11 +59,7 @@ app.get('/facebook/return', sm.FBfromAuth);
   res.render('index', { title: 'Broasis!', env: env });
 });*/
 
-app.post('/api/image/imgLink', (req, res) => {
-    cloudinary.uploader.upload(req.body.image, (result) => {
-      res.send(result.secure_url);
-    })
-})
+app.post('/api/image/imgLink', rh.imageLink)
 
 //conditionally do this after passing them through Auth0
 app.route('/api/user/:post_type')

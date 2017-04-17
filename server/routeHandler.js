@@ -2,6 +2,16 @@ const dbh = require('../db/db_helpers');
 const url = require('url');
 const sm = require('./socialmedia.js')
 const Promise = require('bluebird');
+const cloudinaryUrl = require('./cloudinary.js')
+
+module.exports.imageLink = (req, res, next) => {
+  cloudinaryUrl(req.body.image)
+  .then(result => res.send(result.secure_url))
+  .catch(err =>  {
+    console.log('error with cloudinary', err)
+    res.status(500).end();
+  });  
+}
 
 module.exports.getPostsById = (req, res, next) => {
   const postId = req.query.postId;
