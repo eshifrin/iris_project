@@ -1,5 +1,6 @@
 const passport = require('passport');
 const dbh = require('../../db/db_helpers')
+const querystring = require('querystring');
 
 const env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -26,5 +27,12 @@ exports.success = (req, res) => {
 
 exports.logout = (req, res) => {
   req.logout();
-  res.redirect('/');
+
+  let qs = querystring.stringify({
+    returnTo: process.env.LOGOUT_URL || 'http://localhost:3000',
+    client_id: process.env.AUTH0_CLIENT_ID
+  });
+
+  res.redirect(`https://${process.env.AUTH0_DOMAIN}/v2/logout?${qs}`);
 };
+
