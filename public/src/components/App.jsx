@@ -282,7 +282,7 @@ class App extends React.Component {
             handleModalToggle={handleModalToggle}
             />}
             <footer>
-            <a href="https://www.iubenda.com/privacy-policy/8093701">Our Privacy Policy</a>
+            <a href="https://www.iubenda.com/privacy-policy/8099712">Our Privacy Policy</a>
             </footer>
         </div>
 
