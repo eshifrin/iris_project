@@ -7,10 +7,10 @@ const propTypes = {
   handleResubmitClick: PropTypes.func.isRequired,
 };
 
-const PastPostList = ({pastPosts, handleResubmitClick}) => {  
-  const posts = pastPosts.map(post => 
+const PastPostList = ({ pastPosts, handleResubmitClick }) => {
+  const posts = pastPosts.map(post =>
     <ListItem key={post._id}>
-      <PastPostListItem post={post} handleResubmitClick={handleResubmitClick}/>
+      <PastPostListItem post={post} handleResubmitClick={handleResubmitClick} />
     </ListItem>)
   return (
     <div>

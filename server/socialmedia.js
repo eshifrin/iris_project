@@ -23,11 +23,11 @@ passport.use('twitter-authz', new TwitterStrategy({
       tokenSecret: tokenSecret
     })
     .then(() => {
-      return cb(null, profile); 
+      return cb(null, profile);
     })
     .catch(err => {
       console.log('Error saving tokens', err);
-      return cb(null, profile);       
+      return cb(null, profile);
     });
 }));
 
@@ -41,11 +41,11 @@ passport.use('facebook-authz', new FacebookStrategy({
   function(req, accessToken, refreshToken, profile, cb) {
     return dbh.updateUserFacebook(req.session.email, accessToken, profile.id)
     .then(() => {
-      return cb(null, profile); 
+      return cb(null, profile);
     })
     .catch(err => {
       console.log('Error saving tokens', err);
-      return cb(null, profile);       
+      return cb(null, profile);
     });
   }
 ));
@@ -66,8 +66,30 @@ module.exports.FBtoAuth = passport.authenticate('facebook-authz', { scope: ['pub
 module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/login',
 successRedirect: '/'});
 
+let twToken = '';
+let twTokenSecret = '';
+
+module.exports.getPostsStats = (postIds) => {
+  const client = new Twitter({
+    consumer_key: process.env.TW_KEY,
+    consumer_secret: process.env.TW_SECRET,
+    access_token_key: twToken,
+    access_token_secret: twTokenSecret
+  });
+  return client.get('statuses/lookup', { 'id': postIds })
+  .then(results => {
+    console.log()
+    return results;
+  })
+  .catch(err => {
+    console.log('Error in getting Twitter post stats' + err);
+  })
+}
+
 // Module.exports functions //
 module.exports.populateTwitterClient = (token, tokenSecret) => {
+  twToken = token;
+  twTokenSecret = tokenSecret;
   var client = new Twitter({
     consumer_key: process.env.TW_KEY,
     consumer_secret: process.env.TW_SECRET,
@@ -92,17 +114,15 @@ module.exports.FBPost = (profileId, accessToken, message, photoUrl) => {
 }
 
 module.exports.tweet = (userCred, message, pictureData) => {
-  let client = module.exports.populateTwitterClient(userCred.twitter_token, userCred.twitter_secret)
+  let client = module.exports.populateTwitterClient(userCred.twitter_token, userCred.twitter_secret);
 
-  let params = {
-    status: message
-  }
+  let params = { status: message };
     /* pictureData starts off in base 64
       but the client sends over the string starting with 'image/jpeg;base64'
       the code below strips that out */
   if (pictureData) {
     const b64 = pictureData.replace(/^data:image\/[a-z]+;base64,/, "");
-    const pictureDatainBinary = Buffer.from(b64, 'base64'); 
+    const pictureDatainBinary = Buffer.from(b64, 'base64');
     return client.post('media/upload', {media: pictureDatainBinary})
     .then(media => {
       params.media_ids = media.media_id_string;

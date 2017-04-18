@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const Promise = require('bluebird');
 Promise.promisifyAll(mongoose);
-const { user1, user1_scheduledPost, user1_scheduledPost2, user1_postedPost } = 
+const { user1, user1_scheduledPost, user1_scheduledPost2, user1_postedPost } =
         require('./sampleData');
 
 module.exports.savePost = (userId, postData, postType) => {
@@ -14,7 +14,7 @@ module.exports.savePost = (userId, postData, postType) => {
   .then(post => {
     postData._id = post._id;
     return User.updateAsync(
-            {_id: postData.user_id}, 
+            {_id: postData.user_id},
             {$push: {[postType]: post._id}});
   });
 }
@@ -44,7 +44,7 @@ module.exports.deleteCredentials = (email, provider) => {
 }
 
 module.exports.retrievePosts = (postIds) => {
-  return Post.findAsync({_id: {$in: postIds} });
+  return Post.findAsync({_id: {$in: postIds} })
 }
 
 module.exports.showUserPosts = (email, typeofPost) => {
@@ -108,7 +108,7 @@ module.exports.checkScheduledEvent = (dateTime) => {
 
 module.exports.getScheduledEvents = () => {
   return Post.findAsync(
-    { $and: 
+    { $and:
       [ { 'scheduledDateTime': { $lte: new Date() } },
         { 'status': 'scheduled' } ]
     }
@@ -128,5 +128,5 @@ module.exports.moveScheduledToPosted = (userId, postId) => {
 }
 
 // module.exports.updatePost = (userId, postData, postType) => {
-  
+
 // }

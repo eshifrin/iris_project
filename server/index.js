@@ -16,10 +16,10 @@ const rh = require('./routeHandler')
 const cronJob = require('./cronJob.js');
 const cloudinaryUrl = require('./cloudinary.js')
 
-
-// sm.getPostsStats();
-// const user = require('./routes/usercred');
-
+sm.getPostsStats()
+.then(result => {
+  console.log('inside index.js the result: ', result);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -27,7 +27,7 @@ const Main = ({ editPost, postToFacebook, postToTwitter, uploadImg, imgUrl, text
   return(
     <div>
       <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost} editPost={editPost}/>
-      <PastPostList pastPosts={pastPosts} handleResubmitClick={handleResubmitClick}/>
+      <PastPostList pastPosts={pastPosts} handleResubmitClick={handleResubmitClick} />
       <CreatePost
         uploadImg={uploadImg}
         imgUrl={imgUrl}
