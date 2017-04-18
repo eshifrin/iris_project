@@ -44,7 +44,7 @@ module.exports.deleteCredentials = (email, provider) => {
 }
 
 module.exports.retrievePosts = (postIds) => {
-  return Post.findAsync({_id: {$in: postIds} });
+  return Post.findAsync({_id: {$in: postIds} })
 }
 
 module.exports.showUserPosts = (email, typeofPost) => {
