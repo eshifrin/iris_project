@@ -14,7 +14,6 @@ module.exports.imageLink = (req, res, next) => {
 }
 
 module.exports.deauthorize = (req, res, next) => {
-  console.log(' -------*****', 'got here')
   let provider = req.params.provider;
   let email = req.session.email;
   let tokenName = `${provider}_token`;

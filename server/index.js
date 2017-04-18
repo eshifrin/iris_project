@@ -72,6 +72,8 @@ app.route('/api/post/:action')
 
 app.get('/userinfo', rh.getUserInfo);
 
+app.get('/logout', Auth0.logout)
+
 app.get('/twitter', sm.TWtoAuth);
 app.get('/twitter/return', sm.TWfromAuth);
 
