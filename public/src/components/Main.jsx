@@ -33,14 +33,7 @@ const propTypes = {
 
 
 const Main = ({ handleModalToggle, newPostModal, editPost, postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleFbLogoClick, handleScheduleChange, pastPosts, scheduledDateTime, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick }) => {
-  const actions = [
-      <FlatButton
-        label="close"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={handleModalToggle}
-      />,
-    ];
+
   return(
     <div>
       <FlatButton label="Create new Post" onTouchTap={handleModalToggle} primary={true}/>
@@ -56,7 +49,6 @@ const Main = ({ handleModalToggle, newPostModal, editPost, postToFacebook, postT
       </Tabs>
       <Dialog
           title="New Post"
-          actions={actions}
           modal={false}
           open={newPostModal}
           onRequestClose={handleModalToggle}
