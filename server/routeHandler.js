@@ -67,9 +67,11 @@ module.exports.sendUserPosts = (req, res, next) => {
         }
       }
       postWithStats = postWithStats.slice(0, -1);
-      return sm.getPostsStats(postWithStats);
+      return sm.getPostsStats(email, postWithStats);
     })
     .then((stats) => {
+      console.log('what stats??', stats);
+      console.log('what resultsWithStats', resultsWithStats);
       for (let q = 0; q < resultsWithStats.length; q++) {
         resultsWithStats[q] = resultsWithStats[q].toObject();
       }
@@ -168,7 +170,7 @@ module.exports.sendScheduledPost = (post) => {
 
   return dbh.getUserbyId(post.user_id)
   .catch((err) => {
-    throw `Error in getting user by id${  err}`;
+    throw `Error in getting user by id${err}`;
   })
   .then((userInfo) => {
     userCredentials = userInfo;

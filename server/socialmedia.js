@@ -66,30 +66,32 @@ module.exports.FBtoAuth = passport.authenticate('facebook-authz', { scope: ['pub
 module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/login',
 successRedirect: '/'});
 
-let twToken = '';
-let twTokenSecret = '';
-
-module.exports.getPostsStats = (postIds) => {
-  const client = new Twitter({
-    consumer_key: process.env.TW_KEY,
-    consumer_secret: process.env.TW_SECRET,
-    access_token_key: twToken,
-    access_token_secret: twTokenSecret
+module.exports.getPostsStats = (email, postIds) => {
+  return dbh.getUser(email)
+  .then(result => {
+    console.log('??what??', result);
+    const client = new Twitter({
+      consumer_key: process.env.TW_KEY,
+      consumer_secret: process.env.TW_SECRET,
+      access_token_key: result.twitter_token,
+      access_token_secret: result.twitter_secret
+    });
+    return client;
+  })
+  .then(client => {
+    return client.get('statuses/lookup', { 'id': postIds })
+      .then(results => {
+        console.log('what are the Tweet posts', results);
+        return results;
+      })
+      .catch(err => {
+        console.log('Error in getting Twitter post stats' + err);
+      });
   });
-  return client.get('statuses/lookup', { 'id': postIds })
-  .then(results => {
-    console.log()
-    return results;
-  })
-  .catch(err => {
-    console.log('Error in getting Twitter post stats' + err);
-  })
-}
+};
 
 // Module.exports functions //
 module.exports.populateTwitterClient = (token, tokenSecret) => {
-  twToken = token;
-  twTokenSecret = tokenSecret;
   var client = new Twitter({
     consumer_key: process.env.TW_KEY,
     consumer_secret: process.env.TW_SECRET,
@@ -111,7 +113,7 @@ module.exports.FBPost = (profileId, accessToken, message, photoUrl) => {
     method: 'post',
     params
   });
-}
+};
 
 module.exports.tweet = (userCred, message, pictureData) => {
   let client = module.exports.populateTwitterClient(userCred.twitter_token, userCred.twitter_secret);
