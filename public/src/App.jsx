@@ -8,6 +8,7 @@ import axios from 'axios';
 import * as util from './lib/util.js'
 import moment from 'moment';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
@@ -28,6 +29,7 @@ class App extends React.Component {
       pastPosts: [],
       scheduledDateTime: '',
       updatingPostId: undefined,
+      newPostModal: false,
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -46,6 +48,7 @@ class App extends React.Component {
     this.getPostById = this.getPostById.bind(this);
     this.handleClearImg = this.handleClearImg.bind(this);
     this.handleResetPostFields = this.handleResetPostFields.bind(this);
+    this.handleModalToggle = this.handleModalToggle.bind(this);
   }
 
   componentWillMount(){
@@ -91,7 +94,7 @@ class App extends React.Component {
   }
 
   getPosts(type) {
-    console.log('type in getPosts : ', type);
+    // console.log('type in getPosts : ', type);
     util.retrievePosts(type, this.state.email)
     .then((results) => {
       if (type === 'scheduled') {
@@ -139,7 +142,8 @@ class App extends React.Component {
       postToTwitter: post.postToTwitter,
       scheduledDateTime: post.scheduledDateTime,
       imgUrl: post.imgUrl,
-      updatingPostId: post._id
+      updatingPostId: post._id,
+      newPostModal: true
     })
   }
 
@@ -172,7 +176,11 @@ class App extends React.Component {
       this.setState({
         text: '',
         scheduledDateTime: '',
-        updatingPostId: undefined
+        updatingPostId: undefined,
+        newPostModal: false,
+        postToTwitter: false,
+        postToFacebook: false,
+        imgUrl: ''
       })
       this.getScheduledPosts();
       this.getPastPosts();
@@ -194,7 +202,7 @@ class App extends React.Component {
 
   handleResubmitClick(e, post) {
     e.preventDefault();
-    document.getElementById('message').scrollIntoView();
+    // document.getElementById('message').scrollIntoView();
     const postId = e.target.value;
     console.log('post in  handle resub click: ', post)
     // this.getPostById(post._id);
@@ -204,13 +212,21 @@ class App extends React.Component {
       postToTwitter: post.postToTwitter,
       scheduledDateTime: post.scheduledDateTime,
       imgUrl: post.imgUrl,
-      updatingPostId: post._id
+      updatingPostId: post._id,
+      newPostModal: !this.state.newPostModal
     })
+    // handleModalToggle();
   }
 
   handleClearImg(e) {
     e.preventDefault();
     this.setState({ img: '', imgUrl: '' });
+  }
+
+  handleModalToggle() {
+    this.setState({
+      newPostModal: !this.state.newPostModal
+    });
   }
 
   handleResetPostFields(e) {
@@ -226,8 +242,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime } = this.state;
-    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
+
+    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime, newPostModal} = this.state;
+    const { handleModalToggle, editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
 
     return (
       <MuiThemeProvider>
@@ -258,8 +275,15 @@ class App extends React.Component {
             handleResubmitClick={handleResubmitClick}
             handleClearImg={handleClearImg}
             handleResetPostFields={handleResetPostFields}
+            newPostModal={newPostModal}
+            handleModalToggle={handleModalToggle}
             />}
+            <footer>
+            <a href="https://www.iubenda.com/privacy-policy/8093701">Our Privacy Policy</a>
+            </footer>
         </div>
+
+
       </MuiThemeProvider>
     );
   }

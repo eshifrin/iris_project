@@ -29,8 +29,10 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
   return (
   <div>
     <form onSubmit={(e) => handlePostSubmit(e)}>
-      <h4>New Post</h4>
+      
+      {!postToTwitter && !postToFacebook && <h4 style={style}>Please choose at least one social site to share your post</h4>}
       {(imgUrl.length !== 0) && <img src={imgUrl} style={{width: 100}} />}
+      {(postToTwitter || postToFacebook) && <h4>Get ready to share!</h4>}
       <WriteMessage
         text={text}
         postToTwitter={postToTwitter}
@@ -48,7 +50,7 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
       <FlatButton primary={true} onClick={handleResetPostFields}>Reset Fields</FlatButton>
       <FlatButton primary={true} value="postnow" onClick={(postToFacebook || postToTwitter) && handleNowSubmit}>Post Now</FlatButton>
       <FlatButton primary={true} value="schedulepost" onClick={(postToFacebook || postToTwitter) && handlePostSubmit}>Schedule Post</FlatButton>
-      {!postToTwitter && !postToFacebook && <h5 style={style}>Please choose at least one social site to share your post</h5>}
+      
   </div>
 )};
 

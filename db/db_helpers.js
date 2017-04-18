@@ -50,7 +50,7 @@ module.exports.retrievePosts = (postIds) => {
 module.exports.showUserPosts = (email, typeofPost) => {
   return User.findOneAsync({email: email})
   .then(data => {
-    console.log('data pls', data);
+    // console.log('data pls', data);
     if (!data) throw ('invalid user');
     else return module.exports.retrievePosts(data[typeofPost])
   })
@@ -101,7 +101,7 @@ module.exports.checkScheduledEvent = (dateTime) => {
     }
   )
   .then(data => {
-    console.log('what is the data we get?', data);
+    // console.log('what is the data we get?', data);
     return data;
   })
 }
