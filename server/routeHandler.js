@@ -7,7 +7,7 @@ const cloudinaryUrl = require('./cloudinary.js')
 module.exports.imageLink = (req, res, next) => {
   cloudinaryUrl(req.body.image)
   .then(result => res.send(result.secure_url))
-  .catch(err =>  {
+  .catch((err) =>  {
     console.log('error with cloudinary', err)
     res.status(500).end();
   });
@@ -23,7 +23,7 @@ module.exports.deauthorize = (req, res, next) => {
   if (!req.session.email) res.status(404).send();
 
   return dbh.getUser(req.session.email)
-  .then(user => {
+  .then((user) => {
     //if theres no user or they arent authorized
     if (!user || !user[tokenName]) {
       console.log('no user or relevant token')
@@ -31,10 +31,10 @@ module.exports.deauthorize = (req, res, next) => {
     }
     return dbh.deleteCredentials(email, provider);
   })
-  .then(deleted => {
+  .then((deleted) => {
     res.redirect('/');
   })
-  .catch(err => {
+  .catch((err) => {
     console.log('error deleting credentials', err)
     res.redirect('/');
   })
@@ -52,47 +52,54 @@ module.exports.getPostsById = (req, res, next) => {
 // if authenticated, send posts
 // TOFIX: change function name to getPastPosts
 module.exports.sendUserPosts = (req, res, next) => {
+  console.log('send user post is running 1');
   const url_parts = url.parse(req.url, true);
   const email = url_parts.query.email;
-  // let resultsWithStats = [];
-  dbh.showUserPosts(email, req.params.post_type)
-  .then((results) => {
-    // resultsWithStats = results;
-    // let postWithStats = '';
-  //   for (let i = 0; i < results.length; i++) {
-  //     postWithStats = postWithStats + results[i].postedTwitterId + ','
-  //   }
-  //   postWithStats = postWithStats.slice(0, -1);
-  //   return sm.getPostsStats(postWithStats)
-  // })
-  // .then(stats => {
-  //   console.log('what are the stats', stats);
-  //   for (let i = 0; i < stats.length; i++) {
-  //     console.log('this is my obj', resultsWithStats);
-  //     resultsWithStats[0]['apple'] = 1;
-  //     // resultsWithStats[0].twFavCount = 2;
-  //     // resultsWithStats[0].twRetweetCount = 3;
-  //     // resultsWithStats[i].twFavCount = stats[i]['favorite_count'];
-  //     // resultsWithStats[i].twRetweetCount = stats[i]['retweet_count'];
-  //     console.log('what is result i', resultsWithStats[0]);
-  //   }
-  //   console.log('resultsWithStats 1:', resultsWithStats);
-  //   return resultsWithStats;
-  // })
-  // .catch(err => {
-  //   console.log('Error compiling favorite and retweet stats', err);
-  // })
-  // .then(resultsWithStats => {
-  //   console.log('resultsWithStats 2!!!!!:', resultsWithStats);
-    res.status(200).json(results);
-  })
-  .catch((err) => {
-    if (err === 'invalid user') res.status(404).end();
-    else res.status(500).end();
-  });
+  let resultsWithStats = [];
+  // TODO: Create new function for this big block of code
+  if (req.params.post_type === 'posted') {
+    dbh.showUserPosts(email, req.params.post_type)
+    .then((results) => {
+      resultsWithStats = results;
+      let postWithStats = '';
+      for (let i = 0; i < results.length; i++) {
+        postWithStats = postWithStats + results[i].postedTwitterId + ',';
+      }
+      postWithStats = postWithStats.slice(0, -1);
+      return sm.getPostsStats(postWithStats);
+    })
+    .then((stats) => {
+      for (let i = 0; i < stats.length; i++) {
+        resultsWithStats[i] = resultsWithStats[i].toObject();
+        resultsWithStats[i]['twFavCount'] = stats[i]['favorite_count'];
+        resultsWithStats[i]['twRetweetCount'] = stats[i]['retweet_count'];
+      }
+      console.log('resultsWithStats 1:', resultsWithStats);
+      return resultsWithStats;
+    })
+    .catch((err) => {
+      console.log('Error compiling POSTED Tweets', err);
+    })
+    .then((resultsWithStats) => {
+      console.log('hello Billy', resultsWithStats);
+      res.status(200).json(resultsWithStats);
+    })
+    .catch((err) => {
+      if (err === 'invalid user') res.status(404).end();
+      else res.status(500).end();
+    });
+  } else {
+    dbh.showUserPosts(email, req.params.post_type)
+    .then((results) => {
+      res.status(200).json(results);
+    })
+    .catch((err) => {
+      console.log('Error compiling non-posted Tweets', err);
+    });
+  }
 };
 
-//if authenticated, send posts
+// if authenticated, send posts
 module.exports.scheduleOrSavePosts = (req, res, next) => {
   if (req.params.post_type === 'scheduled') {
     let id = '';

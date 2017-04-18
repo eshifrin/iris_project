@@ -4,7 +4,6 @@ import WriteMessage from './WriteMessage.jsx';
 import DateTimePicker from './DateTimePicker.jsx';
 import FlatButton from 'material-ui/FlatButton';
 
-
 const propTypes = {
   uploadImg: PropTypes.func.isRequired,
   imgUrl: PropTypes.string.isRequired,
