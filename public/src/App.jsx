@@ -27,7 +27,7 @@ class App extends React.Component {
       scheduledPosts: [],
       pastPosts: [],
       scheduledDateTime: '',
-      updatingPostId: undefined
+      updatingPostId: undefined,
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);

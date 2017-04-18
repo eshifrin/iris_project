@@ -74,14 +74,12 @@ module.exports.sendUserPosts = (req, res, next) => {
         resultsWithStats[i]['twFavCount'] = stats[i]['favorite_count'];
         resultsWithStats[i]['twRetweetCount'] = stats[i]['retweet_count'];
       }
-      console.log('resultsWithStats 1:', resultsWithStats);
       return resultsWithStats;
     })
     .catch((err) => {
       console.log('Error compiling POSTED Tweets', err);
     })
     .then((resultsWithStats) => {
-      console.log('hello Billy', resultsWithStats);
       res.status(200).json(resultsWithStats);
     })
     .catch((err) => {
