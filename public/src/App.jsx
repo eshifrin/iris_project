@@ -11,6 +11,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
+import FontAwesome from 'react-fontawesome';
 
 class App extends React.Component {
   constructor(props) {
