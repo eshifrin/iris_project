@@ -68,8 +68,6 @@ module.exports.sendUserPosts = (req, res, next) => {
       return sm.getPostsStats(email, postWithStats);
     })
     .then((stats) => {
-      console.log('what stats??', stats);
-      console.log('what resultsWithStats', resultsWithStats);
       for (let q = 0; q < resultsWithStats.length; q++) {
         resultsWithStats[q] = resultsWithStats[q].toObject();
       }

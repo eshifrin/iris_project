@@ -16,8 +16,6 @@ const rh = require('./routeHandler')
 const cronJob = require('./cronJob.js');
 const cloudinaryUrl = require('./cloudinary.js')
 
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

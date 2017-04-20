@@ -68,7 +68,6 @@ successRedirect: '/'});
 module.exports.getPostsStats = (email, postIds) => {
   return dbh.getUser(email)
   .then(result => {
-    console.log('??what??', result);
     const client = new Twitter({
       consumer_key: process.env.TW_KEY,
       consumer_secret: process.env.TW_SECRET,
@@ -89,6 +88,10 @@ module.exports.getPostsStats = (email, postIds) => {
   });
 };
 
+module.exports.getTweetsStats = (client) => {
+
+}
+
 // Module.exports functions //
 module.exports.populateTwitterClient = (token, tokenSecret) => {
   var client = new Twitter({
@@ -101,6 +104,7 @@ module.exports.populateTwitterClient = (token, tokenSecret) => {
 };
 
 module.exports.FBPost = (profileId, accessToken, message, photoUrl) => {
+  console.log('what is this access token?', accessToken);
   let params = {
     'message': message,
     'access_token': accessToken
