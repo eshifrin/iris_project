@@ -156,13 +156,8 @@ module.exports.sendScheduledPosts = () => dbh.getScheduledEvents()
   .then((scheduledPosts) => {
     console.log('here are the scheduledPosts', scheduledPosts)
     return Promise.map(scheduledPosts, (post) => {
-<<<<<<< HEAD
-      return module.exports.sendScheduledPost(post);
-    });
-=======
       return this.sendScheduledPost(post);
     })
->>>>>>> added tests for server
   })
   .catch((err) => {
     console.log('error for sendingScheduledPost in rh', err);
