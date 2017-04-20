@@ -7,7 +7,6 @@ const Twitter = require('twitter');
 const dbh = require('../db/db_helpers.js')
 const fs = require('fs');
 
-console.log('fb callback', process.env.FB_CALLBACK)
 
 passport.use('twitter-authz', new TwitterStrategy({
     consumerKey: process.env.TW_KEY,

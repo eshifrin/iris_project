@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
-import NavBar from './components/NavBar.jsx';
-import Main from './components/Main.jsx';
-import FuturePostList from './components/FuturePostList.jsx';
+import NavBar from './NavBar.jsx';
+import Main from './Main.jsx';
+import FuturePostList from './FuturePostList.jsx';
 import axios from 'axios';
-import * as util from './lib/util.js'
+import * as util from '../lib/util.js'
 import moment from 'moment';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -55,6 +55,7 @@ class App extends React.Component {
   componentWillMount(){
     util.getCurrentUserInfo()
     .then((res) => {
+      console.log(res);
       if (res.data.email.length !== 0){
         this.setState({email: res.data.email,
           isLoggedIn: true,
@@ -290,4 +291,8 @@ class App extends React.Component {
   }
 }
 
+<<<<<<< HEAD:public/src/App.jsx
 ReactDOM.render(<App />, document.getElementById('app'));
+=======
+export default App
+>>>>>>> added tests for server:public/src/components/App.jsx

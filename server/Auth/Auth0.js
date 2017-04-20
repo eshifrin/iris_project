@@ -2,11 +2,7 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 var dotenv = require('dotenv');
 dotenv.load();
-console.log('process.env domain', process.env.AUTH0_DOMAIN);
-console.log('process.env callback', process.env.AUTH0_CALLBACK_URL);
 
-
-// This will configure Passport to use Auth0
 
 var strategy = new Auth0Strategy({
     domain:       process.env.AUTH0_DOMAIN,
@@ -19,7 +15,6 @@ var strategy = new Auth0Strategy({
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     req.session.email = profile.emails[0].value;
-    // console.log('in auth0 strategy');
     return done(null, profile);
   });
 

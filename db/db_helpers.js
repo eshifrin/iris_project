@@ -127,6 +127,3 @@ module.exports.moveScheduledToPosted = (userId, postId) => {
   });
 }
 
-// module.exports.updatePost = (userId, postData, postType) => {
-
-// }
