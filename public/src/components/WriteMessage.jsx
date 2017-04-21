@@ -23,8 +23,8 @@ const WriteMessage = ({ text, handleTextChange, handleFbLogoClick, postToFaceboo
 
   return (
   <div id='message'>
-    <img className="sendToFB" style={fbLogoStyle} width="70px" height="auto" src="https://img.clipartfest.com/5f501c692bb9c6782efc7af0f4bcf349_facebook-icon-circle-vector-facebook-logo_512-512.png" value="Facebook" onClick={handleFbLogoClick} checked={postToFacebook}/>
-    <img className="sendToTW" style={twLogoStyle} width="70px" height="auto" src="http://goinkscape.com/wp-content/uploads/2015/07/twitter-logo-final.png" value="Twitter" onClick={handleTwLogoClick} checked={postToTwitter}/>
+    <img className="sendToFB" style={fbLogoStyle} width="70px" height="auto" src="./img/facebook-logo.png" value="Facebook" onClick={handleFbLogoClick} checked={postToFacebook}/>
+    <img className="sendToTW" style={twLogoStyle} width="70px" height="auto" src="./img/twitter-logo-final.png" value="Twitter" onClick={handleTwLogoClick} checked={postToTwitter}/>
     <br/>
     <TextField
       type="text"

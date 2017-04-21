@@ -48,8 +48,8 @@ const CreatePost = ({ postToFacebook, postToTwitter, imgUrl, text, uploadImg, ha
       />
     </form>
       <FlatButton primary={true} onClick={handleResetPostFields}>Reset Fields</FlatButton>
-      <FlatButton primary={true} value="postnow" onClick={(postToFacebook || postToTwitter) && handleNowSubmit}>Post Now</FlatButton>
-      <FlatButton primary={true} value="schedulepost" onClick={(postToFacebook || postToTwitter) && handlePostSubmit}>Schedule Post</FlatButton>
+      { (postToFacebook || postToTwitter) &&  <FlatButton primary={true} value="postnow" onClick={handleNowSubmit}>Post Now</FlatButton> }
+      { (postToFacebook || postToTwitter) &&<FlatButton primary={true} value="schedulepost" onClick={handlePostSubmit}>Schedule Post</FlatButton> }
       
   </div>
 )};

@@ -1,17 +1,17 @@
 import React from 'react';
+import {connect} from "react-redux";
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
-import NavBar from './NavBar.jsx';
-import Main from './Main.jsx';
-import FuturePostList from './FuturePostList.jsx';
 import axios from 'axios';
-import * as util from '../lib/util.js'
 import moment from 'moment';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 import injectTapEventPlugin from 'react-tap-event-plugin';
+// import FontAwesome from 'react-fontawesome';
+import NavBar from './NavBar';
+import Main from './Main';
+import FuturePostList from './FuturePostList';
+import * as util from '../lib/util';
 injectTapEventPlugin();
-import FontAwesome from 'react-fontawesome';
 
 class App extends React.Component {
   constructor(props) {
@@ -52,15 +52,15 @@ class App extends React.Component {
     this.handleModalToggle = this.handleModalToggle.bind(this);
   }
 
-  componentWillMount(){
+  componentWillMount() {
     util.getCurrentUserInfo()
     .then((res) => {
-      console.log(res);
-      if (res.data.email.length !== 0){
-        this.setState({email: res.data.email,
+      console.log('res: ', res);
+      if (res.data.email.length !== 0) {
+        this.setState({ email: res.data.email,
           isLoggedIn: true,
           twitterAuthenticated: res.data.twitter,
-          facebookAuthenticated: res.data.facebook
+          facebookAuthenticated: res.data.facebook,
         });
         this.getScheduledPosts();
         this.getPastPosts();
@@ -72,21 +72,6 @@ class App extends React.Component {
     });
   }
 
-  uploadImg(e) {
-    e.preventDefault();
-    let file = e.target.files[0];
-    let reader = new FileReader(file);
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      this.setState({
-        img: reader.result
-      })
-      axios.post('/api/image/imgLink', {image: reader.result})
-      .then(res =>
-        this.setState({ imgUrl: res.data })
-      );
-    }
-  }
 
   getScheduledPosts() {
     this.getPosts('scheduled');
@@ -102,17 +87,17 @@ class App extends React.Component {
     .then((results) => {
       if (type === 'scheduled') {
         this.setState({
-          scheduledPosts: results.data
+          scheduledPosts: results.data,
         })
       } else {
         this.setState({
-          pastPosts: results.data
+          pastPosts: results.data,
         })
       }
     })
     .catch((err) => {
       console.log('there was error in retreiving scheduled/past posts of the current user, err : ', err);
-    })
+    });
   }
 
   //delete this func
@@ -126,6 +111,23 @@ class App extends React.Component {
     });
   }
 
+  uploadImg(e) {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const reader = new FileReader(file);
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      this.setState({
+        img: reader.result,
+      });
+      axios.post('/api/image/imgLink', { image: reader.result })
+      .then(res =>
+        this.setState({ imgUrl: res.data }),
+      );
+    };
+  }
+
+
   deletePost(e, post) {
     e.preventDefault();
     util.deletePost(post._id)
@@ -133,7 +135,7 @@ class App extends React.Component {
       this.getScheduledPosts();
     })
     .catch((err) => {
-      console.log('error while deleting');
+      console.log('error while deleting - ', err);
     });
   }
 
@@ -146,20 +148,20 @@ class App extends React.Component {
       scheduledDateTime: post.scheduledDateTime,
       imgUrl: post.imgUrl,
       updatingPostId: post._id,
-      newPostModal: true
-    })
+      newPostModal: true,
+    });
   }
 
   handleTextChange(e) {
-    let text = e.target.value;
-    this.setState({ text: text })
+    const text = e.target.value;
+    this.setState({ text });
   }
 
   handleScheduleChange(e) {
     e.preventDefault();
     console.log('schedule change args: ', arguments);
-    let scheduledDateTime = moment(e.target.value).utc().toISOString();
-    this.setState({ scheduledDateTime: scheduledDateTime });
+    const scheduledDateTime = moment(e.target.value).utc().toISOString();
+    this.setState({ scheduledDateTime });
   }
 
   handleFbLogoClick(e) {
@@ -183,14 +185,14 @@ class App extends React.Component {
         newPostModal: false,
         postToTwitter: false,
         postToFacebook: false,
-        imgUrl: ''
-      })
+        imgUrl: '',
+      });
       this.getScheduledPosts();
       this.getPastPosts();
     })
     .catch((err) => {
       console.log('issue with posting scheduled posts', err);
-    })
+    });
   }
 
   handlePostSubmit(e) {
@@ -207,7 +209,7 @@ class App extends React.Component {
     e.preventDefault();
     // document.getElementById('message').scrollIntoView();
     const postId = e.target.value;
-    console.log('post in  handle resub click: ', post)
+    console.log('post in  handle resub click: ', post);
     // this.getPostById(post._id);
     this.setState({
       text: post.text,
@@ -216,7 +218,7 @@ class App extends React.Component {
       scheduledDateTime: post.scheduledDateTime,
       imgUrl: post.imgUrl,
       updatingPostId: post._id,
-      newPostModal: !this.state.newPostModal
+      newPostModal: !this.state.newPostModal,
     })
     // handleModalToggle();
   }
@@ -228,7 +230,7 @@ class App extends React.Component {
 
   handleModalToggle() {
     this.setState({
-      newPostModal: !this.state.newPostModal
+      newPostModal: !this.state.newPostModal,
     });
   }
 
@@ -240,15 +242,13 @@ class App extends React.Component {
       text: '',
       img: '',
       imgUrl: '',
-      scheduledDateTime: ''
-    })
+      scheduledDateTime: '',
+    });
   }
 
   render() {
-
     const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime, newPostModal} = this.state;
     const { handleModalToggle, editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
-
     return (
       <MuiThemeProvider>
         <div>
@@ -257,7 +257,7 @@ class App extends React.Component {
             twitter={!this.state.twitterAuthenticated}
             facebook={!this.state.facebookAuthenticated}
           />
-            {this.state.isLoggedIn && <Main
+          {this.state.isLoggedIn && <Main
             deletePost={deletePost}
             scheduledPosts={scheduledPosts}
             pastPosts={pastPosts}
@@ -280,10 +280,10 @@ class App extends React.Component {
             handleResetPostFields={handleResetPostFields}
             newPostModal={newPostModal}
             handleModalToggle={handleModalToggle}
-            />}
-            <footer>
+          />}
+          <footer>
             <a href="https://www.iubenda.com/privacy-policy/8099712">Our Privacy Policy</a>
-            </footer>
+          </footer>
         </div>
 
 
@@ -292,4 +292,21 @@ class App extends React.Component {
   }
 }
 
-export default App
+const mapStateToProps = (state) => {
+  return {
+      user: state.user,
+      math: state.math
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setName: (name) => {
+            dispatch(setName(name));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+// export default App;
