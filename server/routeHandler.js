@@ -221,7 +221,7 @@ module.exports.sendPostsNow = (req, res, next) => {
   .then(() => {
     let posts = [];
     if (postInfo.postToFacebook) posts.push(this.sendFBPost(userCredentials, postInfo))
-    if (postInfo.postToTwitter) posts.push(this.exports.sendTweet(userCredentials, postInfo))
+    if (postInfo.postToTwitter) posts.push(this.sendTweet(userCredentials, postInfo))
     return Promise.all(posts);
   })
   .catch((err) => {
