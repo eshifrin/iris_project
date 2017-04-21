@@ -17,15 +17,16 @@ const NavBar = ({login, twitter, facebook}) => {
 	return (
 		<div>
 		<AppBar title="Iris" >
-	    { twitter && <FlatButton href="/twitter" style={ButtonStyle} label="verify Twitter"/>}  
-	    { facebook && <FlatButton href="/facebook" style={ButtonStyle} label="verify Facebook"/>}
+      { !login && <i className='fa fa-twitter fa-2x' style={ButtonStyle}/> }
+      { twitter && <FlatButton href="/twitter" style={ButtonStyle} label="verify Twitter"/>}  
       { !login && !twitter && <FlatButton href="/deauthorize/twitter" style={ButtonStyle} label="unlink Twitter"/>}
+      { !login && <i className='fa fa-facebook fa-2x'style={ButtonStyle}/> }
+      { facebook && <FlatButton href="/facebook" style={ButtonStyle} label="verify Facebook"/>}
       { !login && !facebook && <FlatButton href="/deauthorize/facebook" style={ButtonStyle} label="unlink Facebook" />}
 	    { login ? <FlatButton href="/login" style={ButtonStyle} label="Login | Signup"  /> : 
                 <FlatButton href="/logout" style={ButtonStyle} label="Log Out"  /> 
       }
 	  </AppBar>
-	    
 	  </div>
   );
 };

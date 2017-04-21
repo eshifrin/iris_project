@@ -18,10 +18,10 @@ const styles = {
 };
 
 const PastPostList = ({ pastPosts, handleResubmitClick }) => {
-  const posts = pastPosts.map(post =>
+  const posts = pastPosts.length ? pastPosts.map(post =>
     <ListItem key={post._id}>
       <PastPostListItem post={post} handleResubmitClick={handleResubmitClick} />
-    </ListItem>)
+    </ListItem>) : null;
   
   return (
     <div>

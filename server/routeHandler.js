@@ -17,8 +17,6 @@ module.exports.deauthorize = (req, res, next) => {
   let provider = req.params.provider;
   let email = req.session.email;
   let tokenName = `${provider}_token`;
-  console.log(' -------*****', 'got here');
-  console.log('in deauthorize', provider, email, tokenName);
 
   if (!req.session.email) res.status(404).send();
 
@@ -158,8 +156,8 @@ module.exports.sendScheduledPosts = () => dbh.getScheduledEvents()
   .then((scheduledPosts) => {
     console.log('here are the scheduledPosts', scheduledPosts)
     return Promise.map(scheduledPosts, (post) => {
-      return module.exports.sendScheduledPost(post);
-    });
+      return this.sendScheduledPost(post);
+    })
   })
   .catch((err) => {
     console.log('error for sendingScheduledPost in rh', err);
@@ -184,9 +182,9 @@ module.exports.sendScheduledPost = (post) => {
     throw `Error moving scheduled post to posted${  err}`;
   })
   .then(() => {
-    const posts = [];
-    if (post.postToFacebook) posts.push(module.exports.sendFBPost(userCredentials, post));
-    if (post.postToTwitter) posts.push(module.exports.sendTweet(userCredentials, post));
+    let posts = [];
+    if (post.postToFacebook) posts.push(this.sendFBPost(userCredentials, post))
+    if (post.postToTwitter) posts.push(this.sendTweet(userCredentials, post))
     return Promise.all(posts);
   })
   .catch((err) => {
@@ -221,9 +219,9 @@ module.exports.sendPostsNow = (req, res, next) => {
     dbh.savePost(userCredentials._id, postInfo, 'posted');
   })
   .then(() => {
-    const posts = [];
-    if (postInfo.postToFacebook) posts.push(module.exports.sendFBPost(userCredentials, postInfo));
-    if (postInfo.postToTwitter) posts.push(module.exports.sendTweet(userCredentials, postInfo));
+    let posts = [];
+    if (postInfo.postToFacebook) posts.push(this.sendFBPost(userCredentials, postInfo))
+    if (postInfo.postToTwitter) posts.push(this.sendTweet(userCredentials, postInfo))
     return Promise.all(posts);
   })
   .catch((err) => {
@@ -274,17 +272,18 @@ module.exports.deletePost = (req, res, next) => {
 module.exports.getUserInfo = (req, res, next) => {
   // console.log('getUserCred req cookies: ', req.cookies);
   // console.log('getUserCred req user: ', req.user);
-  console.log('getUserCred req session: ', req.session.email);
+  // console.log('getUserCred req session: ', req.session.email);
 
   if (req.user) {
-    const userCred = {};
+    //look up Promise.reduce, refactor for no nested promises
+    let userCred = {};
     userCred.email = req.session.email;
     dbh.getUser(userCred.email)
     .then((data) => {
       console.log('data from get user : ', data);
       userCred.twitter = !!(data.twitter_token);
       userCred.facebook = !!(data.facebook_id);
-
+      //dont nest
       dbh.showUserPosts(userCred.email, 'scheduled')
       .then((results) => {
         console.log('-----------------', results);
