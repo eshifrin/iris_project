@@ -291,8 +291,4 @@ class App extends React.Component {
   }
 }
 
-<<<<<<< HEAD:public/src/App.jsx
-ReactDOM.render(<App />, document.getElementById('app'));
-=======
 export default App
->>>>>>> added tests for server:public/src/components/App.jsx
