@@ -58,27 +58,42 @@ module.exports.sendUserPosts = (req, res, next) => {
     dbh.showUserPosts(email, req.params.post_type)
     .then((results) => {
       resultsWithStats = results;
-      let postWithStats = '';
+      let tweetWithStats = '';
+      let fbPostWithStats = '';
       for (let i = 0; i < results.length; i++) {
         if (results[i].postedTwitterId !== null) {
-          postWithStats = `${postWithStats + results[i].postedTwitterId},`;
+          tweetWithStats = `${tweetWithStats + results[i].postedTwitterId},`;
+        }
+        if (results[i].postedFacebookId !== null) {
+          fbPostWithStats = `${fbPostWithStats + results[i].postedFacebookId},`;
         }
       }
-      postWithStats = postWithStats.slice(0, -1);
-      return sm.getPostsStats(email, postWithStats);
+      tweetWithStats = tweetWithStats.slice(0, -1);
+      fbPostWithStats = fbPostWithStats.slice(0, -1);
+      let smStats = [];
+      smStats.push(sm.getTweetStats(email, tweetWithStats));
+      smStats.push(sm.getFbPostStats(email, fbPostWithStats));
+      return Promise.all(smStats);
     })
     .then((stats) => {
-      console.log('what stats??', stats);
-      console.log('what resultsWithStats', resultsWithStats);
       for (let q = 0; q < resultsWithStats.length; q++) {
         resultsWithStats[q] = resultsWithStats[q].toObject();
       }
       for (let i = 0; i < stats.length; i++) {
         for (let k = 0; k < resultsWithStats.length; k++) {
-          if (resultsWithStats[k].postedTwitterId !== null) {
-            resultsWithStats[k].twFavCount = stats[i].favorite_count;
-            resultsWithStats[k].twRetweetCount = stats[i].retweet_count;
+          if (resultsWithStats[k].postedTwitterId === stats[0][i].id_str) {
+            resultsWithStats[k].twFavCount = stats[0][i].favorite_count;
+            resultsWithStats[k].twRetweetCount = stats[0][i].retweet_count;
             i++;
+          }
+        }
+      }
+      const fbPostIds = Object.keys(stats[1].data);
+      for (let i = 0; i < resultsWithStats.length; i++) {
+        for (let k = 0; k < fbPostIds.length; k++) {
+          if (resultsWithStats[i].postedFacebookId === fbPostIds[k]) {
+            resultsWithStats[i].fbLikeCount = stats[1].data[fbPostIds[k]].likes.summary.total_count;
+            resultsWithStats[i].fbCommentCount = stats[1].data[fbPostIds[k]].comments.summary.total_count;
           }
         }
       }
