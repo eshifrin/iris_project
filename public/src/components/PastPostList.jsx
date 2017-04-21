@@ -18,7 +18,6 @@ const styles = {
 };
 
 const PastPostList = ({ pastPosts, handleResubmitClick }) => {
-  console.log('here is pastPosts', pastPosts)
   const posts = pastPosts.length ? pastPosts.map(post =>
     <ListItem key={post._id}>
       <PastPostListItem post={post} handleResubmitClick={handleResubmitClick} />
