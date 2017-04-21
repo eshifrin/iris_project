@@ -65,7 +65,7 @@ module.exports.FBtoAuth = passport.authenticate('facebook-authz', { scope: ['pub
 module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRedirect: '/login',
 successRedirect: '/'});
 
-module.exports.getPostsStats = (email, postIds) => {
+module.exports.getTweetStats = (email, postIds) => {
   return dbh.getUser(email)
   .then(result => {
     const client = new Twitter({
@@ -79,7 +79,6 @@ module.exports.getPostsStats = (email, postIds) => {
   .then(client => {
     return client.get('statuses/lookup', { 'id': postIds })
       .then(results => {
-        console.log('what are the Tweet posts', results);
         return results;
       })
       .catch(err => {
@@ -88,9 +87,15 @@ module.exports.getPostsStats = (email, postIds) => {
   });
 };
 
-module.exports.getTweetsStats = (client) => {
-
-}
+module.exports.getFbPostStats = (email, postIds) => {
+  return dbh.getUser(email)
+  .then(result => {
+    return axios.get(`https://graph.facebook.com/v2.9/?ids=${postIds}&fields=likes.summary(true),comments.summary(true)&access_token=${result.facebook_token}`)
+    .then(fbPost => {
+      return fbPost;
+    })
+  })
+};
 
 // Module.exports functions //
 module.exports.populateTwitterClient = (token, tokenSecret) => {
