@@ -252,13 +252,10 @@ module.exports.userCheck = (req, res, next) => {
   const email = req.session.email;
   return dbh.getUser(email)
   .then((data) => {
-    // console.log('usercheck if user exists, data : ', data);
     if (!data) return dbh.saveUser(email)
     return
   })
   .then(() => {
-    // console.log(' checking cookies in req: ', req.cookies);
-    // res.cookie('email', email);
     res.redirect('/');
   })
   .catch((err) => {
@@ -285,23 +282,19 @@ module.exports.deletePost = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  // console.log('getUserCred req cookies: ', req.cookies);
-  // console.log('getUserCred req user: ', req.user);
-  // console.log('getUserCred req session: ', req.session.email);
 
+  //look up Promise.reduce, refactor for no nested promises
   if (req.user) {
-    //look up Promise.reduce, refactor for no nested promises
+  
     let userCred = {};
     userCred.email = req.session.email;
     dbh.getUser(userCred.email)
     .then((data) => {
-      console.log('data from get user : ', data);
       userCred.twitter = !!(data.twitter_token);
       userCred.facebook = !!(data.facebook_id);
       //dont nest
       dbh.showUserPosts(userCred.email, 'scheduled')
       .then((results) => {
-        console.log('-----------------', results);
         userCred.scheduledPosts = results;
         dbh.showUserPosts(userCred.email, 'posted')
         .then((posts) => {
@@ -319,8 +312,9 @@ module.exports.getUserInfo = (req, res, next) => {
         if (err === 'invalid user') res.status(404).end();
         else res.status(500).end();
       });
-    });
+    })
+    .catch(console.log)
   } else {
-    res.send({ email: '', twitter: true, facebook: true });
+    res.send({ email: '', twitter: false, facebook: false });
   }
 };
