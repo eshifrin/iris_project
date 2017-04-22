@@ -77,6 +77,7 @@ module.exports.saveUser = (email) => {
 }
 
 module.exports.updateUserTwitter = ({email, token, tokenSecret}) => {
+ console.log('updating', email, token, tokenSecret)
  return User.updateAsync(
       { email: email},
       { $set:  {twitter_token: token,
