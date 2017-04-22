@@ -89,7 +89,7 @@ describe ('database testing', function(){
       let req = httpMocks.createRequest({
         method: 'get',
         url: '/userinfo',
-        user: 'someshit',
+        user: 'testuser',
         session: {
           email: 'test.email'
         }
