@@ -68,6 +68,7 @@ class App extends React.Component {
     })
     .catch((err) => {
       console.log('error in getting user email, err :', err);
+      console.log('we must remove all console logs : )')
     });
   }
 
