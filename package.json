@@ -8,7 +8,7 @@
     "node": ">=6.4.0"
   },
   "scripts": {
-    "postinstall": "webpack -p",
+    // "postinstall": "webpack -p",
     "start": "node server/index.js",
     "webpack": "webpack -w",
     "test": "cross-env NODE_ENV=test ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",

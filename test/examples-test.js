@@ -57,16 +57,16 @@ describe('how to test state changes', () => {
 });
 
 
-describe('testing nested click events in nested components affecting state', () => {
-  it('should change postToFacebook from false to true on actual handleFbLogoClick', () => {
-    const wrapper = mount(<App />);
-    wrapper.setState({ isLoggedIn: true });
-    wrapper.setState({ newPostModal: true });
-    expect(wrapper.state('postToFacebook')).to.equal(false)
-    wrapper.find('.sendToFB').simulate('click');
-    expect(wrapper.state('postToFacebook')).to.equal(true)
-  });
-});
+// describe('testing nested click events in nested components affecting state', () => {
+//   it('should change postToFacebook from false to true on actual handleFbLogoClick', () => {
+//     const wrapper = mount(<App />);
+//     wrapper.setState({ isLoggedIn: true });
+//     wrapper.setState({ newPostModal: true });
+//     expect(wrapper.state('postToFacebook')).to.equal(false)
+//     wrapper.find('.sendToFB').simulate('click');
+//     expect(wrapper.state('postToFacebook')).to.equal(true)
+//   });
+// });
 
 describe('testing stubbed axios requests', () => {
     it('should get email on componentWillMount', () => {
