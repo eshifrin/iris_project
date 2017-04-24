@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
+    "postinstall": "webpack -p",
     "webpack": "webpack -w",
     "test": "cross-env NODE_ENV=test ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
     "chrometest": "cross-env NODE_ENV=test ./node_modules/karma/bin/karma start --browsers Chrome",
