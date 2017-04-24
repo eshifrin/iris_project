@@ -1,37 +1,45 @@
 import React from 'react';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import Dialog from 'material-ui/Dialog';
+// import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 // import FontAwesome from 'react-fontawesome';
 import NavBar from './NavBar';
-import Main from './Main';
+// import Main from './Main';
 import FuturePostList from './FuturePostList';
 import * as util from '../lib/util';
+import PastPostList from './PastPostList';
+import CreatePost from './CreatePost';
+import { getCurrentUserInfo } from '../actions/permissions';
+
 injectTapEventPlugin();
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoggedIn: false,
-      twitterAuthenticated: true,
-      facebookAuthenticated: true,
-      email: '',
-      postToTwitter: false,
-      postToFacebook: false,
-      text: '',
-      img: '',
-      imgUrl: '',
-      scheduledPosts: [],
-      pastPosts: [],
-      scheduledDateTime: '',
-      updatingPostId: undefined,
-      newPostModal: false,
-    };
+    // this.state = {
+    //   isLoggedIn: false,
+    //   twitterAuthenticated: true,
+    //   facebookAuthenticated: true,
+    //   email: '',
+    //   postToTwitter: false,
+    //   postToFacebook: false,
+    //   text: '',
+    //   img: '',
+    //   imgUrl: '',
+    //   scheduledPosts: [],
+    //   pastPosts: [],
+    //   scheduledDateTime: '',
+    //   updatingPostId: undefined,
+    //   newPostModal: false,
+    // };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -53,23 +61,8 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    util.getCurrentUserInfo()
-    .then((res) => {
-      console.log('res: ', res);
-      if (res.data.email.length !== 0) {
-        this.setState({ email: res.data.email,
-          isLoggedIn: true,
-          twitterAuthenticated: res.data.twitter,
-          facebookAuthenticated: res.data.facebook,
-        });
-        this.getScheduledPosts();
-        this.getPastPosts();
-      }
-    })
-    .catch((err) => {
-      console.log('error in getting user email, err :', err);
-      console.log('we must remove all console logs : )')
-    });
+
+    this.props.getCurrentUserInfo();
   }
 
 
@@ -103,7 +96,7 @@ class App extends React.Component {
   //delete this func
 
   getPostById(postId) {
-    console.log('post id before :', postId)
+    console.log('post id before :', postId);
     util.getPostByPostId(postId)
     .then((post) => {
       const { text, img, imgUrl, postToFacebook, postToTwitter } = post.data[0];
@@ -247,40 +240,55 @@ class App extends React.Component {
   }
 
   render() {
-    const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime, newPostModal} = this.state;
+    // const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime, newPostModal} = this.state;
     const { handleModalToggle, editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
     return (
       <MuiThemeProvider>
         <div>
           <NavBar
-            login={!this.state.isLoggedIn}
-            twitter={!this.state.twitterAuthenticated}
-            facebook={!this.state.facebookAuthenticated}
+            login={!this.props.isLoggedIn}
+            twitter={!this.props.twitterAuthenticated}
+            facebook={!this.props.facebookAuthenticated}
           />
-          {this.state.isLoggedIn && <Main
-            deletePost={deletePost}
-            scheduledPosts={scheduledPosts}
-            pastPosts={pastPosts}
-            uploadImg={uploadImg}
-            imgUrl={imgUrl}
-            postToFacebook={postToFacebook}
-            postToTwitter={postToTwitter}
-            scheduleNewPost={scheduleNewPost}
-            handlePostSubmit={handlePostSubmit}
-            handleNowSubmit={handleNowSubmit}
-            scheduledDateTime={scheduledDateTime}
-            text={text}
-            handleTextChange={handleTextChange}
-            handleFbLogoClick={handleFbLogoClick}
-            handleTwLogoClick={handleTwLogoClick}
-            handleScheduleChange={handleScheduleChange}
-            editPost={editPost}
-            handleResubmitClick={handleResubmitClick}
-            handleClearImg={handleClearImg}
-            handleResetPostFields={handleResetPostFields}
-            newPostModal={newPostModal}
-            handleModalToggle={handleModalToggle}
-          />}
+          {this.props.isLoggedIn &&
+            <div>
+              <FlatButton label="Create new Post" onTouchTap={handleModalToggle} primary={true}/>
+              <Tabs>
+                <Tab label='Scheduled Posts'>
+                  <FuturePostList scheduledPosts={this.props.scheduledPosts} deletePost={deletePost} editPost={editPost} />
+                </Tab>
+
+                <Tab label='History'>
+                  <PastPostList pastPosts={this.props.pastPosts} handleResubmitClick={handleResubmitClick}/>
+                </Tab>
+              </Tabs>
+              <Dialog
+                title="New Post"
+                modal={false}
+                open={this.props.newPostModal}
+                onRequestClose={handleModalToggle}
+              >
+
+                <CreatePost
+                  uploadImg={uploadImg}
+                  imgUrl={this.props.imgUrl}
+                  text={this.props.text}
+                  scheduleNewpost={scheduleNewpost}
+                  handleNowSubmit={handleNowSubmit}
+                  handlePostSubmit={handlePostSubmit}
+                  handleTextChange={handleTextChange}
+                  handleFbLogoClick={handleFbLogoClick}
+                  handleScheduleChange={handleScheduleChange}
+                  postToTwitter={this.props.postToTwitter}
+                  postToFacebook={this.props.postToFacebook}
+                  scheduledDateTime={this.props.scheduledDateTime}
+                  handleResubmitClick={handleResubmitClick}
+                  handleClearImg={handleClearImg}
+                  handleResetPostFields={handleResetPostFields}
+                  handleTwLogoClick={handleTwLogoClick}
+                />
+              </Dialog>
+            </div>}
           <footer>
             <a href="https://www.iubenda.com/privacy-policy/8099712">Our Privacy Policy</a>
           </footer>
@@ -294,19 +302,29 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-      user: state.user,
-      math: state.math
+    isLoggedIn: state.isLoggedIn,
+    twitterAuthenticated: state.twitterAuthenticated,
+    facebookAuthenticated: state.facebookAuthenticated,
+    postToTwitter: state.postToTwitter,
+    postToFacebook: state.postToFacebook,
+    email: state.email,
+    text: state.text,
+    img: state.img,
+    imgUrl: state.imgUrl,
+    scheduledPosts: state.scheduledPosts,
+    pastPosts: state.pastPosts,
+    scheduledDateTime: state.scheduledDateTime,
+    updatingPostId: state.updatingPostId,
+    newPostModal: state.newPostModal,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        setName: (name) => {
-            dispatch(setName(name));
-        }
-    };
+  return {
+    getCurrentUserInfo: () => {
+      dispatch(getCurrentUserInfo());
+    },
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-// export default App;
