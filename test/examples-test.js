@@ -22,16 +22,49 @@ describe('how to check immediate child components existing', () => {
   });
 });
 
-describe('seeing a deeply nested component', () => {
+describe('Tests involving App without requests', () => {
+  var userInfoStub;
+
+  before(function() {
+    let results = {data: {email: '', twitter: false, facebook: false}};
+    const promise = Promise.resolve(results);
+    userInfoStub = sinon.stub(axios, 'get').withArgs('/userinfo')
+    userInfoStub.returns(promise);
+  });
+
+  after(function() {
+    axios.get.restore();
+  });
+
   it('will render a FuturePostList if App is rendered', () => {
     const wrapper = mount(<App />);
-    //so we can see deep into Main
+    //so we can see deep into App
     wrapper.setState({ isLoggedIn: true });
     //use the below if you want to see html representation of all the of code
     // console.log(wrapper.debug());
     expect(wrapper.find('FuturePostList')).to.have.length(1);
-  })
-});
+  });
+
+
+  it('should change postToFacebook from false to true on simulated handleFbLogoClick', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.state('postToFacebook')).to.equal(false);
+    wrapper.instance().handleFbLogoClick()
+    expect(wrapper.state('postToFacebook')).to.equal(true);
+  });
+
+  // expecting refactor post Redux - doesnt work due to modal
+  // it('should change postToFacebook from false to true on actual handleFbLogoClick', () => {
+  //   const wrapper = mount(<App />);
+  //   wrapper.setState({ isLoggedIn: true });
+  //   wrapper.setState({ newPostModal: true });
+  //   expect(wrapper.state('postToFacebook')).to.equal(false);
+  //   wrapper.find('.sendToFB').simulate('click');
+  //   expect(wrapper.state('postToFacebook')).to.equal(true);
+  // });
+
+})
+
 
 describe('how to test if functions were called', () => {
   it('should call handleFBClick when the logo is clicked', () => {
@@ -47,25 +80,12 @@ describe('how to test if functions were called', () => {
   });
 });
 
-describe('how to test state changes', () => {
-  it('should change postToFacebook from false to true on simulated handleFbLogoClick', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.state('postToFacebook')).to.equal(false);
-    wrapper.instance().handleFbLogoClick()
-    expect(wrapper.state('postToFacebook')).to.equal(true);
-  });
-});
+// describe('how to test state changes', () => {
+
+// });
 
 
 // describe('testing nested click events in nested components affecting state', () => {
-//   it('should change postToFacebook from false to true on actual handleFbLogoClick', () => {
-//     const wrapper = mount(<App />);
-//     wrapper.setState({ isLoggedIn: true });
-//     wrapper.setState({ newPostModal: true });
-//     expect(wrapper.state('postToFacebook')).to.equal(false)
-//     wrapper.find('.sendToFB').simulate('click');
-//     expect(wrapper.state('postToFacebook')).to.equal(true)
-//   });
 // });
 
 describe('testing stubbed axios requests', () => {
@@ -73,12 +93,13 @@ describe('testing stubbed axios requests', () => {
       let results = {data: {email: 'hello@yo.com', twitter: true, facebook: true}};
       const promise = Promise.resolve(results);
       sinon.stub(axios, 'get').withArgs('/userinfo').returns(promise);
+
       let wrapper = mount(<App />);
       promise.then(() => {
         expect(wrapper.state().email).to.equal('hello@yo.com');
         expect(wrapper.state().twitterAuthenticated).to.equal(true);
       });
-    })
+    });
 });
 
 
