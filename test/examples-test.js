@@ -80,13 +80,6 @@ describe('how to test if functions were called', () => {
   });
 });
 
-// describe('how to test state changes', () => {
-
-// });
-
-
-// describe('testing nested click events in nested components affecting state', () => {
-// });
 
 describe('testing stubbed axios requests', () => {
     it('should get email on componentWillMount', () => {
