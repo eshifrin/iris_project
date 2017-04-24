@@ -42,6 +42,7 @@ module.exports.getPostsById = (req, res, next) => {
   const postId = req.query.postId;
   return dbh.retrievePosts(postId)
   .then((results) => {
+    console.log('what are the posts view', results);
     res.status(200).json(results);
   })
   .catch(err => console.log('Error in getting posts by id in rh', err));
@@ -110,10 +111,9 @@ module.exports.sendUserPosts = (req, res, next) => {
   const typeOfPost = req.params.post_type;
   let resultsWithStats = [];
   // TODO: Create new function for this big block of code
-  
   return dbh.showUserPosts(email, typeOfPost)
   .then((posts) => {
-    if (typeOfPost === 'posted') { 
+    if (typeOfPost === 'posted') {
       return this.attachSMStats(posts, email);
     } else {
       return posts;
@@ -123,12 +123,12 @@ module.exports.sendUserPosts = (req, res, next) => {
     res.status(200).json(posts);
   })
   .catch((err) => {
-    if (err === 'invalid user') { 
-      res.status(401).end(); 
-    } else { 
-      res.status(500).end(); 
+    if (err === 'invalid user') {
+      res.status(401).end();
+    } else {
+      res.status(500).end();
     }
-  })
+  });
 };
 
 // if authenticated, send posts

@@ -9,16 +9,11 @@ import moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment'
 momentLocalizer(moment);
 
-        // {(this.props.postToTwitter || this.props.postToFacebook) && <h4>Get ready to share!</h4>}
-
-        // <FlatButton primary={true} onClick={this.props.handleResetPostFields}>Reset Form</FlatButton>
-
-
-import { handleScheduleChange, 
-        uploadImg, 
-        handleClearImg, 
-        handleResetPostFields, 
-        handleNowSubmit, 
+import { handleScheduleChange,
+        uploadImg,
+        handleClearImg,
+        handleResetPostFields,
+        handleNowSubmit,
         handlePostSubmit } from '../actions/permissions';
 
 class CreatePost extends React.Component {
@@ -33,9 +28,7 @@ class CreatePost extends React.Component {
              onChange={this.props.handleScheduleChange}
         />
       </div>
-
         <WriteMessage/>
-
         <div style={{height: '175'}}>
         <PhotoUpload
           uploadImg={this.props.uploadImg}
@@ -43,8 +36,6 @@ class CreatePost extends React.Component {
           handleClearImg={this.props.handleClearImg}
         />
         </div>
-
-
       <div>
       <hr />
 
@@ -54,7 +45,6 @@ class CreatePost extends React.Component {
         {!this.props.postToTwitter && !this.props.postToFacebook && <h4 style={{color: 'red'}}>please choose at least one social site to share your post</h4>}
       </div>
       </div>
-
     </div>
   )}
 };
