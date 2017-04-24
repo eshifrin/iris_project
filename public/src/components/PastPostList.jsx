@@ -3,7 +3,6 @@ import {List, ListItem} from 'material-ui/List';
 import PastPostListItem from './PastPostListItem.jsx';
 import BubbleChart from './BubbleChart.jsx';
 import Paper from 'material-ui/Paper';
-import { Grid, Row, Cell } from 'react-inline-grid';
 
 const propTypes = {
   pastPosts: PropTypes.array.isRequired,
