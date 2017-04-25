@@ -109,6 +109,7 @@ export const twClick = () => {
   }
 }
 
+<<<<<<< HEAD
 export const handleScheduleChange = (e) => {
   return {
     type: 'SCHEDULE_CHANGE',
@@ -128,3 +129,31 @@ export const handleResetPostFields = () => {
   }
 }
 
+export const deletePost = (e, post) => {
+  e.preventDefault();
+
+  return (dispatch, getState) => {
+    return util.deletePost(post._id)
+    .then((res) => {
+      return util.retrievePosts('scheduled', getState().main.email);
+    })
+    .then((res) => {
+       dispatch({
+        type: 'UPDATE_SCHEDULED_POSTS',
+        payload: res.data
+       });
+    })
+    .catch((err) => {
+      console.log('failure deleting scheduled post', err);
+    })
+  }
+}
+
+export const populateCreatePost = (e, post) => {
+  e.preventDefault();
+
+  return {
+    type: 'POPULATE_CREATE_POST',
+    payload: post
+  }
+}

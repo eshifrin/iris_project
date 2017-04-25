@@ -1,7 +1,6 @@
 import moment from 'moment';
 
-
-const permissionsAndPostsReducer = (state = {
+const initialState = {
   isLoggedIn: false,
   twitterAuthenticated: false,
   facebookAuthenticated: false,
@@ -16,7 +15,9 @@ const permissionsAndPostsReducer = (state = {
   scheduledDateTime: '',
   updatingPostId: undefined,
   newPostModal: false,
-}, action) => {
+}
+
+const permissionsAndPostsReducer = (state = initialState, action) => {
   switch (action.type) {
     // case
     case 'GET_USER_INFO_SUCCESS':
@@ -66,52 +67,72 @@ const permissionsAndPostsReducer = (state = {
           imgUrl: action.payload.imgUrl,
           img: action.payload.img,
         }
-      
-      // )};
 
-  case 'CLEAR_IMG':
-    return {
-      ...state,
-      img: '',
-      imgUrl: '',
-    };
+    case 'CLEAR_IMG':
+      return {
+        ...state,
+        img: '',
+        imgUrl: '',
+      };
     
-  case 'RESET_POST_FIELDS':
-    return {
-      ...state,
-      text: '',
-      img: '',
-      imgUrl: '',
-      scheduledDateTime: '',
-    };
+    case 'RESET_POST_FIELDS':
+      return {
+        ...state,
+        text: '',
+        img: '',
+        imgUrl: '',
+        scheduledDateTime: '',
+      };
 
-  case 'POST_NOW':
-  return {
-    ...state,
-    text: '',
-    scheduledDateTime: '',
-    updatingPostId: undefined,
-    newPostModal: false,
-    postToTwitter: false,
-    postToFacebook: false,
-    imgUrl: '',
-    pastPosts: action.payload,
+    case 'POST_NOW':
+      return {
+        ...state,
+        text: '',
+        scheduledDateTime: '',
+        updatingPostId: undefined,
+        newPostModal: false,
+        postToTwitter: false,
+        postToFacebook: false,
+        imgUrl: '',
+        pastPosts: action.payload,
+      }
+
+    case 'POST_LATER':
+      return {
+        ...state,
+        text: '',
+        scheduledDateTime: '',
+        updatingPostId: undefined,
+        newPostModal: false,
+        postToTwitter: false,
+        postToFacebook: false,
+        imgUrl: '',
+        scheduledPosts: action.payload,
+      }
+
+    case 'UPDATE_SCHEDULED_POSTS':
+      return {
+        ...state,
+        scheduledPosts: action.payload,
+      };
+
+    case 'POPULATE_CREATE_POST':
+      return {
+        ...state,
+        postToTwitter: action.payload.postToTwitter,
+        postToFacebook: action.payload.postToFacebook,
+        text: action.payload.text,
+        img: action.payload.img,
+        imgUrl: action.payload.imgUrl,
+        scheduledDateTime: action.payload.scheduledDateTime,
+        updatingPostId: action.payload._id,
+        newPostModal: true,
+      }
+
+    default:
+      console.log('action type: ', action.type);
+      return state;
   }
-
-  case 'POST_LATER':
-  return {
-    ...state,
-    text: '',
-    scheduledDateTime: '',
-    updatingPostId: undefined,
-    newPostModal: false,
-    postToTwitter: false,
-    postToFacebook: false,
-    imgUrl: '',
-    scheduledPosts: action.payload,
-  }
-
-
 };
 
 export default permissionsAndPostsReducer;

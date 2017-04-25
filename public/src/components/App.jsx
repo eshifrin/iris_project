@@ -17,28 +17,11 @@ import FuturePostList from './FuturePostList';
 import * as util from '../lib/util';
 import PastPostList from './PastPostList';
 import CreatePost from './CreatePost';
-import { getCurrentUserInfo, modalToggle } from '../actions/permissions';
+import { getCurrentUserInfo, modalToggle, deletePost, populateCreatePost } from '../actions/permissions';
 
 injectTapEventPlugin();
 
-// const propTypes = {
-//   isLoggedIn: PropTypes.bool.isRequired,
-//   twitterAuthenticated: PropTypes.bool.isRequired,
-//   facebookAuthenticated: PropTypes.bool.isRequired,
-//   postToTwitter: PropTypes.bool.isRequired,
-//   postToFacebook: PropTypes.bool.isRequired,
-//   email: PropTypes.string.isRequired,
-//   text: PropTypes.string.isRequired,
-//   img: state.img,
-//   imgUrl: PropTypes.string.isRequired,
-//   scheduledPosts: state.scheduledPosts,
-//   pastPosts: state.pastPosts,
-//   scheduledDateTime: state.scheduledDateTime,
-//   updatingPostId: state.updatingPostId,
-//   newPostModal: state.newPostModal,
-//   // url: PropTypes.string.isRequired
 
-// }
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -66,6 +49,60 @@ class App extends React.Component {
   }
 
 
+  getScheduledPosts() {
+    this.getPosts('scheduled');
+  }
+
+  getPastPosts() {
+    this.getPosts('posted');
+  }
+
+  getPosts(type) {
+    // console.log('type in getPosts : ', type);
+    util.retrievePosts(type, this.state.email)
+    .then((results) => {
+      if (type === 'scheduled') {
+        this.setState({
+          scheduledPosts: results.data,
+        })
+      } else {
+        this.setState({
+          pastPosts: results.data,
+        })
+      }
+    })
+    .catch((err) => {
+      console.log('there was error in retreiving scheduled/past posts of the current user, err : ', err);
+    });
+  }
+
+
+  getPostById(postId) {
+    console.log('post id before :', postId);
+    util.getPostByPostId(postId)
+    .then((post) => {
+      const { text, img, imgUrl, postToFacebook, postToTwitter } = post.data[0];
+      this.setState({ text, img, imgUrl, postToFacebook, postToTwitter });
+    });
+  }
+
+  uploadImg(e) {
+    e.preventDefault();
+    const file = e.target.files[0];
+    const reader = new FileReader(file);
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      this.setState({
+        img: reader.result,
+      });
+      axios.post('/api/image/imgLink', { image: reader.result })
+      .then(res =>
+        this.setState({ imgUrl: res.data }),
+      );
+    };
+  }
+
+
   deletePost(e, post) {
     e.preventDefault();
     util.deletePost(post._id)
@@ -90,6 +127,60 @@ class App extends React.Component {
     });
   }
 
+
+  handleTextChange(e) {
+    const text = e.target.value;
+    this.setState({ text });
+  }
+
+  handleScheduleChange(e) {
+    e.preventDefault();
+    console.log('schedule change args: ', arguments);
+    const scheduledDateTime = moment(e.target.value).utc().toISOString();
+    this.setState({ scheduledDateTime });
+  }
+
+  // handleFbLogoClick(e) {
+  //   this.setState({ postToFacebook: !this.state.postToFacebook });
+  // }
+
+  // handleTwLogoClick(e) {
+  //   this.setState({ postToTwitter: !this.state.postToTwitter });
+  // }
+
+  scheduleNewPost(e, when) {
+    const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
+    e.preventDefault();
+    util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
+    .then((results) => {
+      console.log('Submit new post - status code:', results.status);
+      this.setState({
+        text: '',
+        scheduledDateTime: '',
+        updatingPostId: undefined,
+        newPostModal: false,
+        postToTwitter: false,
+        postToFacebook: false,
+        imgUrl: '',
+      });
+      this.getScheduledPosts();
+      this.getPastPosts();
+    })
+    .catch((err) => {
+      console.log('issue with posting scheduled posts', err);
+    });
+  }
+
+  handlePostSubmit(e) {
+    e.preventDefault();
+    this.scheduleNewPost(e, 'scheduled');
+  }
+
+  handleNowSubmit(e) {
+    e.preventDefault();
+    this.scheduleNewPost(e, 'now');
+  }
+
   handleResubmitClick(e, post) {
     e.preventDefault();
     const postId = e.target.value;
@@ -105,7 +196,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
+    // const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
     return (
       <MuiThemeProvider>
         <div>
@@ -119,11 +210,14 @@ class App extends React.Component {
               <FlatButton label="Create new Post" onTouchTap={this.props.modalToggle} primary={true}/>
               <Tabs>
                 <Tab label='Scheduled Posts'>
-                  <FuturePostList scheduledPosts={this.props.scheduledPosts} deletePost={deletePost} editPost={editPost} />
+                  <FuturePostList 
+                    scheduledPosts={this.props.scheduledPosts} 
+                    deletePost={this.props.deletePostClick} 
+                    editPost={this.props.editPostClick} />
                 </Tab>
 
                 <Tab label='History'>
-                  <PastPostList pastPosts={this.props.pastPosts} handleResubmitClick={handleResubmitClick}/>
+                  <PastPostList pastPosts={this.props.pastPosts} handleResubmitClick={this.props.editPostClick}/>
                 </Tab>
               </Tabs>
               <Dialog
@@ -173,6 +267,12 @@ const mapDispatchToProps = (dispatch) => {
     modalToggle: () => {
       dispatch(modalToggle());
     },
+    deletePostClick: (e, post) => {
+      dispatch(deletePost(e, post));
+    },
+    editPostClick: (e, post) => {
+      dispatch(populateCreatePost(e, post))
+    }
   };
 };
 
