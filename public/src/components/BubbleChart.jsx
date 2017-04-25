@@ -35,12 +35,12 @@ const data = {
 };
 
 export default React.createClass({
-  displayName: 'BubbleExample',
+  displayName: 'Facebook Twitter ROI',
 
   render() {
     return (
       <div>
-        <h2>Bubble Example</h2>
+        <h2>Facebook Twitter ROI</h2>
         <Bubble data={data} />
       </div>
     );
