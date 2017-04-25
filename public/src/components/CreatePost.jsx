@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import PhotoUpload from './PhotoUpload.jsx';
 import WriteMessage from './WriteMessage.jsx';
 import DateTimePicker from './DateTimePicker.jsx';

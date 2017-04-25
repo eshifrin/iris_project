@@ -62,7 +62,6 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-
     this.props.getCurrentUserInfo();
   }
 
