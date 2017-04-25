@@ -54,8 +54,11 @@ module.exports.retrievePosts = (postIds) => {
 module.exports.showUserPosts = (email, typeofPost) => {
   return User.findOneAsync({email: email})
   .then(data => {
-    if (!data) throw ('invalid user');
-    else return this.retrievePosts(data[typeofPost])
+    if (!data) {
+      throw ('invalid user');
+    } else {
+      return this.retrievePosts(data[typeofPost]);
+    }
   })
 }
 
@@ -99,13 +102,12 @@ module.exports.checkScheduledEvent = (dateTime) => {
     { $and: [
         { 'scheduledDateTime': { $lte: new Date() } },
         { 'status': 'scheduled' },
-
       ]
     }
   )
   .then(data => {
     return data;
-  })
+  });
 }
 
 module.exports.getScheduledEvents = () => {
