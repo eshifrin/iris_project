@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const permissionsAndPostsReducer = (state = {
   isLoggedIn: false,
   twitterAuthenticated: false,
@@ -54,7 +56,52 @@ const permissionsAndPostsReducer = (state = {
         ...state,
         postToTwitter: !state.postToTwitter,
       };
+    case 'SCHEDULE_CHANGE':
+      return {
+        ...state,
+        scheduledDateTime: moment(action.payload).utc().toISOString(),
+      };
 
+    case 'UPLOAD_IMG':
+      const reader = new FileReader(action.payload);
+      reader.readAsDataURL(action.payload);
+      reader.onloadend = () => {
+        axios.post('/api/image/imgLink', { image: reader.result })
+      .then(res =>
+         ({
+          ...state,
+          imgURL: res.data,
+          img: reader.result,
+        })
+      )};
+
+    case 'CLEAR_IMG':
+      return {
+        ...state,
+        img: '',
+        imgURL: '',
+      };
+    
+  case 'RESET_POST_FIELDS':
+    return {
+      ...state,
+      text: '',
+      img: '',
+      imgURL: '',
+      scheduledDateTime: '',
+    };
+
+  case 'POST':
+  return {
+    ...state,
+    text: '',
+    scheduledDateTime: '',
+    updatingPostId: undefined,
+    newPostModal: false,
+    postToTwitter: false,
+    postToFacebook: false,
+    imgUrl: '',
+  }
 
     default:
       // state = {

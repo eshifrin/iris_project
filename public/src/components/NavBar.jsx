@@ -14,7 +14,7 @@ const NavBar = ({login, twitter, facebook}) => {
     backgroundColor: 'transparent',
     color: 'white'
   };
-  console.log('props in navbar: ', login, twitter, facebook);
+  // console.log('props in navbar: ', login, twitter, facebook);
 	return (
 		<div>
 		<AppBar title="Iris" >

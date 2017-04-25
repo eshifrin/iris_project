@@ -47,7 +47,7 @@ class WriteMessage extends React.Component {
 
 const mapStateToProps = (state) => {
   console.log('state in writemsg.jsx : ', state);
-  console.log('state is logged in in writemsg.jsx : ', state.main.text);
+  // console.log('state is logged in in writemsg.jsx : ', state.main.text);
   return {
     text: state.main.text,
     postToFacebook: state.main.postToFacebook,

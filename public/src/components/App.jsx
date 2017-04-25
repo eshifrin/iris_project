@@ -76,7 +76,7 @@ class App extends React.Component {
 
   getPosts(type) {
     // console.log('type in getPosts : ', type);
-    util.retrievePosts(type, this.state.email)
+    util.retrievePosts(type, this.props.email)
     .then((results) => {
       if (type === 'scheduled') {
         this.setState({
@@ -224,8 +224,8 @@ class App extends React.Component {
   handleResetPostFields(e) {
     e.preventDefault();
     this.setState({
-      postToTwitter: true,
-      postToFacebook: true,
+      // postToTwitter: true,
+      // postToFacebook: true,
       text: '',
       img: '',
       imgUrl: '',
@@ -296,7 +296,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   console.log('state in app.jsx : ', state);
-  console.log('state is logged in in app.jsx : ', state.main.isLoggedIn);
+  // console.log('state is logged in in app.jsx : ', state.main.isLoggedIn);
   // CONST { }
   return {
     isLoggedIn: state.main.isLoggedIn,
