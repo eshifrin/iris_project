@@ -1,8 +1,47 @@
 import React from 'react';
 import { Bubble } from 'react-chartjs-2';
+import moment from 'moment';
+
+// const data = {
+//   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+//   datasets: [{
+//     label: '# of Votes',
+//     data: [12, 19, 3, 5, 2, 3],
+//   }],
+// };
+
+const newDate = (days) => {
+  return moment().add(days, 'd');
+}
+
+const options = {
+  scales: {
+    xAxes: [{
+      type: 'time',
+      // unit: 'day',
+      // unitStepSize: 1,
+      time: {
+        displayFormats: {
+          millisecond: 'MMM DD',
+          second: 'MMM DD',
+          minute: 'MMM DD',
+          hour: 'MMM DD',
+          day: 'MMM DD',
+          week: 'MMM DD',
+          month: 'MMM DD',
+          quarter: 'MMM DD',
+          year: 'MMM DD',
+        },
+      }
+    }],
+  },
+};
+
+console.log('newDate-4', newDate(-4));
+console.log('newDate-3', newDate(-3));
 
 const data = {
-  labels: ['January'],
+  labels: [newDate(-4), newDate(-3), newDate(2), newDate(3), newDate(4), newDate(5), newDate(6)],
   datasets: [
     {
       label: 'My First dataset',
@@ -31,7 +70,7 @@ const data = {
         { x: 5, y: 4, r: 10 },
       ],
     },
-  ],
+  ]
 };
 
 export default React.createClass({
@@ -40,7 +79,7 @@ export default React.createClass({
     return (
       <div>
         <h2>Facebook Twitter ROI</h2>
-        <Bubble data={data} />
+        <Bubble data={data} options={options} />
       </div>
     );
   },
