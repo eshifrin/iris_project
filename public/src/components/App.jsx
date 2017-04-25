@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
@@ -17,29 +17,31 @@ import FuturePostList from './FuturePostList';
 import * as util from '../lib/util';
 import PastPostList from './PastPostList';
 import CreatePost from './CreatePost';
-import { getCurrentUserInfo } from '../actions/permissions';
+import { getCurrentUserInfo, modalToggle } from '../actions/permissions';
 
 injectTapEventPlugin();
 
+// const propTypes = {
+//   isLoggedIn: PropTypes.bool.isRequired,
+//   twitterAuthenticated: PropTypes.bool.isRequired,
+//   facebookAuthenticated: PropTypes.bool.isRequired,
+//   postToTwitter: PropTypes.bool.isRequired,
+//   postToFacebook: PropTypes.bool.isRequired,
+//   email: PropTypes.string.isRequired,
+//   text: PropTypes.string.isRequired,
+//   img: state.img,
+//   imgUrl: PropTypes.string.isRequired,
+//   scheduledPosts: state.scheduledPosts,
+//   pastPosts: state.pastPosts,
+//   scheduledDateTime: state.scheduledDateTime,
+//   updatingPostId: state.updatingPostId,
+//   newPostModal: state.newPostModal,
+//   // url: PropTypes.string.isRequired
+
+// }
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   isLoggedIn: false,
-    //   twitterAuthenticated: true,
-    //   facebookAuthenticated: true,
-    //   email: '',
-    //   postToTwitter: false,
-    //   postToFacebook: false,
-    //   text: '',
-    //   img: '',
-    //   imgUrl: '',
-    //   scheduledPosts: [],
-    //   pastPosts: [],
-    //   scheduledDateTime: '',
-    //   updatingPostId: undefined,
-    //   newPostModal: false,
-    // };
     this.uploadImg = this.uploadImg.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -57,7 +59,6 @@ class App extends React.Component {
     this.getPostById = this.getPostById.bind(this);
     this.handleClearImg = this.handleClearImg.bind(this);
     this.handleResetPostFields = this.handleResetPostFields.bind(this);
-    this.handleModalToggle = this.handleModalToggle.bind(this);
   }
 
   componentWillMount() {
@@ -213,7 +214,6 @@ class App extends React.Component {
       updatingPostId: post._id,
       newPostModal: !this.state.newPostModal,
     })
-    // handleModalToggle();
   }
 
   handleClearImg(e) {
@@ -221,11 +221,6 @@ class App extends React.Component {
     this.setState({ img: '', imgUrl: '' });
   }
 
-  handleModalToggle() {
-    this.setState({
-      newPostModal: !this.state.newPostModal,
-    });
-  }
 
   handleResetPostFields(e) {
     e.preventDefault();
@@ -241,7 +236,7 @@ class App extends React.Component {
 
   render() {
     // const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime, newPostModal} = this.state;
-    const { handleModalToggle, editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
+    const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
     return (
       <MuiThemeProvider>
         <div>
@@ -252,7 +247,7 @@ class App extends React.Component {
           />
           {this.props.isLoggedIn &&
             <div>
-              <FlatButton label="Create new Post" onTouchTap={handleModalToggle} primary={true}/>
+              <FlatButton label="Create new Post" onTouchTap={this.props.modalToggle} primary={true}/>
               <Tabs>
                 <Tab label='Scheduled Posts'>
                   <FuturePostList scheduledPosts={this.props.scheduledPosts} deletePost={deletePost} editPost={editPost} />
@@ -266,14 +261,14 @@ class App extends React.Component {
                 title="New Post"
                 modal={false}
                 open={this.props.newPostModal}
-                onRequestClose={handleModalToggle}
+                onRequestClose={this.props.modalToggle}
               >
 
                 <CreatePost
                   uploadImg={uploadImg}
                   imgUrl={this.props.imgUrl}
                   text={this.props.text}
-                  scheduleNewpost={scheduleNewpost}
+                  scheduleNewPost={scheduleNewPost}
                   handleNowSubmit={handleNowSubmit}
                   handlePostSubmit={handlePostSubmit}
                   handleTextChange={handleTextChange}
@@ -301,21 +296,24 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('state in app.jsx : ', state);
+  console.log('state is logged in in app.jsx : ', state.main.isLoggedIn);
+  // CONST { }
   return {
-    isLoggedIn: state.isLoggedIn,
-    twitterAuthenticated: state.twitterAuthenticated,
-    facebookAuthenticated: state.facebookAuthenticated,
-    postToTwitter: state.postToTwitter,
-    postToFacebook: state.postToFacebook,
-    email: state.email,
-    text: state.text,
-    img: state.img,
-    imgUrl: state.imgUrl,
-    scheduledPosts: state.scheduledPosts,
-    pastPosts: state.pastPosts,
-    scheduledDateTime: state.scheduledDateTime,
-    updatingPostId: state.updatingPostId,
-    newPostModal: state.newPostModal,
+    isLoggedIn: state.main.isLoggedIn,
+    twitterAuthenticated: state.main.twitterAuthenticated,
+    facebookAuthenticated: state.main.facebookAuthenticated,
+    postToTwitter: state.main.postToTwitter,
+    postToFacebook: state.main.postToFacebook,
+    email: state.main.email,
+    text: state.main.text,
+    img: state.main.img,
+    imgUrl: state.main.imgUrl,
+    scheduledPosts: state.main.scheduledPosts,
+    pastPosts: state.main.pastPosts,
+    scheduledDateTime: state.main.scheduledDateTime,
+    updatingPostId: state.main.updatingPostId,
+    newPostModal: state.main.newPostModal,
   };
 };
 
@@ -324,6 +322,9 @@ const mapDispatchToProps = (dispatch) => {
     getCurrentUserInfo: () => {
       dispatch(getCurrentUserInfo());
     },
+    modalToggle: () => {
+      dispatch(modalToggle());
+    }
   };
 };
 

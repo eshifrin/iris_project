@@ -282,10 +282,8 @@ module.exports.deletePost = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-
   //look up Promise.reduce, refactor for no nested promises
   if (req.user) {
-
     let userCred = {};
     userCred.email = req.session.email;
     dbh.getUser(userCred.email)
@@ -315,6 +313,6 @@ module.exports.getUserInfo = (req, res, next) => {
     })
     .catch(console.log)
   } else {
-    res.sendStatus({ email: '', twitter: false, facebook: false });
+    res.send({ email: '', twitter: false, facebook: false });
   }
 };

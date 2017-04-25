@@ -1,4 +1,4 @@
-const permissionsReducer = (state = {
+const permissionsAndPostsReducer = (state = {
   isLoggedIn: false,
   twitterAuthenticated: false,
   facebookAuthenticated: false,
@@ -18,15 +18,8 @@ const permissionsReducer = (state = {
   switch (action.type) {
     // case
     case 'GET_USER_INFO_SUCCESS':
-    // if (res.data.email.length !== 0) {
-    //         this.setState({ email: res.data.email,
-    //           isLoggedIn: true,
-    //           twitterAuthenticated: res.data.twitter,
-    //           facebookAuthenticated: res.data.facebook,
-    //         });
-    // if (action.payload)
-    console.log('get user info dispatcher - payload: ', action.payload);
-      state = {
+    // console.log('get user info dispatcher - payload: ', action.payload);
+      return {
         ...state,
         email: action.payload.data.email,
         isLoggedIn: !!action.payload.data.email,
@@ -35,19 +28,43 @@ const permissionsReducer = (state = {
         pastPosts: action.payload.data.pastPosts,
         scheduledPosts: action.payload.data.scheduledPosts,
       };
-      break;
     case 'GET_USER_INFO_FAIL':
       console.log('get user failed: ', action.payload);
-      break;
+      return state;
+
+    case 'TOGGLE_MODAL':
+      return {
+        ...state,
+        newPostModal: !state.newPostModal,
+      };
+
+    case 'TEXT_CHANGE':
+      return {
+        ...state,
+        text: action.payload,
+      };
+    case 'FB_TOGGLE':
+      return {
+        ...state,
+        postToFacebook: !state.postToFacebook,
+      };
+
+    case 'TW_TOGGLE':
+      return {
+        ...state,
+        postToTwitter: !state.postToTwitter,
+      };
+
+
     default:
       // state = {
       //   ...state,
       // }
       console.log('action type: ', action.type);
-      break;
+      return state;
   }
-  return state;
+  // return state;
 
 };
 
-export default permissionsReducer;
+export default permissionsAndPostsReducer;
