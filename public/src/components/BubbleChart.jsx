@@ -24,11 +24,11 @@ const data = {
       pointRadius: 1,
       pointHitRadius: 10,
       data: [
-        {x:15,y:20,r:30},
-        {x:9,y:21,r:10},
-        {x:11,y:22,r:55},
-        {x:10,y:13,r:15},
-        {x:12,y:4,r:10}
+        {x:1,y:20,r:30},
+        {x:2,y:21,r:10},
+        {x:3,y:22,r:55},
+        {x:4,y:13,r:15},
+        {x:5,y:4,r:10}
       ]
     }
   ]
@@ -36,7 +36,6 @@ const data = {
 
 export default React.createClass({
   displayName: 'Facebook Twitter ROI',
-
   render() {
     return (
       <div>
