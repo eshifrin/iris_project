@@ -24,14 +24,14 @@ const data = {
       pointRadius: 1,
       pointHitRadius: 10,
       data: [
-        {x:1,y:20,r:30},
-        {x:2,y:21,r:10},
-        {x:3,y:22,r:55},
-        {x:4,y:13,r:15},
-        {x:5,y:4,r:10}
-      ]
-    }
-  ]
+        { x: 1, y: 20, r: 30 },
+        { x: 2, y: 21, r: 10 },
+        { x: 3, y: 22, r: 55 },
+        { x: 4, y: 13, r: 15 },
+        { x: 5, y: 4, r: 10 },
+      ],
+    },
+  ],
 };
 
 export default React.createClass({
@@ -43,5 +43,5 @@ export default React.createClass({
         <Bubble data={data} />
       </div>
     );
-  }
+  },
 });
