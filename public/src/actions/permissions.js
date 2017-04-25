@@ -1,5 +1,5 @@
 import * as util from '../lib/util';
-
+import axios from 'axios';
 export const getCurrentUserInfo = () => {
   return dispatch => {
     return util.getCurrentUserInfo()
@@ -11,6 +11,30 @@ export const getCurrentUserInfo = () => {
         console.log('error in getting user email, err :', err);
         dispatch({ type: 'GET_USER_INFO_FAIL', payload: err});
       });
+  }
+}
+export const uploadImg = (e) => {
+  // console.log('e in uploadImg change action: ', e.target.files[0]);
+  const reader = new FileReader(e.target.files[0]);
+  reader.readAsDataURL(e.target.files[0]);
+  return dispatch => {
+    return reader.onloadend = () => {
+    
+       axios.post('/api/image/imgLink', { image: reader.result })
+      .then(res => {
+        console.log('res in upload img after axios: ', res);
+        dispatch ({
+          type: 'UPLOAD_IMG',
+          payload: {
+            img: reader.result,
+            imgUrl: res.data,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log('errored out in axios of upload img action: ', err);
+      });
+    };
   }
 }
 
@@ -47,13 +71,7 @@ export const handleScheduleChange = (e) => {
   }
 }
 
-export const uploadImg = (e) => {
-  console.log('e in uploadImg change action: ', e.target.files[0]);
-  return {
-    type: 'UPLOAD_IMG',
-    payload: e.target.files[0],
-  }
-}
+
 export const handleClearImg = () => {
   console.log('in handleClearImg');
   return {

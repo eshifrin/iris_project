@@ -52,8 +52,8 @@ const mapDispatchToProps = (dispatch) => {
     handleScheduleChange: (e) => {
       dispatch(handleScheduleChange(e));
     },
-    uploadImg: () => {
-      dispatch(uploadImg());
+    uploadImg: (e) => {
+      dispatch(uploadImg(e));
     },
     handleClearImg: () => {
       dispatch(handleClearImg());
