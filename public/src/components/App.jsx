@@ -17,6 +17,7 @@ import FuturePostList from './FuturePostList';
 import * as util from '../lib/util';
 import PastPostList from './PastPostList';
 import CreatePost from './CreatePost';
+import Calendar from './Calendar'
 import { getCurrentUserInfo, modalToggle, deletePost, populateCreatePost } from '../actions/permissions';
 
 injectTapEventPlugin();
@@ -214,6 +215,9 @@ class App extends React.Component {
                     scheduledPosts={this.props.scheduledPosts} 
                     deletePost={this.props.deletePostClick} 
                     editPost={this.props.editPostClick} />
+                  <div className='calendar'>
+                  <Calendar />
+                  </div>
                 </Tab>
 
                 <Tab label='History'>
