@@ -4,7 +4,6 @@ export const getCurrentUserInfo = () => {
   return dispatch => {
     return util.getCurrentUserInfo()
       .then((res) => {
-        console.log('res: ', res);
         dispatch({ type: 'GET_USER_INFO_SUCCESS', payload: res});
       })
       .catch((err) => {
@@ -14,7 +13,6 @@ export const getCurrentUserInfo = () => {
   }
 }
 export const uploadImg = (e) => {
-  // console.log('e in uploadImg change action: ', e.target.files[0]);
   const reader = new FileReader(e.target.files[0]);
   reader.readAsDataURL(e.target.files[0]);
   return dispatch => {
@@ -22,7 +20,6 @@ export const uploadImg = (e) => {
     
        axios.post('/api/image/imgLink', { image: reader.result })
       .then(res => {
-        console.log('res in upload img after axios: ', res);
         dispatch ({
           type: 'UPLOAD_IMG',
           payload: {
@@ -39,7 +36,6 @@ export const uploadImg = (e) => {
 }
 
 export const handleNowSubmit = () => {
-  // console.log(' in handleNowSubmit action, args: ', when);
   return (dispatch, getState) => {
   const st = getState().main;
   const passSt = {
@@ -51,15 +47,11 @@ export const handleNowSubmit = () => {
     postToTwitter: st.postToTwitter,
     updatingPostId: st.updatingPostId
   }
-  // console.log('trying getstate in handlenow submit action: ', passSt);
    return util.submitNewPost('now', passSt)
     .then((results) => {
-      // console.log('Submit new post in actions - status code:', results.status);
-        // console.log('after posting, getting posted posts')
         return util.retrievePosts('posted', st.email)
     })
     .then((results) => {
-      // console.log('results after retreive post in submit new post actions: ', results);
         dispatch({type: 'POST_NOW', payload: results.data});
     })
     .catch((err) => {
@@ -69,7 +61,6 @@ export const handleNowSubmit = () => {
 }
 
 export const handlePostSubmit = () => {
-  // console.log(' in handleNowSubmit action, args: ', when);
   return (dispatch, getState) => {
   const st = getState().main;
   const passSt = {
@@ -81,15 +72,11 @@ export const handlePostSubmit = () => {
     postToTwitter: st.postToTwitter,
     updatingPostId: st.updatingPostId
   }
-  // console.log('trying getstate in handlenow submit action: ', passSt);
    return util.submitNewPost('scheduled', passSt)
     .then((results) => {
-      // console.log('Submit new post in actions - status code:', results.status);
-        // console.log('after posting, getting posted posts')
         return util.retrievePosts('scheduled', st.email)
     })
     .then((results) => {
-      // console.log('results after retreive post in submit new post actions: ', results);
         dispatch({type: 'POST_LATER', payload: results.data});
     })
     .catch((err) => {
@@ -105,7 +92,6 @@ export const modalToggle = () => {
 }
 
 export const textChange = (event) => {
-  console.log('txt in text change : ', event.target.value);
   return {
     type:'TEXT_CHANGE',
     payload: event.target.value,
@@ -124,7 +110,6 @@ export const twClick = () => {
 }
 
 export const handleScheduleChange = (e) => {
-  console.log('e in handle schedule change action: ', e.target.value);
   return {
     type: 'SCHEDULE_CHANGE',
     payload: e.target.value,
@@ -133,13 +118,11 @@ export const handleScheduleChange = (e) => {
 
 
 export const handleClearImg = () => {
-  console.log('in handleClearImg');
   return {
     type: 'CLEAR_IMG',
   }
 }
 export const handleResetPostFields = () => {
-  console.log('in handle reset post action');
   return {
     type: 'RESET_POST_FIELDS'
   }

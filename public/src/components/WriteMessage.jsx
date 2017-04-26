@@ -3,18 +3,7 @@ import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
 import { textChange, fbClick, twClick } from '../actions/permissions';
 
-// const propTypes = {
-//   text: PropTypes.string.isRequired,
-//   // handleTextChange: PropTypes.func.isRequired,
-//   handleFbLogoClick: PropTypes.func.isRequired,
-//   handleTwLogoClick: PropTypes.func.isRequired,
-//   postToFacebook: PropTypes.bool.isRequired,
-//   postToTwitter: PropTypes.bool.isRequired,
-// };
-
-// const WriteMessage = ({ text, handleFbLogoClick, postToFacebook, postToTwitter, handleClearImg, handleResetPostFields, handleTwLogoClick }) => {
 class WriteMessage extends React.Component {
-
   render() {
   // Styling scrips for Facebook and Twitter logos's onClick actions
     let fbLogoStyle = {};
@@ -46,8 +35,6 @@ class WriteMessage extends React.Component {
 
 
 const mapStateToProps = (state) => {
-  console.log('state in writemsg.jsx : ', state);
-  // console.log('state is logged in in writemsg.jsx : ', state.main.text);
   return {
     text: state.main.text,
     postToFacebook: state.main.postToFacebook,

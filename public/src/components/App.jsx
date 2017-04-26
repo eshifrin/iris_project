@@ -66,61 +66,6 @@ class App extends React.Component {
   }
 
 
-  getScheduledPosts() {
-    this.getPosts('scheduled');
-  }
-
-  getPastPosts() {
-    this.getPosts('posted');
-  }
-
-  getPosts(type) {
-    // console.log('type in getPosts : ', type);
-    util.retrievePosts(type, this.props.email)
-    .then((results) => {
-      if (type === 'scheduled') {
-        this.setState({
-          scheduledPosts: results.data,
-        })
-      } else {
-        this.setState({
-          pastPosts: results.data,
-        })
-      }
-    })
-    .catch((err) => {
-      console.log('there was error in retreiving scheduled/past posts of the current user, err : ', err);
-    });
-  }
-
-  //delete this func
-
-  getPostById(postId) {
-    console.log('post id before :', postId);
-    util.getPostByPostId(postId)
-    .then((post) => {
-      const { text, img, imgUrl, postToFacebook, postToTwitter } = post.data[0];
-      this.setState({ text, img, imgUrl, postToFacebook, postToTwitter });
-    });
-  }
-
-  // uploadImg(e) {
-  //   e.preventDefault();
-  //   const file = e.target.files[0];
-  //   const reader = new FileReader(file);
-  //   reader.readAsDataURL(file);
-  //   reader.onloadend = () => {
-  //     this.setState({
-  //       img: reader.result,
-  //     });
-  //     axios.post('/api/image/imgLink', { image: reader.result })
-  //     .then(res =>
-  //       this.setState({ imgUrl: res.data }),
-  //     );
-  //   };
-  // }
-
-
   deletePost(e, post) {
     e.preventDefault();
     util.deletePost(post._id)
@@ -145,65 +90,9 @@ class App extends React.Component {
     });
   }
 
-  // handleTextChange(e) {
-  //   const text = e.target.value;
-  //   this.setState({ text });
-  // }
-
-  // handleScheduleChange(e) {
-  //   e.preventDefault();
-  //   console.log('schedule change args: ', arguments);
-  //   const scheduledDateTime = moment(e.target.value).utc().toISOString();
-  //   this.setState({ scheduledDateTime });
-  // }
-
-  // handleFbLogoClick(e) {
-  //   this.setState({ postToFacebook: !this.state.postToFacebook });
-  // }
-
-  // handleTwLogoClick(e) {
-  //   this.setState({ postToTwitter: !this.state.postToTwitter });
-  // }
-
-  // scheduleNewPost(e, when) {
-  //   const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
-  //   e.preventDefault();
-  //   util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
-  //   .then((results) => {
-  //     console.log('Submit new post - status code:', results.status);
-  //     this.setState({
-  //       text: '',
-  //       scheduledDateTime: '',
-  //       updatingPostId: undefined,
-  //       newPostModal: false,
-  //       postToTwitter: false,
-  //       postToFacebook: false,
-  //       imgUrl: '',
-  //     });
-  //     this.getScheduledPosts();
-  //     this.getPastPosts();
-  //   })
-  //   .catch((err) => {
-  //     console.log('issue with posting scheduled posts', err);
-  //   });
-  // }
-
-  handlePostSubmit(e) {
-    e.preventDefault();
-    this.scheduleNewPost(e, 'scheduled');
-  }
-
-  // handleNowSubmit(e) {
-  //   e.preventDefault();
-  //   this.scheduleNewPost(e, 'now');
-  // }
-
   handleResubmitClick(e, post) {
     e.preventDefault();
-    // document.getElementById('message').scrollIntoView();
     const postId = e.target.value;
-    console.log('post in  handle resub click: ', post);
-    // this.getPostById(post._id);
     this.setState({
       text: post.text,
       postToFacebook: post.postToFacebook,
@@ -212,29 +101,10 @@ class App extends React.Component {
       imgUrl: post.imgUrl,
       updatingPostId: post._id,
       newPostModal: !this.state.newPostModal,
-    })
+    });
   }
 
-  // handleClearImg(e) {
-  //   e.preventDefault();
-  //   this.setState({ img: '', imgUrl: '' });
-  // }
-
-
-  // handleResetPostFields(e) {
-  //   e.preventDefault();
-  //   this.setState({
-  //     // postToTwitter: true,
-  //     // postToFacebook: true,
-  //     text: '',
-  //     img: '',
-  //     imgUrl: '',
-  //     scheduledDateTime: '',
-  //   });
-  // }
-
   render() {
-    // const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime, newPostModal} = this.state;
     const { editPost, deletePost, uploadImg, scheduleNewPost, handleNowSubmit, handlePostSubmit, handleTextChange, handleFbLogoClick, handleScheduleChange, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick } = this;
     return (
       <MuiThemeProvider>
@@ -262,25 +132,7 @@ class App extends React.Component {
                 open={this.props.newPostModal}
                 onRequestClose={this.props.modalToggle}
               >
-
-                <CreatePost
-                  uploadImg={uploadImg}
-                  imgUrl={this.props.imgUrl}
-                  text={this.props.text}
-                  scheduleNewPost={scheduleNewPost}
-                  handleNowSubmit={handleNowSubmit}
-                  handlePostSubmit={handlePostSubmit}
-                  handleTextChange={handleTextChange}
-                  handleFbLogoClick={handleFbLogoClick}
-                  handleScheduleChange={handleScheduleChange}
-                  postToTwitter={this.props.postToTwitter}
-                  postToFacebook={this.props.postToFacebook}
-                  scheduledDateTime={this.props.scheduledDateTime}
-                  handleResubmitClick={handleResubmitClick}
-                  handleClearImg={handleClearImg}
-                  handleResetPostFields={handleResetPostFields}
-                  handleTwLogoClick={handleTwLogoClick}
-                />
+                <CreatePost/>
               </Dialog>
             </div>}
           <footer>
@@ -295,9 +147,6 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state in app.jsx : ', state);
-  // console.log('state is logged in in app.jsx : ', state.main.isLoggedIn);
-  // CONST { }
   return {
     isLoggedIn: state.main.isLoggedIn,
     twitterAuthenticated: state.main.twitterAuthenticated,

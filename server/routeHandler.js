@@ -161,7 +161,6 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
 
 module.exports.sendTweet = (userCred, postInfo) => sm.tweet(userCred, postInfo.text, postInfo.img)
     .then((tweet) => {
-      console.log('whats inside the tweet----', tweet);
       dbh.updatePostFields(postInfo._id, 'postedTwitterId', tweet.id_str)
       return 'Successful Tweet';
     })
@@ -183,7 +182,6 @@ module.exports.sendFBPost = (userCred, postInfo) => sm.FBPost(userCred.facebook_
 module.exports.sendScheduledPosts = () => {
   dbh.getScheduledEvents()
   .then((scheduledPosts) => {
-    console.log('here are the scheduledPosts', scheduledPosts)
     return Promise.map(scheduledPosts, (post) => {
       return this.sendScheduledPost(post);
     })
@@ -244,7 +242,6 @@ module.exports.sendPostsNow = (req, res, next) => {
     console.log('err while deleting rh - ', err);
   })
   .then(() => {
-    console.log('what is post Info from rh.sendpostnow', postInfo);
     dbh.savePost(userCredentials._id, postInfo, 'posted');
   })
   .then(() => {
@@ -254,7 +251,6 @@ module.exports.sendPostsNow = (req, res, next) => {
     return Promise.all(posts);
   })
   .then((posts) => {
-    console.log('posts after send tweet in sendposts now in rh : ', posts);
     res.send(posts);
   })
   .catch((err) => {
@@ -286,7 +282,6 @@ module.exports.deletePost = (req, res, next) => {
   return dbh.retrieveUserId(req.session.email)
   .then((userId) => dbh.deletePost(userId, postId))
   .then((results) => {
-    // console.log('deletedPost in routehandler', results);
     res.end();
   })
   .catch((err) => {

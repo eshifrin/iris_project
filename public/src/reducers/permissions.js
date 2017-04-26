@@ -17,11 +17,9 @@ const permissionsAndPostsReducer = (state = {
   updatingPostId: undefined,
   newPostModal: false,
 }, action) => {
-  console.log('action type: ', action.type);
   switch (action.type) {
     // case
     case 'GET_USER_INFO_SUCCESS':
-    // console.log('get user info dispatcher - payload: ', action.payload);
       return {
         ...state,
         email: action.payload.data.email,
@@ -32,7 +30,6 @@ const permissionsAndPostsReducer = (state = {
         scheduledPosts: action.payload.data.scheduledPosts,
       };
     case 'GET_USER_INFO_FAIL':
-      console.log('get user failed: ', action.payload);
       return state;
 
     case 'TOGGLE_MODAL':
@@ -64,9 +61,6 @@ const permissionsAndPostsReducer = (state = {
       };
 
     case 'UPLOAD_IMG':
-    console.log('actionpayload in UPLOAD_IMG reducer: ', action.payload);
-        // console.log('in UPLOAD_IMG res: ', res.data);
-        // console.log('in UPLOAD_IMG reader.result: ', reader.result);
          return {
           ...state,
           imgUrl: action.payload.imgUrl,
@@ -92,7 +86,6 @@ const permissionsAndPostsReducer = (state = {
     };
 
   case 'POST_NOW':
-  console.log('postnow reducer payload: ', action.payload);
   return {
     ...state,
     text: '',
@@ -106,7 +99,6 @@ const permissionsAndPostsReducer = (state = {
   }
 
   case 'POST_LATER':
-  console.log('postlater reducer payload: ', action.payload);
   return {
     ...state,
     text: '',
@@ -119,14 +111,6 @@ const permissionsAndPostsReducer = (state = {
     scheduledPosts: action.payload,
   }
 
-    default:
-      // state = {
-      //   ...state,
-      // }
-      console.log('action type: ', action.type);
-      return state;
-  }
-  // return state;
 
 };
 
