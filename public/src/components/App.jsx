@@ -17,9 +17,12 @@ import CreatePost from './CreatePost';
 import { getCurrentUserInfo, 
           modalToggle, 
           deletePost, 
-          populateCreatePost } from '../actions/permissions';
+          populateCreatePost,
+          switchScheduledView
+        } from '../actions/permissions';
 
 injectTapEventPlugin();
+import Calendar from './Calendar'
 
 
 class App extends React.Component {
@@ -29,6 +32,7 @@ class App extends React.Component {
 
   componentWillMount() {
     this.props.getCurrentUserInfo();
+
   }
 
   render() {
@@ -54,10 +58,31 @@ class App extends React.Component {
           <Tabs>
 
             <Tab label='Scheduled Posts'>
+              <div>
+              <i className={`fa fa-list fa-4x
+                 ${this.props.calendarView ? 'toggle-off' : 'toggle-on'}`} 
+                 name="listIcon"
+                 aria-hidden="true" 
+                 onClick={this.props.switchScheduledViewClick} />
+              <i className={`fa fa-calendar fa-4x
+                 ${this.props.calendarView ? 'toggle-on' : 'toggle-off'}`}
+                 name="calendarIcon"
+                 aria-hidden="true" 
+                 onClick={this.props.switchScheduledViewClick} />
+
+              </div>
+
+              {this.props.calendarView ?
+              <div className='calendar'>
+                <Calendar scheduledPosts={this.props.scheduledPosts}/>
+              </div>
+              :
               <FuturePostList 
                 scheduledPosts={this.props.scheduledPosts} 
                 deletePost={this.props.deletePostClick} 
                 editPost={this.props.editPostClick} />
+              }
+
             </Tab>
 
             <Tab label='History'>
@@ -107,6 +132,7 @@ const mapStateToProps = (state) => {
     scheduledDateTime: state.main.scheduledDateTime,
     updatingPostId: state.main.updatingPostId,
     newPostModal: state.main.newPostModal,
+    calendarView: state.main.calendarView
   };
 };
 
@@ -123,6 +149,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     editPostClick: (e, post) => {
       dispatch(populateCreatePost(e, post))
+    },
+    switchScheduledViewClick: (e) => {
+      dispatch(switchScheduledView(e))
     }
   };
 };

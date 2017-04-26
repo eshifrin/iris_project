@@ -15,6 +15,7 @@ const initialState = {
   scheduledDateTime: '',
   updatingPostId: undefined,
   newPostModal: false,
+  calendarView: false
 }
 
 const permissionsAndPostsReducer = (state = initialState, action) => {
@@ -127,6 +128,12 @@ const permissionsAndPostsReducer = (state = initialState, action) => {
         scheduledDateTime: action.payload.scheduledDateTime,
         updatingPostId: action.payload._id,
         newPostModal: true,
+      }
+
+    case 'SWITCH_SCHEDULED_VIEW':
+      return {
+        ...state,
+        calendarView: !state.calendarView
       }
 
     default:
