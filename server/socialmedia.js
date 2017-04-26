@@ -66,6 +66,8 @@ module.exports.FBfromAuth = passport.authenticate('facebook-authz',  { failureRe
 successRedirect: '/'});
 
 module.exports.getTweetStats = (email, postIds) => {
+  if (!postIds) { return []; }
+
   return dbh.getUser(email)
   .then(result => {
     const client = new Twitter({
@@ -78,22 +80,29 @@ module.exports.getTweetStats = (email, postIds) => {
   })
   .then(client => {
     return client.get('statuses/lookup', { 'id': postIds })
-      .then(results => {
-        return results;
-      })
-      .catch(err => {
-        console.log('Error in getting Twitter post stats' + err);
-      });
+  })
+  .then(results => {
+    return results;
+  })
+  .catch(err => {
+    console.log('Error in getting Twitter post stats' + err);
+    return [];
   });
 };
 
 module.exports.getFbPostStats = (email, postIds) => {
+  if (!postIds) return {};
+
   return dbh.getUser(email)
   .then(result => {
     return axios.get(`https://graph.facebook.com/v2.9/?ids=${postIds}&fields=likes.summary(true),comments.summary(true)&access_token=${result.facebook_token}`)
-    .then(fbPost => {
-      return fbPost;
-    })
+  })
+  .then(fbPost => {
+    return fbPost;
+  })
+  .catch(err => {
+    console.log('error getting fbpoststats', err);
+    return {};
   })
 };
 

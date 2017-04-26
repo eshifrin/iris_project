@@ -6,12 +6,6 @@ const routes = {
   'posted': '/api/user/posted'
 }
 
-//delete this func
-const getPostByPostId = (postId) => {
-  console.log('post id in util : ', postId)
-  return axios.get('/api/post/resubmit', { params: { postId } });
-}
-
 const retrievePosts = (type, email) => {
   return axios.get(routes[type], 
             { params: { email: email,
@@ -31,4 +25,4 @@ const getCurrentUserInfo = () => {
   return axios.get('/userinfo');
 }
 
-export { getPostByPostId, retrievePosts, submitNewPost, deletePost, getCurrentUserInfo };
+export { retrievePosts, submitNewPost, deletePost, getCurrentUserInfo };
