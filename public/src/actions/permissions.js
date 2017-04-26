@@ -63,7 +63,9 @@ export const handleNowSubmit = () => {
 export const handlePostSubmit = () => {
   return (dispatch, getState) => {
   const st = getState().main;
+  console.log(st.scheduledDateTime)
   const passSt = {
+    scheduledDateTime: st.scheduledDateTime,
     email: st.email,
     text: st.text,
     img: st.img,
@@ -109,14 +111,12 @@ export const twClick = () => {
   }
 }
 
-<<<<<<< HEAD
 export const handleScheduleChange = (e) => {
   return {
     type: 'SCHEDULE_CHANGE',
     payload: e.target.value,
   }
 }
-
 
 export const handleClearImg = () => {
   return {

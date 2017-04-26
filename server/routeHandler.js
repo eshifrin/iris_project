@@ -153,7 +153,7 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
       else res.status(500).end();
     });
   } else if (req.params.post_type === 'now') {
-    module.exports.sendPostsNow(req, res, next);
+    this.sendPostsNow(req, res, next);
   }
 };
 
@@ -215,7 +215,6 @@ module.exports.sendScheduledPost = (post) => {
   })
   .catch((err) => {
     console.log(err);
-
   });
 };
 
@@ -305,7 +304,6 @@ module.exports.getUserInfo = (req, res, next) => {
       return dbh.showUserPosts(userCred.email, 'posted')
     })
     .then((postedPosts) => {
-      console.log('still good, its an issue with postedposts')
       return this.attachSMStats(postedPosts, userCred.email);
     })
     .then((postedPostswithSMStats) => {

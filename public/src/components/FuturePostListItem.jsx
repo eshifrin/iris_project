@@ -14,7 +14,7 @@ const FuturePostListItem = ({post, deletePost, editPost}) => {
   const monthDay = dateObj.format('M/D');
   const time = dateObj.format('hh:mma');
   return (
-  <Card style={{width: '30%'}}>
+  <Card style={{width: '70%'}}>
   <CardHeader
       subtitle={monthDay + ' ' + time}
     />
