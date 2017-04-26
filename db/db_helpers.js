@@ -19,6 +19,10 @@ module.exports.savePost = (userId, postData, postType) => {
   });
 }
 
+// this.savePost('58ff84b8e3004244fcf18bc1', user1_scheduledPost, 'scheduled');
+// this.savePost('58ff84b8e3004244fcf18bc1', user1_postedPost, 'posted');
+
+
 module.exports.deletePost = (userId, postId) => {
   return User.updateAsync(
     {_id: userId},
@@ -50,9 +54,11 @@ module.exports.retrievePosts = (postIds) => {
 module.exports.showUserPosts = (email, typeofPost) => {
   return User.findOneAsync({email: email})
   .then(data => {
-    // console.log('data pls', data);
-    if (!data) throw ('invalid user');
-    else return module.exports.retrievePosts(data[typeofPost])
+    if (!data) {
+      throw ('invalid user');
+    } else {
+      return this.retrievePosts(data[typeofPost]);
+    }
   })
 }
 
@@ -96,15 +102,12 @@ module.exports.checkScheduledEvent = (dateTime) => {
     { $and: [
         { 'scheduledDateTime': { $lte: new Date() } },
         { 'status': 'scheduled' },
-        // { $or: [{ postedFacebookId: null,
-        //          postedTwitterId: null }]}
       ]
     }
   )
   .then(data => {
-    // console.log('what is the data we get?', data);
     return data;
-  })
+  });
 }
 
 module.exports.getScheduledEvents = () => {

@@ -52,7 +52,7 @@ module.exports.attachSMStats = (postedPosts, email) => {
   let tweetWithStats = '';
   let fbPostWithStats = '';
   let referenceIDs = {};
-  console.log('posted posts in attachSNStats rh:', postedPosts);
+
   postedPosts = postedPosts.map(post => post.toObject());
 
   postedPosts.forEach((post, i) => {
@@ -124,10 +124,8 @@ module.exports.sendUserPosts = (req, res, next) => {
   })
   .catch((err) => {
     if (err === 'invalid user') { 
-      
       res.status(401).end(); 
     } else { 
-      console.log('500 err in send user posts, rh :', err);
       res.status(500).end(); 
     }
   })
@@ -155,7 +153,7 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
       else res.status(500).end();
     });
   } else if (req.params.post_type === 'now') {
-    module.exports.sendPostsNow(req, res, next);
+    this.sendPostsNow(req, res, next);
   }
 };
 
@@ -217,7 +215,6 @@ module.exports.sendScheduledPost = (post) => {
   })
   .catch((err) => {
     console.log(err);
-
   });
 };
 
@@ -307,11 +304,9 @@ module.exports.getUserInfo = (req, res, next) => {
       return dbh.showUserPosts(userCred.email, 'posted')
     })
     .then((postedPosts) => {
-      console.log('still good, its an issue with postedposts')
       return this.attachSMStats(postedPosts, userCred.email);
     })
     .then((postedPostswithSMStats) => {
-      console.log('after posted posts');
       userCred.pastPosts = postedPostswithSMStats;
       res.send(userCred);
     })
@@ -324,3 +319,5 @@ module.exports.getUserInfo = (req, res, next) => {
     res.send({ email: '', twitter: false, facebook: false });
   }
 };
+
+

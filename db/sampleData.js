@@ -9,7 +9,8 @@ module.exports = {
     text: 'hello fans',
     postToTwitter: true,
     postToFacebook: false,
-    date: new Date(),
+    date: new Date(2018, 1, 1),
+    scheduledDateTime: new Date(2018, 1, 1),
     status: 'scheduled',
     imgUrl: 'https://previews.123rf.com/images/joshjcurtis/joshjcurtis0909/joshjcurtis090900006/5581021-Honey-Bunny-Stock-Vector.jpg'
   },
@@ -23,9 +24,9 @@ module.exports = {
   },
   user1_postedPost: {
     text: 'so long fans',
-    postToTwitter: false,
-    postToFacebook: true,
-    date: new Date("2016-05-18T16:00:00Z"),
+    postToTwitter: true,
+    postedTwitterId: '855214450831310848',
+    scheduledDateTime: new Date("2016-05-18T16:00:00Z"),
     status: 'posted',
     imgUrl: 'https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg'
   }

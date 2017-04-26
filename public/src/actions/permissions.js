@@ -63,7 +63,9 @@ export const handleNowSubmit = () => {
 export const handlePostSubmit = () => {
   return (dispatch, getState) => {
   const st = getState().main;
+  console.log(st.scheduledDateTime)
   const passSt = {
+    scheduledDateTime: st.scheduledDateTime,
     email: st.email,
     text: st.text,
     img: st.img,
@@ -116,7 +118,6 @@ export const handleScheduleChange = (e) => {
   }
 }
 
-
 export const handleClearImg = () => {
   return {
     type: 'CLEAR_IMG',
@@ -128,3 +129,31 @@ export const handleResetPostFields = () => {
   }
 }
 
+export const deletePost = (e, post) => {
+  e.preventDefault();
+
+  return (dispatch, getState) => {
+    return util.deletePost(post._id)
+    .then((res) => {
+      return util.retrievePosts('scheduled', getState().main.email);
+    })
+    .then((res) => {
+       dispatch({
+        type: 'UPDATE_SCHEDULED_POSTS',
+        payload: res.data
+       });
+    })
+    .catch((err) => {
+      console.log('failure deleting scheduled post', err);
+    })
+  }
+}
+
+export const populateCreatePost = (e, post) => {
+  e.preventDefault();
+
+  return {
+    type: 'POPULATE_CREATE_POST',
+    payload: post
+  }
+}

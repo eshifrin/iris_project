@@ -24,11 +24,9 @@ const styles = {
 };
 
 const FuturePostList = ({scheduledPosts, deletePost, editPost}) => {
-
   const posts = scheduledPosts.map(post => 
      <ListItem key={post._id}>
-        <FuturePostListItem post={post} deletePost={deletePost} editPost={editPost}/>
-        
+        <FuturePostListItem post={post} deletePost={(e) => deletePost(e, post)} editPost={(e) => editPost(e, post)}/>
     </ListItem>)
 
   return (
