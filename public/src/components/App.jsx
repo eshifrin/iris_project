@@ -42,23 +42,23 @@ injectTapEventPlugin();
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.uploadImg = this.uploadImg.bind(this);
-    this.handlePostSubmit = this.handlePostSubmit.bind(this);
-    this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleFbLogoClick = this.handleFbLogoClick.bind(this);
-    this.handleTwLogoClick = this.handleTwLogoClick.bind(this);
-    this.handleNowSubmit = this.handleNowSubmit.bind(this);
-    this.deletePost = this.deletePost.bind(this);
-    this.scheduleNewPost = this.scheduleNewPost.bind(this);
-    this.handleScheduleChange = this.handleScheduleChange.bind(this);
-    this.getPastPosts = this.getPastPosts.bind(this);
-    this.getScheduledPosts = this.getScheduledPosts.bind(this);
-    this.getPosts = this.getPosts.bind(this);
-    this.editPost = this.editPost.bind(this);
-    this.handleResubmitClick = this.handleResubmitClick.bind(this);
-    this.getPostById = this.getPostById.bind(this);
-    this.handleClearImg = this.handleClearImg.bind(this);
-    this.handleResetPostFields = this.handleResetPostFields.bind(this);
+    // this.uploadImg = this.uploadImg.bind(this);
+    // this.handlePostSubmit = this.handlePostSubmit.bind(this);
+    // this.handleTextChange = this.handleTextChange.bind(this);
+    // this.handleFbLogoClick = this.handleFbLogoClick.bind(this);
+    // this.handleTwLogoClick = this.handleTwLogoClick.bind(this);
+    // this.handleNowSubmit = this.handleNowSubmit.bind(this);
+    // this.deletePost = this.deletePost.bind(this);
+    // this.scheduleNewPost = this.scheduleNewPost.bind(this);
+    // this.handleScheduleChange = this.handleScheduleChange.bind(this);
+    // this.getPastPosts = this.getPastPosts.bind(this);
+    // this.getScheduledPosts = this.getScheduledPosts.bind(this);
+    // this.getPosts = this.getPosts.bind(this);
+    // this.editPost = this.editPost.bind(this);
+    // this.handleResubmitClick = this.handleResubmitClick.bind(this);
+    // this.getPostById = this.getPostById.bind(this);
+    // this.handleClearImg = this.handleClearImg.bind(this);
+    // this.handleResetPostFields = this.handleResetPostFields.bind(this);
   }
 
   componentWillMount() {
@@ -104,21 +104,21 @@ class App extends React.Component {
     });
   }
 
-  uploadImg(e) {
-    e.preventDefault();
-    const file = e.target.files[0];
-    const reader = new FileReader(file);
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      this.setState({
-        img: reader.result,
-      });
-      axios.post('/api/image/imgLink', { image: reader.result })
-      .then(res =>
-        this.setState({ imgUrl: res.data }),
-      );
-    };
-  }
+  // uploadImg(e) {
+  //   e.preventDefault();
+  //   const file = e.target.files[0];
+  //   const reader = new FileReader(file);
+  //   reader.readAsDataURL(file);
+  //   reader.onloadend = () => {
+  //     this.setState({
+  //       img: reader.result,
+  //     });
+  //     axios.post('/api/image/imgLink', { image: reader.result })
+  //     .then(res =>
+  //       this.setState({ imgUrl: res.data }),
+  //     );
+  //   };
+  // }
 
 
   deletePost(e, post) {
@@ -145,58 +145,58 @@ class App extends React.Component {
     });
   }
 
-  handleTextChange(e) {
-    const text = e.target.value;
-    this.setState({ text });
-  }
+  // handleTextChange(e) {
+  //   const text = e.target.value;
+  //   this.setState({ text });
+  // }
 
-  handleScheduleChange(e) {
-    e.preventDefault();
-    console.log('schedule change args: ', arguments);
-    const scheduledDateTime = moment(e.target.value).utc().toISOString();
-    this.setState({ scheduledDateTime });
-  }
+  // handleScheduleChange(e) {
+  //   e.preventDefault();
+  //   console.log('schedule change args: ', arguments);
+  //   const scheduledDateTime = moment(e.target.value).utc().toISOString();
+  //   this.setState({ scheduledDateTime });
+  // }
 
-  handleFbLogoClick(e) {
-    this.setState({ postToFacebook: !this.state.postToFacebook });
-  }
+  // handleFbLogoClick(e) {
+  //   this.setState({ postToFacebook: !this.state.postToFacebook });
+  // }
 
-  handleTwLogoClick(e) {
-    this.setState({ postToTwitter: !this.state.postToTwitter });
-  }
+  // handleTwLogoClick(e) {
+  //   this.setState({ postToTwitter: !this.state.postToTwitter });
+  // }
 
-  scheduleNewPost(e, when) {
-    const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
-    e.preventDefault();
-    util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
-    .then((results) => {
-      console.log('Submit new post - status code:', results.status);
-      this.setState({
-        text: '',
-        scheduledDateTime: '',
-        updatingPostId: undefined,
-        newPostModal: false,
-        postToTwitter: false,
-        postToFacebook: false,
-        imgUrl: '',
-      });
-      this.getScheduledPosts();
-      this.getPastPosts();
-    })
-    .catch((err) => {
-      console.log('issue with posting scheduled posts', err);
-    });
-  }
+  // scheduleNewPost(e, when) {
+  //   const { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId } = this.state;
+  //   e.preventDefault();
+  //   util.submitNewPost(when, { email, text, img, scheduledDateTime, imgUrl, postToFacebook, postToTwitter, updatingPostId })
+  //   .then((results) => {
+  //     console.log('Submit new post - status code:', results.status);
+  //     this.setState({
+  //       text: '',
+  //       scheduledDateTime: '',
+  //       updatingPostId: undefined,
+  //       newPostModal: false,
+  //       postToTwitter: false,
+  //       postToFacebook: false,
+  //       imgUrl: '',
+  //     });
+  //     this.getScheduledPosts();
+  //     this.getPastPosts();
+  //   })
+  //   .catch((err) => {
+  //     console.log('issue with posting scheduled posts', err);
+  //   });
+  // }
 
   handlePostSubmit(e) {
     e.preventDefault();
     this.scheduleNewPost(e, 'scheduled');
   }
 
-  handleNowSubmit(e) {
-    e.preventDefault();
-    this.scheduleNewPost(e, 'now');
-  }
+  // handleNowSubmit(e) {
+  //   e.preventDefault();
+  //   this.scheduleNewPost(e, 'now');
+  // }
 
   handleResubmitClick(e, post) {
     e.preventDefault();
@@ -215,23 +215,23 @@ class App extends React.Component {
     })
   }
 
-  handleClearImg(e) {
-    e.preventDefault();
-    this.setState({ img: '', imgUrl: '' });
-  }
+  // handleClearImg(e) {
+  //   e.preventDefault();
+  //   this.setState({ img: '', imgUrl: '' });
+  // }
 
 
-  handleResetPostFields(e) {
-    e.preventDefault();
-    this.setState({
-      // postToTwitter: true,
-      // postToFacebook: true,
-      text: '',
-      img: '',
-      imgUrl: '',
-      scheduledDateTime: '',
-    });
-  }
+  // handleResetPostFields(e) {
+  //   e.preventDefault();
+  //   this.setState({
+  //     // postToTwitter: true,
+  //     // postToFacebook: true,
+  //     text: '',
+  //     img: '',
+  //     imgUrl: '',
+  //     scheduledDateTime: '',
+  //   });
+  // }
 
   render() {
     // const { imgUrl, text, scheduledPosts, postToTwitter, pastPosts, postToFacebook, scheduledDateTime, newPostModal} = this.state;
@@ -323,7 +323,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     modalToggle: () => {
       dispatch(modalToggle());
-    }
+    },
   };
 };
 

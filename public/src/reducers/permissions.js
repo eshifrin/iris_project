@@ -91,7 +91,8 @@ const permissionsAndPostsReducer = (state = {
       scheduledDateTime: '',
     };
 
-  case 'POST':
+  case 'POST_NOW':
+  console.log('postnow reducer payload: ', action.payload);
   return {
     ...state,
     text: '',
@@ -101,6 +102,21 @@ const permissionsAndPostsReducer = (state = {
     postToTwitter: false,
     postToFacebook: false,
     imgUrl: '',
+    pastPosts: action.payload,
+  }
+
+  case 'POST_LATER':
+  console.log('postlater reducer payload: ', action.payload);
+  return {
+    ...state,
+    text: '',
+    scheduledDateTime: '',
+    updatingPostId: undefined,
+    newPostModal: false,
+    postToTwitter: false,
+    postToFacebook: false,
+    imgUrl: '',
+    scheduledPosts: action.payload,
   }
 
     default:

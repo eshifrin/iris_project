@@ -47,77 +47,90 @@ module.exports.getPostsById = (req, res, next) => {
   .catch(err => console.log('Error in getting posts by id in rh', err));
 };
 
+
+module.exports.attachSMStats = (postedPosts, email) => {
+  let tweetWithStats = '';
+  let fbPostWithStats = '';
+  let referenceIDs = {};
+  console.log('posted posts in attachSNStats rh:', postedPosts);
+  postedPosts = postedPosts.map(post => post.toObject());
+
+  postedPosts.forEach((post, i) => {
+    if (!!post.postedTwitterId) {
+      tweetWithStats += `${post.postedTwitterId},`;
+      referenceIDs[post.postedTwitterId] = i;
+    }
+
+    if (!!post.postedFacebookId) {
+      fbPostWithStats += `${post.postedFacebookId},`;
+      referenceIDs[post.postedFacebookId] = i;
+    }
+  });
+
+  tweetWithStats = tweetWithStats.slice(0, -1);
+  fbPostWithStats = fbPostWithStats.slice(0, -1);
+
+
+  let smStats = [];
+  smStats.push(sm.getTweetStats(email, tweetWithStats));
+  smStats.push(sm.getFbPostStats(email, fbPostWithStats));
+
+  return Promise.all(smStats)
+  .then((stats) => {
+    let twStats = stats[0];
+    let fbStats = stats[1];
+
+    twStats.forEach(tweet => {
+      let index = referenceIDs[tweet.id_str];
+      postedPosts[index].twFavCount = tweet.favorite_count;
+      postedPosts[index].twRetweetCount = tweet.retweet_count;
+    });
+
+    if (fbStats.data) {
+      Object.keys(fbStats.data).forEach(fbpostid => {
+        let index = referenceIDs[fbpostid];
+        postedPosts[index].fbLikeCount = fbStats.data[fbpostid].likes.summary.total_count;
+        postedPosts[index].fbCommentCount = fbStats.data[fbpostid].comments.summary.total_count;
+      })
+    }
+    return
+  })
+  .then(() => {
+    return postedPosts;
+  });
+};
+
+
+
 // if authenticated, send posts
 // TOFIX: change function name to getPastPosts
 module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
   const email = url_parts.query.email;
+  const typeOfPost = req.params.post_type;
   let resultsWithStats = [];
   // TODO: Create new function for this big block of code
-  if (req.params.post_type === 'posted') {
-    dbh.showUserPosts(email, req.params.post_type)
-    .then((results) => {
-      resultsWithStats = results;
-      let tweetWithStats = '';
-      let fbPostWithStats = '';
-      for (let i = 0; i < results.length; i++) {
-        if (results[i].postedTwitterId !== null) {
-          tweetWithStats = `${tweetWithStats + results[i].postedTwitterId},`;
-        }
-        if (results[i].postedFacebookId !== null) {
-          fbPostWithStats = `${fbPostWithStats + results[i].postedFacebookId},`;
-        }
-      }
-      tweetWithStats = tweetWithStats.slice(0, -1);
-      fbPostWithStats = fbPostWithStats.slice(0, -1);
-      let smStats = [];
-      smStats.push(sm.getTweetStats(email, tweetWithStats));
-      smStats.push(sm.getFbPostStats(email, fbPostWithStats));
-      return Promise.all(smStats);
-    })
-    .then((stats) => {
-      for (let q = 0; q < resultsWithStats.length; q++) {
-        resultsWithStats[q] = resultsWithStats[q].toObject();
-      }
-      for (let i = 0; i < stats.length; i++) {
-        for (let k = 0; k < resultsWithStats.length; k++) {
-          if (resultsWithStats[k].postedTwitterId === stats[0][i].id_str) {
-            resultsWithStats[k].twFavCount = stats[0][i].favorite_count;
-            resultsWithStats[k].twRetweetCount = stats[0][i].retweet_count;
-            i++;
-          }
-        }
-      }
-      const fbPostIds = Object.keys(stats[1].data);
-      for (let i = 0; i < resultsWithStats.length; i++) {
-        for (let k = 0; k < fbPostIds.length; k++) {
-          if (resultsWithStats[i].postedFacebookId === fbPostIds[k]) {
-            resultsWithStats[i].fbLikeCount = stats[1].data[fbPostIds[k]].likes.summary.total_count;
-            resultsWithStats[i].fbCommentCount = stats[1].data[fbPostIds[k]].comments.summary.total_count;
-          }
-        }
-      }
-      return resultsWithStats;
-    })
-    .catch((err) => {
-      console.log('Error compiling POSTED Tweets', err);
-    })
-    .then((resultsWithStats) => {
-      res.status(200).json(resultsWithStats);
-    })
-    .catch((err) => {
-      if (err === 'invalid user') res.status(404).end();
-      else res.status(500).end();
-    });
-  } else {
-    dbh.showUserPosts(email, req.params.post_type)
-    .then((results) => {
-      res.status(200).json(results);
-    })
-    .catch((err) => {
-      console.log('Error compiling non-posted Tweets', err);
-    });
-  }
+  
+  return dbh.showUserPosts(email, typeOfPost)
+  .then((posts) => {
+    if (typeOfPost === 'posted') { 
+      return this.attachSMStats(posts, email);
+    } else {
+      return posts;
+    }
+  })
+  .then((posts) => {
+    res.status(200).json(posts);
+  })
+  .catch((err) => {
+    if (err === 'invalid user') { 
+      
+      res.status(401).end(); 
+    } else { 
+      console.log('500 err in send user posts, rh :', err);
+      res.status(500).end(); 
+    }
+  })
 };
 
 // if authenticated, send posts
@@ -167,7 +180,8 @@ module.exports.sendFBPost = (userCred, postInfo) => sm.FBPost(userCred.facebook_
       return 'Unsuccessful Post';
     });
 
-module.exports.sendScheduledPosts = () => dbh.getScheduledEvents()
+module.exports.sendScheduledPosts = () => {
+  dbh.getScheduledEvents()
   .then((scheduledPosts) => {
     console.log('here are the scheduledPosts', scheduledPosts)
     return Promise.map(scheduledPosts, (post) => {
@@ -177,6 +191,7 @@ module.exports.sendScheduledPosts = () => dbh.getScheduledEvents()
   .catch((err) => {
     console.log('error for sendingScheduledPost in rh', err);
   });
+}
 
 module.exports.sendScheduledPost = (post) => {
   let userCredentials = '';
@@ -209,7 +224,6 @@ module.exports.sendScheduledPost = (post) => {
 };
 
 module.exports.sendPostsNow = (req, res, next) => {
-  console.log('what is in this req.body?', req.body);
   const email = req.body.email;
   const postInfo = {
     text: req.body.text,
@@ -239,13 +253,14 @@ module.exports.sendPostsNow = (req, res, next) => {
     if (postInfo.postToTwitter) posts.push(this.sendTweet(userCredentials, postInfo))
     return Promise.all(posts);
   })
+  .then((posts) => {
+    console.log('posts after send tweet in sendposts now in rh : ', posts);
+    res.send(posts);
+  })
   .catch((err) => {
     console.log(err);
     res.status(404).send('Not found');
   })
-  .then((posts) => {
-    res.send(posts);
-  });
 };
 
 module.exports.userCheck = (req, res, next) => {
@@ -282,36 +297,34 @@ module.exports.deletePost = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  //look up Promise.reduce, refactor for no nested promises
   if (req.user) {
     let userCred = {};
     userCred.email = req.session.email;
+
     dbh.getUser(userCred.email)
     .then((data) => {
       userCred.twitter = !!(data.twitter_token);
       userCred.facebook = !!(data.facebook_id);
-      //dont nest
-      dbh.showUserPosts(userCred.email, 'scheduled')
-      .then((results) => {
-        userCred.scheduledPosts = results;
-        dbh.showUserPosts(userCred.email, 'posted')
-        .then((posts) => {
-          userCred.pastPosts = posts;
-          res.send(userCred);
-        })
-        .catch((err) => {
-          console.log('err in getting past results : ', err);
-          if (err === 'invalid user') res.status(404).end();
-          else res.status(500).end();
-        });
-      })
-      .catch((err) => {
-        console.log('error in getting scheduled results ');
-        if (err === 'invalid user') res.status(404).end();
-        else res.status(500).end();
-      });
+      return dbh.showUserPosts(userCred.email, 'scheduled')
     })
-    .catch(console.log)
+    .then((results) => {
+      userCred.scheduledPosts = results;
+      return dbh.showUserPosts(userCred.email, 'posted')
+    })
+    .then((postedPosts) => {
+      console.log('still good, its an issue with postedposts')
+      return this.attachSMStats(postedPosts, userCred.email);
+    })
+    .then((postedPostswithSMStats) => {
+      console.log('after posted posts');
+      userCred.pastPosts = postedPostswithSMStats;
+      res.send(userCred);
+    })
+    .catch((err) => {
+      console.log('error in getting scheduled results ', err);
+      if (err === 'invalid user') res.status(404).end();
+      else res.status(500).end();
+    })
   } else {
     res.send({ email: '', twitter: false, facebook: false });
   }

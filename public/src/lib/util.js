@@ -13,12 +13,14 @@ const getPostByPostId = (postId) => {
 }
 
 const retrievePosts = (type, email) => {
+  console.log('util retreive posts args: ', type, email)
   return axios.get(routes[type], 
             { params: { email: email,
                         post_type: type } });
 }
 
 const submitNewPost = (type, newPost) => {
+  console.log('util submit new post args:', type, newPost);
   return axios.post(routes[type], newPost);
 }
 

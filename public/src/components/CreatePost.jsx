@@ -16,7 +16,7 @@ class CreatePost extends React.Component {
     // console.log('this in cr eate post: ', this);
     return (
     <div>
-      <form onSubmit={(e) => this.props.handlePostSubmit(e)}>
+      <form>
         {!this.props.postToTwitter && !this.props.postToFacebook && <h4 style={style}>Please choose at least one social site to share your post</h4>}
         {(this.props.imgUrl.length !== 0) && <img src={this.props.imgUrl} style={{width: 100}} />}
         {(this.props.postToTwitter || this.props.postToFacebook) && <h4>Get ready to share!</h4>}
@@ -27,9 +27,9 @@ class CreatePost extends React.Component {
           handleClearImg={this.props.handleClearImg}
         />
       </form>
-        <FlatButton primary={true} onClick={this.props.handleResetPostFields}>Reset Fields</FlatButton>
+        <FlatButton primary={true} onClick={this.props.handleResetPostFields}>Reset Form</FlatButton>
         { (this.props.postToFacebook || this.props.postToTwitter) &&  <FlatButton primary={true} value="postnow" onClick={this.props.handleNowSubmit}>Post Now</FlatButton> }
-        { (this.props.postToFacebook || this.props.postToTwitter) &&<FlatButton primary={true} value="schedulepost" onClick={handlePostSubmit}>Schedule Post</FlatButton> }
+        { (this.props.postToFacebook || this.props.postToTwitter) &&<FlatButton primary={true} value="schedulepost" onClick={this.props.handlePostSubmit}>Schedule Post</FlatButton> }
 
     </div>
   )}
@@ -62,7 +62,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(handleResetPostFields());
     },
     handleNowSubmit: () => {
-      dispatch(handleNowSubmit());
+      dispatch(handleNowSubmit('now'));
     },
     handlePostSubmit: () => {
       dispatch(handlePostSubmit());
