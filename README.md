@@ -1,4 +1,5 @@
-# Iris
+![Title](https://image.ibb.co/gg2ST5/logo3.png)
+
 A one-stop social media manger for posting to Facebook and Twitter.
 
 ## Live Playground
@@ -28,23 +29,31 @@ This project is created by the following members from Oasis72 at Hack Reactor.
     2. [System Architecture](#system-architecture)
     3. [Database Schemas](#database-schemas)
   3. [Contributing](#contributing)
-  4. [Useful Commands](#useful-commands)
 
 ## Features
 
-Login.
+Login to immediately schedule posts to Facebook and Twitter.
 
-* **
+* **Create new post** and post immediately to Facebook and Twitter.
+* **Schedule posts** to Facebook and Twitter at a specific future time. 
+* **Calendar view** of Facebook posts and Tweets that are still pending to be sent.
+* **Check history and stats** of Facebook posts and Tweets which are already sent.
+
+// Add features gif here.
 
 ## Architecture Overview
 
-## Tech Stack
+### Tech Stack
 
-The front-end is written in React and Redux, and the back-end uses Node/Express and a Mongo database, with Mongoose as the ORM.
+The front-end is written in React and Redux, using Auth0 for authentication. The back-end uses Node/Express and a Mongo database, with Mongoose as the ORM.
 
-## System Architecture
+### System Architecture
 
-## Database Schemas
+![Database schemas](https://image.ibb.co/mUqg5k/diagram.png)
+
+### Database Schemas
+
+![Database schemas](https://image.ibb.co/d51zrQ/schema.png)
 
 There are two main entities in the database: **users** and **posts**.
 
