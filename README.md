@@ -1,4 +1,4 @@
-# Iris aaa
+# Iris
 > A one-stop social media manger for posting to Facebook and Twitter.
 
 ## Live Playground
@@ -22,17 +22,29 @@ This project is created by the following members from Oasis72 at Hack Reactor.
 
 ## Table of Contents
 
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-    1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
-1. [Roadmap](#roadmap)
-1. [Contributing](#contributing)
+  1. [Features](#features)
+  2. [Architecture Overview](#architecture-overview)
+    1. [Tech Stack](#tech-stack)
+    2. [System Architecture](#system-architecture)
+    3. [Database Schemas](#database-schemas)
+  3. [Contributing](#contributing)
+    1. [Setting up XCode](#setting-up-xcode)
+    2. [Setting up Postgres](#setting-up-postgres)
+  4. [Useful Commands](#useful-commands)
 
-## Usage
+## Features
 
-> Some usage instructions
+> Some features
+
+## Architecture Overview
+
+## Tech Stack
+
+## System Architecture
+
+## Database Schemas
+
+## Contributing
 
 ## Requirements
 
