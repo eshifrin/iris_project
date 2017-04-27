@@ -1,13 +1,24 @@
-# Project Name
+# Iris
+> A one-stop social media manger for posting to Facebook and Twitter.
 
-> Pithy project description
+## Live Playground
+
+For example of the social media manager in action, go to https://herokuapp.com/iris.
+
+OR
+
+To run that demo on your own computer:
+
+- Clone this repository
+- `npm install`
+- Visit http://localhost:3000/
 
 ## Team
 
-  - teamMember
-  - teamMember
-  - teamMember
-  - teamMember
+This project is created by the following members from Oasis72 at Hack Reactor.
+  - Apruva Shastry ([@apurvaaa](https://github.com/apurvaaa))
+  - Eugene Shifrin ([@eshifrin](https://github.com/eshifrin))
+  - Gary Wong ([@gary-w](https://github.com/gary-w))
 
 ## Table of Contents
 
@@ -31,15 +42,27 @@
 - etc
 - etc
 
-## Development
-
+## Getting Started
 ### Installing Dependencies
 
 From within the root directory:
 
-```sh
+```
 npm install
-npm install -g karma-cli
+```
+
+### Include .env variables
+```
+AUTH0_CLIENT_ID
+AUTH0_DOMAIN
+AUTH0_CLIENT_SECRET
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+TW_KEY
+TW_SECRET
+FB_ID
+FB_SECRET
 ```
 
 ### Roadmap
@@ -47,6 +70,6 @@ npm install -g karma-cli
 View the project roadmap [here](LINK_TO_DOC)
 
 
-## Contributing
+## Copyright & License 
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+Copyright (c) 2017 Oasis72 - Released under the [MIT license](LICENSE).
