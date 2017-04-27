@@ -35,6 +35,20 @@ export const uploadImg = (e) => {
   }
 }
 
+export const switchScheduledView = (e) => {
+
+  return (dispatch, getState) => {
+    const calledCalendar = e.target.getAttribute('name') === 'calendarIcon'
+    const calendarView = getState().main.calendarView
+    console.log('called Calendar?', calledCalendar)
+    console.log('calendarView?', calendarView)
+
+    if (calledCalendar !== calendarView) {
+      dispatch({type: 'SWITCH_SCHEDULED_VIEW'})
+    } 
+  }
+}
+
 export const handleNowSubmit = () => {
   return (dispatch, getState) => {
   const st = getState().main;

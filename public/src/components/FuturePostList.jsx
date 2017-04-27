@@ -32,7 +32,6 @@ const FuturePostList = ({scheduledPosts, deletePost, editPost}) => {
   return (
   
   <div>
-    {(scheduledPosts.length !== 0) && <h2 style={styles.headline}>Scheduled Posts</h2>}
       {(scheduledPosts.length === 0) && <h5>You have not scheduled any messages yet!</h5>}
       <List>
       <Paper zDepth={2}>
