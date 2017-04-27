@@ -79,7 +79,7 @@ export const handlePostSubmit = () => {
   const st = getState().main;
   console.log(st.scheduledDateTime)
   const passSt = {
-    scheduledDateTime: st.scheduledDateTime,
+    scheduledDateTime: st.scheduledDateTime || new Date(),
     email: st.email,
     text: st.text,
     img: st.img,
