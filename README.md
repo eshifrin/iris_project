@@ -28,8 +28,6 @@ This project is created by the following members from Oasis72 at Hack Reactor.
     2. [System Architecture](#system-architecture)
     3. [Database Schemas](#database-schemas)
   3. [Contributing](#contributing)
-    1. [Setting up XCode](#setting-up-xcode)
-    2. [Setting up Postgres](#setting-up-postgres)
   4. [Useful Commands](#useful-commands)
 
 ## Features
