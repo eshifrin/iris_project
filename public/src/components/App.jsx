@@ -99,6 +99,7 @@ class App extends React.Component {
 
           </Tabs>
 
+          <Loader />
 
           </div>
         }

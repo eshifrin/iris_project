@@ -1,6 +1,9 @@
+import React from 'react';
+import loader from '../../../public/dist/img/loader.gif';
+
 const Loader = () => (
   <div>
-    <h1>this is loader</h1>
+    <img src={loader} />
   </div>
   );
 

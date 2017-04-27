@@ -26,5 +26,4 @@ const FuturePostListItem = ({ post, deletePost, editPost }) => {
   );
 };
 
-
 export default FuturePostListItem;

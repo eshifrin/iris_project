@@ -22,7 +22,6 @@ function Event({ event }) {
 const formats = {
   dayFormat: (date, culture, localizer) => localizer.format(date, 'M/DD', culture),
   eventTimeRangeFormat: ({ start, end }, culture, localizer) => localizer.format(start, 'h:mm a'),
-
 };
 
 const Calendar = props => (
