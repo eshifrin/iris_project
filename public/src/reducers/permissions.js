@@ -75,7 +75,7 @@ const permissionsAndPostsReducer = (state = initialState, action) => {
         img: '',
         imgUrl: '',
       };
-    
+
     case 'RESET_POST_FIELDS':
       return {
         ...state,

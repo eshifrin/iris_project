@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { yellow800 } from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -14,16 +16,26 @@ import FuturePostList from './FuturePostList';
 import * as util from '../lib/util';
 import PastPostList from './PastPostList';
 import CreatePost from './CreatePost';
-import { getCurrentUserInfo, 
-          modalToggle, 
-          deletePost, 
+import { getCurrentUserInfo,
+          modalToggle,
+          deletePost,
           populateCreatePost,
           switchScheduledView
         } from '../actions/permissions';
 
+
 injectTapEventPlugin();
 import Calendar from './Calendar'
 
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: yellow800,
+  },
+  appBar: {
+    color: 'white',
+    textColor: yellow800,
+  },
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -37,7 +49,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <NavBar
             login={!this.props.isLoggedIn}
@@ -46,28 +58,26 @@ class App extends React.Component {
           />
 
           {this.props.isLoggedIn &&
-
           <div>
-
-          <FlatButton 
-            label="Create new Post" 
-            onTouchTap={this.props.modalToggle} 
-            primary={true} 
+            <FlatButton
+            label="Create new Post"
+            onTouchTap={this.props.modalToggle}
+            primary={true}
           />
-            
+
           <Tabs>
 
             <Tab label='Scheduled Posts'>
               <div>
               <i className={`fa fa-list fa-4x
-                 ${this.props.calendarView ? 'toggle-off' : 'toggle-on'}`} 
+                 ${this.props.calendarView ? 'toggle-off' : 'toggle-on'}`}
                  name="listIcon"
-                 aria-hidden="true" 
+                 aria-hidden="true"
                  onClick={this.props.switchScheduledViewClick} />
               <i className={`fa fa-calendar fa-4x
                  ${this.props.calendarView ? 'toggle-on' : 'toggle-off'}`}
                  name="calendarIcon"
-                 aria-hidden="true" 
+                 aria-hidden="true"
                  onClick={this.props.switchScheduledViewClick} />
 
               </div>
@@ -77,17 +87,17 @@ class App extends React.Component {
                 <Calendar scheduledPosts={this.props.scheduledPosts}/>
               </div>
               :
-              <FuturePostList 
-                scheduledPosts={this.props.scheduledPosts} 
-                deletePost={this.props.deletePostClick} 
+              <FuturePostList
+                scheduledPosts={this.props.scheduledPosts}
+                deletePost={this.props.deletePostClick}
                 editPost={this.props.editPostClick} />
               }
 
             </Tab>
 
             <Tab label='History'>
-              <PastPostList 
-                pastPosts={this.props.pastPosts} 
+              <PastPostList
+                pastPosts={this.props.pastPosts}
                 handleResubmitClick={this.props.editPostClick}/>
             </Tab>
 
@@ -97,11 +107,10 @@ class App extends React.Component {
             title="New Post"
             modal={false}
             open={this.props.newPostModal}
-            onRequestClose={this.props.modalToggle} 
+            onRequestClose={this.props.modalToggle}
           >
             <CreatePost/>
           </Dialog>
-
           </div>
         }
 
@@ -109,7 +118,6 @@ class App extends React.Component {
           <a href="https://www.iubenda.com/privacy-policy/8099712">Our Privacy Policy</a>
         </footer>
       </div>
-
 
       </MuiThemeProvider>
     );
