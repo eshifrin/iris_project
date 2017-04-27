@@ -6,7 +6,9 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import CreatePost from './CreatePost';
 
 const propTypes = {
   login: PropTypes.bool.isRequired,
@@ -14,7 +16,7 @@ const propTypes = {
   facebook: PropTypes.bool.isRequired,
 };
 
-const NavBar = ({ login, twitter, facebook }) => {
+const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
   const ButtonStyleLive = {
     backgroundColor: 'transparent',
     color: yellow800,
@@ -34,10 +36,10 @@ const NavBar = ({ login, twitter, facebook }) => {
       targetOrigin={{horizontal: 'right', vertical: 'top'}}
       anchorOrigin={{horizontal: 'right', vertical: 'top'}}
     >
-      {twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleLive}/>} primaryText={<FlatButton href="/twitter" hoverColor={'#e6e6e6'}> Verify Twitter </FlatButton>} /> }
-      {!twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/twitter" hoverColor={'#e6e6e6'}> Unlink Twitter </FlatButton>} /> }
-      {facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleLive}/>} primaryText={<FlatButton href="/facebook" hoverColor={'#e6e6e6'}> Verify Facebook</FlatButton> } /> }
-      {!facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/facebook" hoverColor={'#e6e6e6'}> Unlink Facebook</FlatButton> } /> }
+      {twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleLive}/>} primaryText={<FlatButton href="/twitter" hoverColor={'#e6e6e6'}> Verify</FlatButton>} /> }
+      {!twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/twitter" hoverColor={'#e6e6e6'}> Unlink</FlatButton>} /> }
+      {facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleLive}/>} primaryText={<FlatButton href="/facebook" hoverColor={'#e6e6e6'}> Verify</FlatButton> } /> }
+      {!facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/facebook" hoverColor={'#e6e6e6'}> Unlink</FlatButton> } /> }
       <MenuItem primaryText={<FlatButton href='/logout' label='Log Out' hoverColor={'#e6e6e6'}/>} />
     </IconMenu>
   );
@@ -48,10 +50,22 @@ const NavBar = ({ login, twitter, facebook }) => {
         showMenuIconButton={false}
         zDepth={1}
         iconElementRight={login ? <FlatButton href={loginLogoutHref} style={ButtonStyleLive} label={loginOrLogout} /> : <div>
-          <FlatButton href={loginLogoutHref} style={ButtonStyleDead} label={loginOrLogout} />
+          <FlatButton
+            label="New Post"
+            onTouchTap={modalToggle}
+            primary={true}
+          />
           <Logged />
           </div>}
       />
+      <Dialog
+        title="New Post"
+        modal={false}
+        open={newPostModal}
+        onRequestClose={modalToggle}
+      >
+        <CreatePost/>
+      </Dialog>
 	  </div>
   );
 };

@@ -55,15 +55,13 @@ class App extends React.Component {
             login={!this.props.isLoggedIn}
             twitter={!this.props.twitterAuthenticated}
             facebook={!this.props.facebookAuthenticated}
+            modalToggle={this.props.modalToggle}
+            newPostModal={this.props.newPostModal}
           />
 
           {this.props.isLoggedIn &&
           <div>
-            <FlatButton
-            label="Create new Post"
-            onTouchTap={this.props.modalToggle}
-            primary={true}
-          />
+
 
           <Tabs>
 
@@ -103,14 +101,7 @@ class App extends React.Component {
 
           </Tabs>
 
-          <Dialog
-            title="New Post"
-            modal={false}
-            open={this.props.newPostModal}
-            onRequestClose={this.props.modalToggle}
-          >
-            <CreatePost/>
-          </Dialog>
+
           </div>
         }
 
