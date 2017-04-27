@@ -10,12 +10,11 @@ const propTypes = {
 
 const DateTimePicker = ({ handleScheduleChange, scheduledDateTime }) => {
   const dateObj = (moment(scheduledDateTime)).format('YYYY-MM-DDTHH:mm');
-  return(
+  return (
     <div>
-
-        <input type="datetime-local" name="datetime" value={dateObj} onChange={handleScheduleChange}/>
+      <input type="datetime-local" name="datetime" value={dateObj} onChange={handleScheduleChange} />
     </div>
-  )
-}
+  );
+};
 
 export default DateTimePicker;

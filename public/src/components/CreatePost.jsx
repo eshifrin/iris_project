@@ -6,15 +6,15 @@ import FlatButton from 'material-ui/FlatButton';
 import 'react-widgets/lib/less/react-widgets.less';
 import DTP from 'react-widgets/lib/DateTimePicker';
 import moment from 'moment';
-import momentLocalizer from 'react-widgets/lib/localizers/moment'
-momentLocalizer(moment);
-
+import momentLocalizer from 'react-widgets/lib/localizers/moment';
 import { handleScheduleChange,
         uploadImg,
         handleClearImg,
         handleResetPostFields,
         handleNowSubmit,
         handlePostSubmit } from '../actions/permissions';
+
+momentLocalizer(moment);
 
 class CreatePost extends React.Component {
     render() {

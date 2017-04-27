@@ -41,7 +41,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
   }
-
   componentWillMount() {
     this.props.getCurrentUserInfo();
 
@@ -61,7 +60,6 @@ class App extends React.Component {
 
           {this.props.isLoggedIn &&
           <div>
-
 
           <Tabs>
 

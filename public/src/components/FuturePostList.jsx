@@ -5,8 +5,6 @@ import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
-// import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-// import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';style={{width: 400}}
 
 const propTypes = {
   scheduledPosts: PropTypes.array.isRequired,
@@ -24,7 +22,7 @@ const styles = {
 };
 
 const FuturePostList = ({scheduledPosts, deletePost, editPost}) => {
-  const posts = scheduledPosts.map(post => 
+  const posts = scheduledPosts.map(post =>
      <ListItem key={post._id}>
         <FuturePostListItem post={post} deletePost={(e) => deletePost(e, post)} editPost={(e) => editPost(e, post)}/>
     </ListItem>)
@@ -39,7 +37,7 @@ const FuturePostList = ({scheduledPosts, deletePost, editPost}) => {
       </List>
   </div>)
 }
-  
+
 
 
 export default FuturePostList;

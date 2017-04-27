@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FuturePostList from './FuturePostList.jsx';
 import PastPostList from './PastPostList.jsx';
 import CreatePost from './CreatePost.jsx';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -30,30 +30,23 @@ const propTypes = {
 
 };
 
-
-
-const Main = ({ handleModalToggle, newPostModal, editPost, postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleFbLogoClick, handleScheduleChange, pastPosts, scheduledDateTime, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick }) => {
-
-  return(
-    <div>
-      <FlatButton label="Create new Post" onTouchTap={handleModalToggle} primary={true}/>
-      <Tabs>
-        <Tab label='Scheduled Posts'>
-        <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost} editPost={editPost}/>
-
-        </Tab>
-        
-        <Tab label='History'>
-        <PastPostList pastPosts={pastPosts} handleResubmitClick={handleResubmitClick}/>
-        </Tab>
-      </Tabs>
-      <Dialog
-          title="New Post"
-          modal={false}
-          open={newPostModal}
-          onRequestClose={handleModalToggle}
-        >
-
+const Main = ({ handleModalToggle, newPostModal, editPost, postToFacebook, postToTwitter, uploadImg, imgUrl, text, scheduleNewpost, deletePost, handleNowSubmit, handlePostSubmit, handleTextChange, scheduledPosts, handleFbLogoClick, handleScheduleChange, pastPosts, scheduledDateTime, handleResubmitClick, handleClearImg, handleResetPostFields, handleTwLogoClick }) => (
+  <div>
+    <FlatButton label="Create new Post" onTouchTap={handleModalToggle} primary />
+    <Tabs>
+      <Tab label="Scheduled Posts">
+        <FuturePostList scheduledPosts={scheduledPosts} deletePost={deletePost} editPost={editPost} />
+      </Tab>
+      <Tab label="History">
+        <PastPostList pastPosts={pastPosts} handleResubmitClick={handleResubmitClick} />
+      </Tab>
+    </Tabs>
+    <Dialog
+      title="New Post"
+      modal={false}
+      open={newPostModal}
+      onRequestClose={handleModalToggle}
+    >
       <CreatePost
         uploadImg={uploadImg}
         imgUrl={imgUrl}
@@ -72,9 +65,8 @@ const Main = ({ handleModalToggle, newPostModal, editPost, postToFacebook, postT
         handleResetPostFields={handleResetPostFields}
         handleTwLogoClick={handleTwLogoClick}
       />
-      </Dialog>
-    </div>
-  )
-}
+    </Dialog>
+  </div>
+  );
 
 export default Main;

@@ -1,10 +1,7 @@
-
-
-export default function (posts){
-  return posts.map(post => {
-
-    let startTime = new Date(post.scheduledDateTime)
-    var endTime = new Date(post.scheduledDateTime)
+export default function (posts) {
+  return posts.map((post) => {
+    const startTime = new Date(post.scheduledDateTime);
+    const endTime = new Date(post.scheduledDateTime);
     endTime.setSeconds(endTime.getSeconds() + 1);
 
     return {
@@ -12,7 +9,7 @@ export default function (posts){
       end: endTime,
       title: post.text,
       fb: post.postToFacebook,
-      tw: post.postToTwitter
+      tw: post.postToTwitter,
     };
   });
 }

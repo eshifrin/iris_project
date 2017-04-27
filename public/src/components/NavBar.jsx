@@ -28,36 +28,37 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
   };
   const loginOrLogout = login ? 'Login | Signup' : 'Log Out';
   const loginLogoutHref = login ? '/login' : '/logout';
-  const Logged = (props) => (
+  const Logged = props => (
     <IconMenu
       {...props}
       iconButtonElement={
         <IconButton><MoreVertIcon /></IconButton>
       }
-      targetOrigin={{horizontal: 'right', vertical: 'top'}}
-      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+      targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+      anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
     >
-      {twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleLive}/>} primaryText={<FlatButton href="/twitter" hoverColor={'#e6e6e6'}> Verify</FlatButton>} /> }
-      {!twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/twitter" hoverColor={'#e6e6e6'}> Unlink</FlatButton>} /> }
-      {facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleLive}/>} primaryText={<FlatButton href="/facebook" hoverColor={'#e6e6e6'}> Verify</FlatButton> } /> }
-      {!facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/facebook" hoverColor={'#e6e6e6'}> Unlink</FlatButton> } /> }
-      <MenuItem primaryText={<FlatButton href='/logout' label='Log Out' hoverColor={'#e6e6e6'}/>} />
+      {twitter && <MenuItem rightIcon={<i className="fa fa-twitter fa-2x" style={ButtonStyleLive} />} primaryText={<FlatButton href="/twitter" hoverColor={'#e6e6e6'}> Verify</FlatButton>} /> }
+      {!twitter && <MenuItem rightIcon={<i className="fa fa-twitter fa-2x" style={ButtonStyleDead} />} primaryText={<FlatButton href="/deauthorize/twitter" hoverColor={'#e6e6e6'}> Unlink</FlatButton>} /> }
+      {facebook && <MenuItem rightIcon={<i className="fa fa-facebook fa-2x"style={ButtonStyleLive} />} primaryText={<FlatButton href="/facebook" hoverColor={'#e6e6e6'}> Verify</FlatButton>} /> }
+      {!facebook && <MenuItem rightIcon={<i className="fa fa-facebook fa-2x"style={ButtonStyleDead} />} primaryText={<FlatButton href="/deauthorize/facebook" hoverColor={'#e6e6e6'}> Unlink</FlatButton>} /> }
+      <MenuItem primaryText={<FlatButton href="/logout" label="Log Out" hoverColor={'#e6e6e6'} />} />
     </IconMenu>
   );
 
   return (
     <div>
-      <AppBar title={<img src="./img/logo3.png" width={60}/>}
+      <AppBar
+        title={<img src="./img/logo3.png" width={60} />}
         showMenuIconButton={false}
         zDepth={1}
         iconElementRight={login ? <FlatButton href={loginLogoutHref} style={ButtonStyleLive} label={loginOrLogout} /> : <div>
           <FlatButton
             label="New Post"
             onTouchTap={modalToggle}
-            primary={true}
+            primary
           />
           <Logged />
-          </div>}
+        </div>}
       />
       <Dialog
 
@@ -82,9 +83,9 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
         }}
 
       >
-        <CreatePost/>
+        <CreatePost />
       </Dialog>
-	  </div>
+    </div>
   );
 };
 
