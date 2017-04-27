@@ -8,7 +8,7 @@ const propTypes = {
 
 const PhotoUpload = ({ uploadImg, handleClearImg }) => (
   <div>
-    <input type="file" id="userfile" name="userfile" onChange={uploadImg} />
+    <FlatButton><input type="file" id="userfile" name="userfile" onChange={uploadImg} /></FlatButton>
     <FlatButton primary={true} onClick={handleClearImg}>Clear Image</FlatButton>
   </div>
 );

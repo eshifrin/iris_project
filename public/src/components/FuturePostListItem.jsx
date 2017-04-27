@@ -3,12 +3,6 @@ import moment from 'moment';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 
-
-const propTypes = {
-
-};
-
-
 const FuturePostListItem = ({post, deletePost, editPost}) => {
   const dateObj = moment(post.scheduledDateTime)
   const monthDay = dateObj.format('M/D');
@@ -18,7 +12,6 @@ const FuturePostListItem = ({post, deletePost, editPost}) => {
   <CardHeader
       subtitle={monthDay + ' ' + time}
     />
-  
   
   <CardText> {post.text} </CardText>
   { (post.imgUrl.length !== 0) && <CardMedia >

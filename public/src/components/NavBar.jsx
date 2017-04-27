@@ -21,6 +21,7 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
     backgroundColor: 'transparent',
     color: yellow800,
   };
+
   const ButtonStyleDead = {
     backgroundColor: 'transparent',
     color: 'grey',

@@ -79,7 +79,7 @@ export const handlePostSubmit = () => {
   const st = getState().main;
   console.log(st.scheduledDateTime)
   const passSt = {
-    scheduledDateTime: st.scheduledDateTime,
+    scheduledDateTime: st.scheduledDateTime || new Date(),
     email: st.email,
     text: st.text,
     img: st.img,
@@ -128,7 +128,7 @@ export const twClick = () => {
 export const handleScheduleChange = (e) => {
   return {
     type: 'SCHEDULE_CHANGE',
-    payload: e.target.value,
+    payload: e,
   }
 }
 

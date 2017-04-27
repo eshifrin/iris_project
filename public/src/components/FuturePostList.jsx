@@ -3,10 +3,10 @@ import FuturePostListItem from './FuturePostListItem.jsx';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
-// import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-// import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';style={{width: 400}}
 import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
+// import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+// import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';style={{width: 400}}
 
 const propTypes = {
   scheduledPosts: PropTypes.array.isRequired,
@@ -30,7 +30,6 @@ const FuturePostList = ({scheduledPosts, deletePost, editPost}) => {
     </ListItem>)
 
   return (
-  
   <div>
       {(scheduledPosts.length === 0) && <h5>You have not scheduled any messages yet!</h5>}
       <List>
