@@ -50,17 +50,8 @@ There are two main entities in the database: **users** and **posts**.
 
 ## Contributing
 
-If you'd like to contribute to this repo, please feel free to submit a pull request.
+If you'd like to contribute to this repo, here are all th steps you need to get started.
 
-## Requirements
-
-- Node 6.4.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
-
-## Getting Started
 ### Installing Dependencies
 
 From within the root directory:
@@ -82,11 +73,6 @@ TW_SECRET
 FB_ID
 FB_SECRET
 ```
-
-### Roadmap
-
-View the project roadmap [here](LINK_TO_DOC)
-
 
 ## Copyright & License 
 
