@@ -128,7 +128,7 @@ export const twClick = () => {
 export const handleScheduleChange = (e) => {
   return {
     type: 'SCHEDULE_CHANGE',
-    payload: e.target.value,
+    payload: e,
   }
 }
 
