@@ -1,5 +1,5 @@
 # Iris
-> A one-stop social media manger for posting to Facebook and Twitter.
+A one-stop social media manger for posting to Facebook and Twitter.
 
 ## Live Playground
 
@@ -32,17 +32,25 @@ This project is created by the following members from Oasis72 at Hack Reactor.
 
 ## Features
 
-> Some features
+Login.
+
+* **
 
 ## Architecture Overview
 
 ## Tech Stack
 
+The front-end is written in React and Redux, and the back-end uses Node/Express and a Mongo database, with Mongoose as the ORM.
+
 ## System Architecture
 
 ## Database Schemas
 
+There are two main entities in the database: **users** and **posts**.
+
 ## Contributing
+
+If you'd like to contribute to this repo, please feel free to submit a pull request.
 
 ## Requirements
 
