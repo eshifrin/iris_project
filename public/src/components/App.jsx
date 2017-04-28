@@ -87,10 +87,8 @@ class App extends React.Component {
               </div>
 
               {this.props.calendarView ?
-              <div className='calendar' style={{textAlign: 'center' }}>
-                <div style={{display: 'inline-block'}}>
+              <div className='calendar' >
                 <Calendar scheduledPosts={this.props.scheduledPosts}/>
-                </div>
               </div>
               :
               <FuturePostList

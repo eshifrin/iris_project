@@ -29,7 +29,6 @@ const PastPostList = ({ pastPosts, handleResubmitClick }) => {
           {posts}
 
         </ul>
-        <BubbleChart />
     </div>)
 }
 
