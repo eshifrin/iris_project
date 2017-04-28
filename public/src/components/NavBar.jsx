@@ -55,7 +55,8 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
           <FlatButton
             label="New Post"
             onTouchTap={modalToggle}
-            primary
+            primary={true}
+            style={{ color: yellow800 }}
           />
           <Logged />
         </div>}

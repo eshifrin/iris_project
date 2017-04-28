@@ -13,22 +13,24 @@ const styles = {
 };
 
 const PastPostList = ({ pastPosts, handleResubmitClick }) => {
-  const posts = pastPosts.length ? pastPosts.map(post =>
-    <ListItem key={post._id}>
-      <PastPostListItem post={post} handleResubmitClick={e => handleResubmitClick(e, post)} />
-    </ListItem>) : null;
+
+  const posts = pastPosts.map(post =>
+  <Paper zDepth={1} style={{margin: 20, padding: 5}}>
+
+    <li key={post._id} style={{ 'listStyleType': 'none', width: '100%', textAlign: 'center' }}>
+      <PastPostListItem post={post} handleResubmitClick={(e) => handleResubmitClick(e, post)} />
+    </li></Paper>)
 
   return (
     <div>
-      {(pastPosts.length !== 0) && <h2 style={styles.headline}>History</h2>}
-      {(pastPosts.length === 0) && <h5>You have not posted any messages yet!</h5>}
-      <List>
-        <Paper zDepth={2}>
+        {(pastPosts.length === 0) && <h5>You have not posted any messages yet!</h5>}
+        <ul style={{ padding: '20px 0'}}>
+
           {posts}
-        </Paper>
-      </List>
-    </div>);
-};
+
+        </ul>
+    </div>)
+}
 
 
 export default PastPostList;

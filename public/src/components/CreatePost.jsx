@@ -8,6 +8,7 @@ import 'react-widgets/lib/less/react-widgets.less';
 import DTP from 'react-widgets/lib/DateTimePicker';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment';
+import { yellow800 } from 'material-ui/styles/colors';
 momentLocalizer(moment);
 
 import { handleScheduleChange,
@@ -43,13 +44,12 @@ class CreatePost extends React.Component {
           />
         </div>
 
-
         <div>
           <hr />
 
           <div style={{ textAlign: 'center', display: 'inline-block' }} >
-            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="postnow" onClick={this.props.handleNowSubmit}>post now</FlatButton> }
-            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="schedulepost" onClick={this.props.handlePostSubmit}>schedule post</FlatButton> }
+            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="postnow" onClick={this.props.handleNowSubmit} style={{color: yellow800}}>post now</FlatButton> }
+            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="schedulepost" onClick={this.props.handlePostSubmit} style={{color: yellow800}}>schedule post</FlatButton> }
             {!this.props.postToTwitter && !this.props.postToFacebook && <h4 style={{ color: 'red' }}>please choose at least one social site to share your post</h4>}
           </div>
         </div>
