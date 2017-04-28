@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import axios from 'axios';
 import moment from 'moment';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { yellow800 } from 'material-ui/styles/colors';
+import { yellow800, blueGrey500 } from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -111,9 +111,13 @@ class App extends React.Component {
           </div>
         }
 
-        <footer>
-          <a href="https://www.iubenda.com/privacy-policy/8099712">Our Privacy Policy</a>
-        </footer>
+        {!(this.props.isLoggedIn) && <div style={{ textAlign: 'center', backgroundColor: 'white', color: blueGrey500 }}>
+          <img src="./img/yellowBanner.png"/>
+            <h1>Welcome to Iris</h1>
+            <p>We are a one-stop social media manager for posting to Facebook and Twitter.</p>
+            <img src="./img/bw.png" />
+          </div>}
+
       </div>
 
       </MuiThemeProvider>

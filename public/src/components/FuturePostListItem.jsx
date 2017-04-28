@@ -16,8 +16,8 @@ const FuturePostListItem = ({ post, deletePost, editPost }) => {
   <CardText>
     <span style={{color: 'grey', fontFamily: 'Times New Roman'}}>{monthDay + ' ' + time}</span>
     <br/>
-    {(post.imgUrl.length !== 0) && <img src={post.imgUrl} style={{height: 70}}/>}
-     {(post.imgUrl.length === 0) && <div style={{height: 70}}/>}
+    {(post.imgUrl.length !== 0) && <img src={post.imgUrl} style={{height: 150}}/>}
+     {(post.imgUrl.length === 0) && <div style={{height: 30}}/>}
     <br/>
 
      {post.text}
