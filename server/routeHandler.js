@@ -285,7 +285,7 @@ module.exports.deletePost = (req, res, next) => {
 
 module.exports.getUserInfo = (req, res, next) => {
   if (req.user) {
-    const userCred = {};
+    let userCred = {};
     userCred.email = req.session.email;
 
     dbh.getUser(userCred.email)
