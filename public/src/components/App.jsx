@@ -63,7 +63,7 @@ class App extends React.Component {
           {this.props.isLoggedIn &&
           <div>
 
-          <Tabs>
+          <Tabs style={{marginTop: '20px'}}>
 
             <Tab
               label="Scheduled Posts"

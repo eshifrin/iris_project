@@ -37,30 +37,32 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
       targetOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
     >
-      {twitter && <MenuItem rightIcon={<i className="fa fa-twitter fa-2x" style={ButtonStyleLive} />} primaryText={<FlatButton href="/twitter" hoverColor={'#e6e6e6'}> Verify</FlatButton>} /> }
-      {!twitter && <MenuItem rightIcon={<i className="fa fa-twitter fa-2x" style={ButtonStyleDead} />} primaryText={<FlatButton href="/deauthorize/twitter" hoverColor={'#e6e6e6'}> Unlink</FlatButton>} /> }
-      {facebook && <MenuItem rightIcon={<i className="fa fa-facebook fa-2x"style={ButtonStyleLive} />} primaryText={<FlatButton href="/facebook" hoverColor={'#e6e6e6'}> Verify</FlatButton>} /> }
-      {!facebook && <MenuItem rightIcon={<i className="fa fa-facebook fa-2x"style={ButtonStyleDead} />} primaryText={<FlatButton href="/deauthorize/facebook" hoverColor={'#e6e6e6'}> Unlink</FlatButton>} /> }
-      <MenuItem primaryText={<FlatButton href="/logout" label="Log Out" hoverColor={'#e6e6e6'} />} />
+
+      {twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleLive}/>} primaryText={<FlatButton href="/twitter" hoverColor={'#e6e6e6'}> Authorize</FlatButton>} /> }
+      {!twitter && <MenuItem rightIcon={<i className='fa fa-twitter fa-2x' style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/twitter" hoverColor={'#e6e6e6'}> Unlink</FlatButton>} /> }
+      {facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleLive}/>} primaryText={<FlatButton href="/facebook" hoverColor={'#e6e6e6'}> Authorize</FlatButton> } /> }
+      {!facebook && <MenuItem rightIcon={<i className='fa fa-facebook fa-2x'style={ButtonStyleDead}/>} primaryText={<FlatButton href="/deauthorize/facebook" hoverColor={'#e6e6e6'}> Unlink</FlatButton> } /> }
+      <MenuItem primaryText={<FlatButton href='/logout' hoverColor={'#e6e6e6'}>Log Out</FlatButton>} />
     </IconMenu>
   );
 
   return (
     <div>
-      <AppBar
-        title={<img src="./img/logo3.png" width={60} />}
+
+      <AppBar title={<div><img src="./img/logo3.png" width={60}/><div style={{display: 'inline-block', position: 'absolute', left: '10%',  fontSize: '80%'}}>YOUR SOCIAL MEDIA MANAGER</div></div>}
         showMenuIconButton={false}
         zDepth={1}
-        iconElementRight={login ? <FlatButton href={loginLogoutHref} style={ButtonStyleLive} label={loginOrLogout} /> : <div>
+        iconElementRight={login ? <FlatButton href={loginLogoutHref} style={ButtonStyleLive} label={loginOrLogout} /> : 
+        <div style={{fontSize: '100%'}}>
           <FlatButton
-            label="New Post"
             onTouchTap={modalToggle}
             primary={true}
             style={{ color: yellow800 }}
-          />
+          >
+            NEW POST
+          </FlatButton>
           <Logged />
         </div>}
-
       />
       <Dialog
 
