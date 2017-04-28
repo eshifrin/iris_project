@@ -60,10 +60,27 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
           </div>}
       />
       <Dialog
-        title="New Post"
+
         modal={false}
         open={newPostModal}
         onRequestClose={modalToggle}
+        style={{height: '100vh', maxHeight: '100%'}}
+        bodyStyle={{ 
+          overflow: 'scroll',
+          display: 'inline-block',
+          margin: '0 auto',
+          width: '100%',
+          maxHeight: '100% ! important'
+        }}
+
+        contentStyle={{
+          margin: '-10vh auto',
+          minHeight: '80%',
+          maxWidth: '50%',
+          padding: '2%',
+          display: 'block'
+        }}
+
       >
         <CreatePost/>
       </Dialog>
