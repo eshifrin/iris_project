@@ -8,6 +8,7 @@ import 'react-widgets/lib/less/react-widgets.less';
 import DTP from 'react-widgets/lib/DateTimePicker';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment';
+import { yellow800 } from 'material-ui/styles/colors';
 momentLocalizer(moment);
 
 import { handleScheduleChange,
@@ -42,7 +43,6 @@ class CreatePost extends React.Component {
             handleClearImg={this.props.handleClearImg}
           />
         </div>
-
 
         <div>
           <hr />

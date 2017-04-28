@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import { yellow800 } from 'material-ui/styles/colors';
 
 const propTypes = {
   handleResubmitClick: PropTypes.func.isRequired,
@@ -23,23 +24,40 @@ const PastPostListItem = ({ post, handleResubmitClick }) => {
   // console.log('post id in item: ', post._id);
 
   return (
-    <Card style={{ width: '30%' }}>
-      <CardHeader
-        subtitle={`${monthDay} ${time}`}
-      />
 
-      <CardText> {post.text} </CardText>
-      { (post.imgUrl.length !== 0) && <CardMedia>
-        <img src={post.imgUrl} />
-      </CardMedia>}
+    <Card style={{width: '70%', display: 'inline', textAlign: 'center'}}>
 
-      {post.postToTwitter && <FlatButton secondary={!post.postedTwitterId}> Twitter</FlatButton>}
-      {post.postToFacebook && <FlatButton secondary={!post.postedFacebookId}> Facebook</FlatButton>}
-      <FlatButton primary onClick={e => handleResubmitClick(e, post)} >Repost</FlatButton>
-      <FlatButton> TW Fav Count: {post.twFavCount}</FlatButton>
-      <FlatButton> TW Retweet Count: {post.twRetweetCount}</FlatButton>
-      <FlatButton> FB Likes Count: {post.fbLikeCount}</FlatButton>
-      <FlatButton> FB Comments Count: {post.fbCommentCount}</FlatButton>
+      <CardText>
+        <span style={{color: 'grey', fontFamily: 'Times New Roman'}}>{monthDay + ' ' + time}</span>
+        <br/>
+          {(post.imgUrl.length !== 0) && <img src={post.imgUrl} style={{height: 70}}/>}
+          {(post.imgUrl.length === 0) && <div style={{height: 70}}/>}
+        <br/>
+        {post.text}
+      </CardText>
+
+
+      {post.postToTwitter &&
+      <span>
+      <FlatButton disabled={!post.postToTwitter}
+        disableTouchRipple = {true}
+        hoverColor ='white'> Twitter <i className="fa fa-twitter"></i>
+      </FlatButton>
+      <FlatButton> <i className="fa fa-heart" /> : {post.twFavCount}</FlatButton>
+      <FlatButton> <i className="fa fa-retweet" /> : {post.twRetweetCount}</FlatButton>
+      </span>
+      }
+      {post.postToFacebook &&
+      <span>
+      <FlatButton disabled={!post.postToTwitter}
+        disableTouchRipple = {true}
+        hoverColor ='white'> Facebook <i style={{color: 'grey'}} className="fa fa-facebook"></i>
+      </FlatButton>
+      <FlatButton> <i className="fa fa-thumbs-up" /> : {post.fbLikeCount}</FlatButton>
+      <FlatButton> <i className="fa fa-comments" /> : {post.fbCommentCount}</FlatButton>
+      </span>}
+      <FlatButton style={{color: yellow800}} onClick={e => handleResubmitClick(e, post)} >Repost</FlatButton>
+
     </Card>
   );
 };

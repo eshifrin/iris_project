@@ -29,7 +29,8 @@ import Calendar from './Calendar'
 
 const muiTheme = getMuiTheme({
   palette: {
-    primary1Color: yellow800,
+    primary1Color: 'white',
+    accent1Color: yellow800,
   },
   appBar: {
     color: 'white',
@@ -47,6 +48,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log('calendar view: ', this.props.calendarView);
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
@@ -63,24 +65,32 @@ class App extends React.Component {
 
           <Tabs>
 
-            <Tab label='Scheduled Posts'>
-              <div>
-              <i className={`fa fa-list fa-4x
-                 ${this.props.calendarView ? 'toggle-off' : 'toggle-on'}`}
-                 name="listIcon"
-                 aria-hidden="true"
-                 onClick={this.props.switchScheduledViewClick} />
-              <i className={`fa fa-calendar fa-4x
-                 ${this.props.calendarView ? 'toggle-on' : 'toggle-off'}`}
-                 name="calendarIcon"
-                 aria-hidden="true"
-                 onClick={this.props.switchScheduledViewClick} />
-
+            <Tab
+              label="Scheduled Posts"
+              style={{ color: yellow800 }}
+            >
+              <div style={{width: '100%', padding: 20}}>
+                {(this.props.calendarView) && <i
+                  className={`fa fa-list-ul fa-2x toggle-on`}
+                  name="listIcon"
+                  style={{ display: 'block', margin: '0 auto', width: 50 }}
+                  aria-hidden="true"
+                  onClick={this.props.switchScheduledViewClick}
+                />}
+                {(!this.props.calendarView) && <i
+                  className={`fa fa-calendar fa-2x toggle-on`}
+                  name="calendarIcon"
+                  aria-hidden="true"
+                  style={{ display: 'block', margin: '0 auto', width: 50 }}
+                  onClick={this.props.switchScheduledViewClick}
+                />}
               </div>
 
               {this.props.calendarView ?
-              <div className='calendar'>
+              <div className='calendar' style={{textAlign: 'center' }}>
+                <div style={{display: 'inline-block'}}>
                 <Calendar scheduledPosts={this.props.scheduledPosts}/>
+                </div>
               </div>
               :
               <FuturePostList
@@ -91,7 +101,8 @@ class App extends React.Component {
 
             </Tab>
 
-            <Tab label='History'>
+            <Tab label='History'
+            style={{ color: yellow800 }}>
               <PastPostList
                 pastPosts={this.props.pastPosts}
                 handleResubmitClick={this.props.editPostClick}/>
@@ -130,6 +141,7 @@ const mapStateToProps = (state) => {
     newPostModal: state.main.newPostModal,
     calendarView: state.main.calendarView,
     isLoading: state.main.isLoading,
+
   };
 };
 
