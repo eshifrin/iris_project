@@ -59,6 +59,7 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
           />
           <Logged />
         </div>}
+
       />
       <Dialog
 
@@ -66,7 +67,7 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
         open={newPostModal}
         onRequestClose={modalToggle}
         style={{height: '100vh', maxHeight: '100%'}}
-        bodyStyle={{ 
+        bodyStyle={{
           overflow: 'scroll',
           display: 'inline-block',
           margin: '0 auto',

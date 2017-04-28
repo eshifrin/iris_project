@@ -99,8 +99,6 @@ class App extends React.Component {
 
           </Tabs>
 
-          <Loader />
-
           </div>
         }
 
@@ -130,7 +128,8 @@ const mapStateToProps = (state) => {
     scheduledDateTime: state.main.scheduledDateTime,
     updatingPostId: state.main.updatingPostId,
     newPostModal: state.main.newPostModal,
-    calendarView: state.main.calendarView
+    calendarView: state.main.calendarView,
+    isLoading: state.main.isLoading,
   };
 };
 

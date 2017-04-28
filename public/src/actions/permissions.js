@@ -6,7 +6,6 @@ export const getCurrentUserInfo = () => (dispatch) => {
         dispatch({ type: 'GET_USER_INFO_SUCCESS', payload: res });
       })
       .catch((err) => {
-        console.log('error in getting user email, err :', err);
         dispatch({ type: 'GET_USER_INFO_FAIL', payload: err });
       });
 };
@@ -14,6 +13,7 @@ export const uploadImg = (e) => {
   const reader = new FileReader(e.target.files[0]);
   reader.readAsDataURL(e.target.files[0]);
   return dispatch => reader.onloadend = () => {
+    dispatch({ type: 'TOGGLE_LOADER' });
     axios.post('/api/image/imgLink', { image: reader.result })
       .then((res) => {
         dispatch({
@@ -23,8 +23,10 @@ export const uploadImg = (e) => {
             imgUrl: res.data,
           },
         });
+        dispatch({ type: 'TOGGLE_LOADER' });
       })
       .catch((err) => {
+        dispatch({ type: 'TOGGLE_LOADER' });
         console.log('errored out in axios of upload img action: ', err);
       });
   };
@@ -33,8 +35,6 @@ export const uploadImg = (e) => {
 export const switchScheduledView = e => (dispatch, getState) => {
   const calledCalendar = e.target.getAttribute('name') === 'calendarIcon';
   const calendarView = getState().main.calendarView;
-  console.log('called Calendar?', calledCalendar);
-  console.log('calendarView?', calendarView);
 
   if (calledCalendar !== calendarView) {
     dispatch({ type: 'SWITCH_SCHEDULED_VIEW' });
@@ -42,6 +42,7 @@ export const switchScheduledView = e => (dispatch, getState) => {
 };
 
 export const handleNowSubmit = () => (dispatch, getState) => {
+  dispatch({ type: 'TOGGLE_LOADER' });
   const st = getState().main;
   const passSt = {
     email: st.email,
@@ -58,15 +59,18 @@ export const handleNowSubmit = () => (dispatch, getState) => {
     })
     .then((results) => {
       dispatch({ type: 'POST_NOW', payload: results.data });
+      dispatch({ type: 'TOGGLE_LOADER' });
     })
     .catch((err) => {
+      dispatch({ type: 'TOGGLE_LOADER' });
       console.log('issue with posting scheduled posts', err);
+
     });
 };
 
 export const handlePostSubmit = () => (dispatch, getState) => {
+  dispatch({ type: 'TOGGLE_LOADER' });
   const st = getState().main;
-  console.log(st.scheduledDateTime);
   const passSt = {
     scheduledDateTime: st.scheduledDateTime || new Date(),
     email: st.email,
@@ -83,10 +87,37 @@ export const handlePostSubmit = () => (dispatch, getState) => {
     })
     .then((results) => {
       dispatch({ type: 'POST_LATER', payload: results.data });
+      dispatch({ type: 'TOGGLE_LOADER' });
     })
     .catch((err) => {
+      dispatch({ type: 'TOGGLE_LOADER' });
       console.log('issue with posting scheduled posts', err);
     });
+};
+
+export const deletePost = (e, post) => {
+  e.preventDefault();
+  return (dispatch, getState) => util.deletePost(post._id)
+    .then((res) => {
+      return util.retrievePosts('scheduled', getState().main.email);
+    })
+    .then((res) => {
+      dispatch({
+        type: 'UPDATE_SCHEDULED_POSTS',
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log('failure deleting scheduled post', err);
+    });
+};
+
+export const populateCreatePost = (e, post) => {
+  e.preventDefault();
+  return {
+    type: 'POPULATE_CREATE_POST',
+    payload: post,
+  };
 };
 
 export const modalToggle = () => ({
@@ -113,31 +144,11 @@ export const handleScheduleChange = e => ({
 export const handleClearImg = () => ({
   type: 'CLEAR_IMG',
 });
+
 export const handleResetPostFields = () => ({
   type: 'RESET_POST_FIELDS',
 });
 
-export const deletePost = (e, post) => {
-  e.preventDefault();
-  return (dispatch, getState) => util.deletePost(post._id)
-    .then((res) => {
-      return util.retrievePosts('scheduled', getState().main.email);
-    })
-    .then((res) => {
-      dispatch({
-        type: 'UPDATE_SCHEDULED_POSTS',
-        payload: res.data,
-      });
-    })
-    .catch((err) => {
-      console.log('failure deleting scheduled post', err);
-    });
-};
-
-export const populateCreatePost = (e, post) => {
-  e.preventDefault();
-  return {
-    type: 'POPULATE_CREATE_POST',
-    payload: post,
-  };
-};
+export const toggleLoader = () => ({
+  type: 'TOGGLE_LOADER',
+});
