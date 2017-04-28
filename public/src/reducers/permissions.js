@@ -15,8 +15,9 @@ const initialState = {
   scheduledDateTime: '',
   updatingPostId: undefined,
   newPostModal: false,
-  calendarView: false
-}
+  calendarView: false,
+  isLoading: false,
+};
 
 const permissionsAndPostsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -63,11 +64,11 @@ const permissionsAndPostsReducer = (state = initialState, action) => {
       };
 
     case 'UPLOAD_IMG':
-         return {
-          ...state,
-          imgUrl: action.payload.imgUrl,
-          img: action.payload.img,
-        }
+      return {
+        ...state,
+        imgUrl: action.payload.imgUrl,
+        img: action.payload.img,
+      };
 
     case 'CLEAR_IMG':
       return {
@@ -96,7 +97,7 @@ const permissionsAndPostsReducer = (state = initialState, action) => {
         postToFacebook: false,
         imgUrl: '',
         pastPosts: action.payload,
-      }
+      };
 
     case 'POST_LATER':
       return {
@@ -109,7 +110,7 @@ const permissionsAndPostsReducer = (state = initialState, action) => {
         postToFacebook: false,
         imgUrl: '',
         scheduledPosts: action.payload,
-      }
+      };
 
     case 'UPDATE_SCHEDULED_POSTS':
       return {
@@ -128,13 +129,19 @@ const permissionsAndPostsReducer = (state = initialState, action) => {
         scheduledDateTime: action.payload.scheduledDateTime,
         updatingPostId: action.payload._id,
         newPostModal: true,
-      }
+      };
 
     case 'SWITCH_SCHEDULED_VIEW':
       return {
         ...state,
-        calendarView: !state.calendarView
-      }
+        calendarView: !state.calendarView,
+      };
+
+    case 'TOGGLE_LOADER':
+      return {
+        ...state,
+        isLoading: !state.isLoading,
+      };
 
     default:
       console.log('action type: ', action.type);
