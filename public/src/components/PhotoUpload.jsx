@@ -1,17 +1,39 @@
 import React, { PropTypes } from 'react';
 import FlatButton from 'material-ui/FlatButton';
+import ReactDOM from 'react-dom';
 
-const propTypes = {
-  uploadImg: PropTypes.func.isRequired,
-  handleClearImg: PropTypes.func.isRequired,
-};
+const clear = () => {
+ this.photoVal = '';
+}
 
-const PhotoUpload = ({ uploadImg, handleClearImg }) => (
+const PhotoUpload = ({ uploadImg, handleClearImg, imgUrl, photoVal = '' }) => (
   <div>
-    <FlatButton><input type="file" id="userfile" name="userfile" onChange={uploadImg} /></FlatButton>
-    <FlatButton primary={true} onClick={handleClearImg}>Clear Image</FlatButton>
+    <img src={imgUrl || "./img/cloud_f.png"} style={{height: '150px'}} />
+
+    <div>
+    
+    {imgUrl ? 
+    <FlatButton 
+      primary={true} 
+      onClick={() => clear.bind(this) && handleClearImg()}>
+    clear image
+    </FlatButton>
+    :
+      
+    <FlatButton 
+      primary={true}
+      containerElement='label' 
+      labelStyle={{'text-transform': 'lowercase'}}
+      onChange={uploadImg}
+    > 
+    upload image
+      <input type="file" style={{ display: 'none' }} value={photoVal} />
+    </FlatButton>
+    }
+
+    </div>
+
   </div>
 );
 
-PhotoUpload.propTypes = propTypes;
 export default PhotoUpload;

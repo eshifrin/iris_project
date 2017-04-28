@@ -5,27 +5,28 @@ import { textChange, fbClick, twClick } from '../actions/permissions';
 
 class WriteMessage extends React.Component {
   render() {
-  // Styling scrips for Facebook and Twitter logos's onClick actions
     let fbLogoStyle = {};
     let twLogoStyle = {};
 
-    if (!this.props.postToFacebook) fbLogoStyle = { opacity: 0.2, padding: 20 }
+    if (!this.props.postToFacebook) fbLogoStyle = { opacity: 0.2, padding: 15 }
       else fbLogoStyle = { padding: 20 }
-    if (!this.props.postToTwitter) twLogoStyle = { opacity: 0.2, padding: 20 }
+    if (!this.props.postToTwitter) twLogoStyle = { opacity: 0.2, padding: 15 }
       else twLogoStyle = { padding: 20 }
 
     return (
       <div id='message'>
-        { this.props.facebookAuthenticated && <img className="sendToFB" style={fbLogoStyle} width="70px" height="auto" src="./img/facebook-logo.png" value="Facebook" onClick={this.props.handleFbLogoClick} checked={this.props.postToFacebook}/>}
-        { this.props.twitterAuthenticated && <img className="sendToTW" style={twLogoStyle} width="70px" height="auto" src="./img/twitter-logo-final.png" value="Twitter" onClick={this.props.handleTwLogoClick} checked={this.props.postToTwitter}/>}
+        { this.props.facebookAuthenticated && <img className="sendToFB" style={fbLogoStyle} width="50px" height="auto" src="./img/facebook-logo.png" value="Facebook" onClick={this.props.handleFbLogoClick} checked={this.props.postToFacebook}/>}
+        { this.props.twitterAuthenticated && <img className="sendToTW" style={twLogoStyle} width="50px" height="auto" src="./img/twitter-logo-final.png" value="Twitter" onClick={this.props.handleTwLogoClick} checked={this.props.postToTwitter}/>}
         <br/>
+
         <TextField
-          type="text"
-          name="text"
-          hintText="What do you want to share?"
-          floatingLabelText="Post"
+          type='text'
+          name='text'
+          hintText='what would you like to say?'
           value={this.props.text}
           onChange={this.props.handleTextChange}
+          multiLine={true}
+          // rows={4}
         />
 
       </div>

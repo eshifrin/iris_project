@@ -9,6 +9,11 @@ import moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment'
 momentLocalizer(moment);
 
+        // {(this.props.postToTwitter || this.props.postToFacebook) && <h4>Get ready to share!</h4>}
+
+        // <FlatButton primary={true} onClick={this.props.handleResetPostFields}>Reset Form</FlatButton>
+
+
 import { handleScheduleChange, 
         uploadImg, 
         handleClearImg, 
@@ -18,31 +23,37 @@ import { handleScheduleChange,
 
 class CreatePost extends React.Component {
     render() {
-    var style = {
-      color: 'red'
-    }
-    return (
-    <div>
-      <form>
 
+    return (
+      <div style={{'textAlign': 'center', maxHeight: 'none ! important'}}>
+      <div style={{'fontWeight': 'bold', 'color': '#F9A825', fontSize: '200%'}}>share</div>
+      <div style={{width: '75%', textAlign: 'center', display: 'inline-block', marginTop: '5px'}}>
         <DTP defaultValue={this.props.scheduledDateTime ? new Date(this.props.scheduledDateTime) : new Date()}
              min={new Date()}
              onChange={this.props.handleScheduleChange}
         />
+      </div>
 
-        {!this.props.postToTwitter && !this.props.postToFacebook && <h4 style={style}>Please choose at least one social site to share your post</h4>}
-        {(this.props.imgUrl.length !== 0) && <img src={this.props.imgUrl} style={{width: 100}} />}
-        {(this.props.postToTwitter || this.props.postToFacebook) && <h4>Get ready to share!</h4>}
         <WriteMessage/>
 
+        <div style={{height: '175'}}>
         <PhotoUpload
           uploadImg={this.props.uploadImg}
+          imgUrl={this.props.imgUrl}
           handleClearImg={this.props.handleClearImg}
         />
-      </form>
-        <FlatButton primary={true} onClick={this.props.handleResetPostFields}>Reset Form</FlatButton>
-        { (this.props.postToFacebook || this.props.postToTwitter) &&  <FlatButton primary={true} value="postnow" onClick={this.props.handleNowSubmit}>Post Now</FlatButton> }
-        { (this.props.postToFacebook || this.props.postToTwitter) &&<FlatButton primary={true} value="schedulepost" onClick={this.props.handlePostSubmit}>Schedule Post</FlatButton> }
+        </div>
+
+
+      <div>
+      <hr />
+
+      <div style={{textAlign: 'center', display: 'inline-block'}} >
+        { (this.props.postToFacebook || this.props.postToTwitter) &&  <FlatButton primary={true} value="postnow" onClick={this.props.handleNowSubmit}>post now</FlatButton> }
+        { (this.props.postToFacebook || this.props.postToTwitter) &&<FlatButton primary={true} value="schedulepost" onClick={this.props.handlePostSubmit}>schedule post</FlatButton> }
+        {!this.props.postToTwitter && !this.props.postToFacebook && <h4 style={{color: 'red'}}>please choose at least one social site to share your post</h4>}
+      </div>
+      </div>
 
     </div>
   )}
