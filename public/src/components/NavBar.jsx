@@ -59,7 +59,6 @@ const NavBar = ({ login, twitter, facebook, modalToggle, newPostModal }) => {
             primary={true}
             style={{ color: yellow800 }}
           >
-          >
             NEW POST
           </FlatButton>
           <Logged />
