@@ -51,7 +51,7 @@ module.exports.getPostsById = (req, res, next) => {
 module.exports.attachSMStats = (postedPosts, email) => {
   let tweetWithStats = '';
   let fbPostWithStats = '';
-  const referenceIDs = {};
+  let referenceIDs = {};
 
   postedPosts = postedPosts.map(post => post.toObject());
 
@@ -71,7 +71,7 @@ module.exports.attachSMStats = (postedPosts, email) => {
   fbPostWithStats = fbPostWithStats.slice(0, -1);
 
 
-  const smStats = [];
+  let smStats = [];
   smStats.push(sm.getTweetStats(email, tweetWithStats));
   smStats.push(sm.getFbPostStats(email, fbPostWithStats));
 
@@ -105,7 +105,7 @@ module.exports.sendUserPosts = (req, res, next) => {
   const url_parts = url.parse(req.url, true);
   const email = url_parts.query.email;
   const typeOfPost = req.params.post_type;
-  const resultsWithStats = [];
+  let resultsWithStats = [];
   // TODO: Create new function for this big block of code
   return dbh.showUserPosts(email, typeOfPost)
   .then((posts) => {
