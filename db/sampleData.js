@@ -12,24 +12,22 @@ module.exports = {
     date: new Date(2018, 1, 1),
     scheduledDateTime: new Date(2018, 1, 1),
     status: 'scheduled',
-    imgUrl: 'https://previews.123rf.com/images/joshjcurtis/joshjcurtis0909/joshjcurtis090900006/5581021-Honey-Bunny-Stock-Vector.jpg'
+    imgUrl: 'https://previews.123rf.com/images/joshjcurtis/joshjcurtis0909/joshjcurtis090900006/5581021-Honey-Bunny-Stock-Vector.jpg',
   },
   user1_scheduledPost2: {
-  text: 'take me to nap reactor',
-  postToTwitter: true,
-  postToFacebook: false,
-  date: new Date(),
-  status: 'scheduled',
-  imgUrl: 'http://ichef.bbci.co.uk/wwfeatures/wm/live/624_351/images/live/p0/3d/tk/p03dtkw2.jpg'
+    text: 'take me to nap reactor',
+    postToTwitter: true,
+    postToFacebook: false,
+    date: new Date(),
+    status: 'scheduled',
+    imgUrl: 'http://ichef.bbci.co.uk/wwfeatures/wm/live/624_351/images/live/p0/3d/tk/p03dtkw2.jpg',
   },
   user1_postedPost: {
     text: 'so long fans',
     postToTwitter: true,
     postedTwitterId: '855214450831310848',
-    scheduledDateTime: new Date("2016-05-18T16:00:00Z"),
+    scheduledDateTime: new Date('2016-05-18T16:00:00Z'),
     status: 'posted',
-    imgUrl: 'https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg'
-  }
-}
-
-
+    imgUrl: 'https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg',
+  },
+};

@@ -14,21 +14,20 @@ module.exports.savePost = (userId, postData, postType) => {
   .then(post => {
     postData._id = post._id;
     return User.updateAsync(
-            {_id: postData.user_id},
-            {$push: {[postType]: post._id}});
+            { _id: postData.user_id },
+            { $push: { [postType]: post._id } });
   });
 }
 
 // this.savePost('58ff84b8e3004244fcf18bc1', user1_scheduledPost, 'scheduled');
 // this.savePost('58ff84b8e3004244fcf18bc1', user1_postedPost, 'posted');
 
-
 module.exports.deletePost = (userId, postId) => {
   return User.updateAsync(
-    {_id: userId},
-    {$pull: {'scheduled': postId}})
+    { _id: userId },
+    { $pull: { scheduled: postId } })
   .then(results => {
-    return Post.removeAsync({_id: postId})
+    return Post.removeAsync({ _id: postId })
   })
 }
 
@@ -44,15 +43,15 @@ module.exports.deleteCredentials = (email, provider) => {
     }
   };
 
-  return User.updateAsync({email: email}, {$set: credentials[provider]});
+  return User.updateAsync({ email }, { $set: credentials[provider] });
 }
 
 module.exports.retrievePosts = (postIds) => {
-  return Post.findAsync({_id: {$in: postIds} })
+  return Post.findAsync({ _id: { $in: postIds } })
 }
 
 module.exports.showUserPosts = (email, typeofPost) => {
-  return User.findOneAsync({email: email})
+  return User.findOneAsync({ email })
   .then(data => {
     if (!data) {
       throw ('invalid user');
@@ -63,7 +62,7 @@ module.exports.showUserPosts = (email, typeofPost) => {
 }
 
 module.exports.retrieveUserId = (email) => {
-  return User.findOneAsync({email: email})
+  return User.findOneAsync({ email })
   .then(data => {
     if (!data) throw ('invalid user');
     else return data._id;
@@ -71,38 +70,38 @@ module.exports.retrieveUserId = (email) => {
 }
 
 module.exports.getUser = (email) => {
-  return User.findOneAsync({email: email});
+  return User.findOneAsync({ email });
 }
 
 module.exports.getUserbyId = (id) => {
-  return User.findOneAsync({_id: id});
+  return User.findOneAsync({ _id: id });
 }
 
 module.exports.saveUser = (email) => {
-  return User({email: email}).saveAsync();
+  return User({ email }).saveAsync();
 }
 
-module.exports.updateUserTwitter = ({email, token, tokenSecret}) => {
- console.log('updating', email, token, tokenSecret)
- return User.updateAsync(
-      { email: email},
-      { $set:  {twitter_token: token,
-                twitter_secret: tokenSecret }})
+module.exports.updateUserTwitter = ({ email, token, tokenSecret }) => {
+  console.log('updating', email, token, tokenSecret)
+  return User.updateAsync(
+      { email },
+    { $set:  { twitter_token: token,
+      twitter_secret: tokenSecret } })
 }
 
 module.exports.updateUserFacebook = (email, token, facebook_id) => {
- return User.updateAsync(
-      { email: email},
-      { $set:  {facebook_token: token,
-                facebook_id: facebook_id }})
+  return User.updateAsync(
+      { email },
+    { $set:  { facebook_token: token,
+      facebook_id } })
 }
 
 module.exports.checkScheduledEvent = (dateTime) => {
   return Post.findAsync(
     { $and: [
-        { 'scheduledDateTime': { $lte: new Date() } },
-        { 'status': 'scheduled' },
-      ]
+        { scheduledDateTime: { $lte: new Date() } },
+        { status: 'scheduled' },
+    ]
     }
   )
   .then(data => {
@@ -113,21 +112,21 @@ module.exports.checkScheduledEvent = (dateTime) => {
 module.exports.getScheduledEvents = () => {
   return Post.findAsync(
     { $and:
-      [ { 'scheduledDateTime': { $lte: new Date() } },
-        { 'status': 'scheduled' } ]
+    [ { scheduledDateTime: { $lte: new Date() } },
+        { status: 'scheduled' } ]
     }
   );
 };
 
 module.exports.updatePostFields = (postId, field, newval) => {
-  return Post.updateAsync({_id: postId}, {[field]: newval});
+  return Post.updateAsync({ _id: postId }, { [field]: newval });
 }
 
 module.exports.moveScheduledToPosted = (userId, postId) => {
   return User.updateAsync(
     { _id: userId },
-    { $pull: {'scheduled': postId },
-      $push: {'posted': postId}
-  });
+    { $pull: { scheduled: postId },
+      $push: { posted: postId }
+    });
 }
 

@@ -14,9 +14,9 @@ module.exports.imageLink = (req, res, next) => {
 };
 
 module.exports.deauthorize = (req, res, next) => {
-  let provider = req.params.provider;
-  let email = req.session.email;
-  let tokenName = `${provider}_token`;
+  const provider = req.params.provider;
+  const email = req.session.email;
+  const tokenName = `${provider}_token`;
 
   if (!req.session.email) res.status(404).send();
 
@@ -77,30 +77,27 @@ module.exports.attachSMStats = (postedPosts, email) => {
 
   return Promise.all(smStats)
   .then((stats) => {
-    let twStats = stats[0];
-    let fbStats = stats[1];
+    const twStats = stats[0];
+    const fbStats = stats[1];
 
-    twStats.forEach(tweet => {
-      let index = referenceIDs[tweet.id_str];
+    twStats.forEach((tweet) => {
+      const index = referenceIDs[tweet.id_str];
       postedPosts[index].twFavCount = tweet.favorite_count;
       postedPosts[index].twRetweetCount = tweet.retweet_count;
     });
 
     if (fbStats.data) {
-      Object.keys(fbStats.data).forEach(fbpostid => {
-        let index = referenceIDs[fbpostid];
+      Object.keys(fbStats.data).forEach((fbpostid) => {
+        const index = referenceIDs[fbpostid];
         postedPosts[index].fbLikeCount = fbStats.data[fbpostid].likes.summary.total_count;
         postedPosts[index].fbCommentCount = fbStats.data[fbpostid].comments.summary.total_count;
-      })
+      });
     }
-    return
   })
   .then(() => {
     return postedPosts;
   });
 };
-
-
 
 // if authenticated, send posts
 // TOFIX: change function name to getPastPosts
@@ -110,25 +107,23 @@ module.exports.sendUserPosts = (req, res, next) => {
   const typeOfPost = req.params.post_type;
   let resultsWithStats = [];
   // TODO: Create new function for this big block of code
-  
   return dbh.showUserPosts(email, typeOfPost)
   .then((posts) => {
-    if (typeOfPost === 'posted') { 
+    if (typeOfPost === 'posted') {
       return this.attachSMStats(posts, email);
-    } else {
-      return posts;
     }
+    return posts;
   })
   .then((posts) => {
     res.status(200).json(posts);
   })
   .catch((err) => {
-    if (err === 'invalid user') { 
-      res.status(401).end(); 
-    } else { 
-      res.status(500).end(); 
+    if (err === 'invalid user') {
+      res.status(401).end();
+    } else {
+      res.status(500).end();
     }
-  })
+  });
 };
 
 // if authenticated, send posts
@@ -159,7 +154,7 @@ module.exports.scheduleOrSavePosts = (req, res, next) => {
 
 module.exports.sendTweet = (userCred, postInfo) => sm.tweet(userCred, postInfo.text, postInfo.img)
     .then((tweet) => {
-      dbh.updatePostFields(postInfo._id, 'postedTwitterId', tweet.id_str)
+      dbh.updatePostFields(postInfo._id, 'postedTwitterId', tweet.id_str);
       return 'Successful Tweet';
     })
     .catch((err) => {
@@ -169,7 +164,7 @@ module.exports.sendTweet = (userCred, postInfo) => sm.tweet(userCred, postInfo.t
 
 module.exports.sendFBPost = (userCred, postInfo) => sm.FBPost(userCred.facebook_id, userCred.facebook_token, postInfo.text, postInfo.imgUrl)
     .then((fbpost) => {
-      dbh.updatePostFields(postInfo._id, 'postedFacebookId', fbpost.data.id)
+      dbh.updatePostFields(postInfo._id, 'postedFacebookId', fbpost.data.id);
       return 'Successful FBPost';
     })
     .catch((err) => {
@@ -182,12 +177,12 @@ module.exports.sendScheduledPosts = () => {
   .then((scheduledPosts) => {
     return Promise.map(scheduledPosts, (post) => {
       return this.sendScheduledPost(post);
-    })
+    });
   })
   .catch((err) => {
     console.log('error for sendingScheduledPost in rh', err);
   });
-}
+};
 
 module.exports.sendScheduledPost = (post) => {
   let userCredentials = '';
@@ -201,16 +196,16 @@ module.exports.sendScheduledPost = (post) => {
     return dbh.updatePostFields(post._id, 'status', 'posted');
   })
   .catch((err) => {
-    throw `Error updating post fields from scheduled to posted${  err}`;
+    throw `Error updating post fields from scheduled to posted${err}`;
   })
   .then(() => dbh.moveScheduledToPosted(post.user_id, post._id))
   .catch((err) => {
-    throw `Error moving scheduled post to posted${  err}`;
+    throw `Error moving scheduled post to posted${err}`;
   })
   .then(() => {
-    let posts = [];
-    if (post.postToFacebook) posts.push(this.sendFBPost(userCredentials, post))
-    if (post.postToTwitter) posts.push(this.sendTweet(userCredentials, post))
+    const posts = [];
+    if (post.postToFacebook) posts.push(this.sendFBPost(userCredentials, post));
+    if (post.postToTwitter) posts.push(this.sendTweet(userCredentials, post));
     return Promise.all(posts);
   })
   .catch((err) => {
@@ -242,9 +237,9 @@ module.exports.sendPostsNow = (req, res, next) => {
     dbh.savePost(userCredentials._id, postInfo, 'posted');
   })
   .then(() => {
-    let posts = [];
-    if (postInfo.postToFacebook) posts.push(this.sendFBPost(userCredentials, postInfo))
-    if (postInfo.postToTwitter) posts.push(this.sendTweet(userCredentials, postInfo))
+    const posts = [];
+    if (postInfo.postToFacebook) posts.push(this.sendFBPost(userCredentials, postInfo));
+    if (postInfo.postToTwitter) posts.push(this.sendTweet(userCredentials, postInfo));
     return Promise.all(posts);
   })
   .then((posts) => {
@@ -253,15 +248,15 @@ module.exports.sendPostsNow = (req, res, next) => {
   .catch((err) => {
     console.log(err);
     res.status(404).send('Not found');
-  })
+  });
 };
 
 module.exports.userCheck = (req, res, next) => {
   const email = req.session.email;
   return dbh.getUser(email)
   .then((data) => {
-    if (!data) return dbh.saveUser(email)
-    return
+    if (!data) return dbh.saveUser(email);
+
   })
   .then(() => {
     res.redirect('/');
@@ -277,7 +272,7 @@ module.exports.deletePost = (req, res, next) => {
   const postId = url_parts.query._id;
 
   return dbh.retrieveUserId(req.session.email)
-  .then((userId) => dbh.deletePost(userId, postId))
+  .then(userId => dbh.deletePost(userId, postId))
   .then((results) => {
     res.end();
   })
@@ -297,11 +292,11 @@ module.exports.getUserInfo = (req, res, next) => {
     .then((data) => {
       userCred.twitter = !!(data.twitter_token);
       userCred.facebook = !!(data.facebook_id);
-      return dbh.showUserPosts(userCred.email, 'scheduled')
+      return dbh.showUserPosts(userCred.email, 'scheduled');
     })
     .then((results) => {
       userCred.scheduledPosts = results;
-      return dbh.showUserPosts(userCred.email, 'posted')
+      return dbh.showUserPosts(userCred.email, 'posted');
     })
     .then((postedPosts) => {
       return this.attachSMStats(postedPosts, userCred.email);
@@ -314,10 +309,8 @@ module.exports.getUserInfo = (req, res, next) => {
       console.log('error in getting scheduled results ', err);
       if (err === 'invalid user') res.status(404).end();
       else res.status(500).end();
-    })
+    });
   } else {
     res.send({ email: '', twitter: false, facebook: false });
   }
 };
-
-

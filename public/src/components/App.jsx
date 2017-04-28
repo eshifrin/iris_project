@@ -16,13 +16,13 @@ import FuturePostList from './FuturePostList';
 import * as util from '../lib/util';
 import PastPostList from './PastPostList';
 import CreatePost from './CreatePost';
+import Loader from './Loader';
 import { getCurrentUserInfo,
           modalToggle,
           deletePost,
           populateCreatePost,
           switchScheduledView
         } from '../actions/permissions';
-
 
 injectTapEventPlugin();
 import Calendar from './Calendar'
@@ -41,7 +41,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
   }
-
   componentWillMount() {
     this.props.getCurrentUserInfo();
 
@@ -61,7 +60,6 @@ class App extends React.Component {
 
           {this.props.isLoggedIn &&
           <div>
-
 
           <Tabs>
 
@@ -101,7 +99,6 @@ class App extends React.Component {
 
           </Tabs>
 
-
           </div>
         }
 
@@ -131,7 +128,8 @@ const mapStateToProps = (state) => {
     scheduledDateTime: state.main.scheduledDateTime,
     updatingPostId: state.main.updatingPostId,
     newPostModal: state.main.newPostModal,
-    calendarView: state.main.calendarView
+    calendarView: state.main.calendarView,
+    isLoading: state.main.isLoading,
   };
 };
 
