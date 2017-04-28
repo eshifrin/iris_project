@@ -48,8 +48,8 @@ class CreatePost extends React.Component {
           <hr />
 
           <div style={{ textAlign: 'center', display: 'inline-block' }} >
-            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="postnow" onClick={this.props.handleNowSubmit}>post now</FlatButton> }
-            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="schedulepost" onClick={this.props.handlePostSubmit}>schedule post</FlatButton> }
+            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="postnow" onClick={this.props.handleNowSubmit} style={{color: yellow800}}>post now</FlatButton> }
+            { (this.props.postToFacebook || this.props.postToTwitter) && <FlatButton primary value="schedulepost" onClick={this.props.handlePostSubmit} style={{color: yellow800}}>schedule post</FlatButton> }
             {!this.props.postToTwitter && !this.props.postToFacebook && <h4 style={{ color: 'red' }}>please choose at least one social site to share your post</h4>}
           </div>
         </div>
