@@ -145,7 +145,6 @@ const permissionsAndPostsReducer = (state = initialState, action) => {
       };
 
     default:
-      console.log('action type: ', action.type);
       return state;
   }
 };

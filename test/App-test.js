@@ -11,7 +11,7 @@ import axios from 'axios'
 import configureStore from 'redux-mock-store'
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-
+import * as actions from '../public/src/actions/permissions.js';
 
 const initialState = {
   main: {
@@ -20,7 +20,7 @@ const initialState = {
   facebookAuthenticated: false,
   postToTwitter: false,
   postToFacebook: false,
-  email: '',
+  email: 'a@b.com',
   text: '',
   img: '',
   imgUrl: '',
@@ -34,24 +34,6 @@ const initialState = {
   }
 };
 
-const loggedInUserState = {
-  isLoggedIn: true,
-  twitterAuthenticated: false,
-  facebookAuthenticated: false,
-  postToTwitter: false,
-  postToFacebook: false,
-  email: '',
-  text: '',
-  img: '',
-  imgUrl: '',
-  scheduledPosts: [],
-  pastPosts: [],
-  scheduledDateTime: '',
-  updatingPostId: undefined,
-  newPostModal: false,
-  calendarView: false,
-  isLoading: false
-}
 
 
 
@@ -61,19 +43,35 @@ const loggedInUserState = {
 
 let wrapper, store
 
-//can test for what should be available when logged in and not
 describe('should render every component', () => {
-  beforeEach(()=>{
-      const mockStore = configureStore([thunk]);
-      store = mockStore(initialState);
-      wrapper = mount( <Provider store={store}><App /></Provider> );
+  beforeEach(() => { 
+    const mockStore = configureStore([thunk]);
+    store = mockStore(initialState);
+    wrapper = mount( <Provider store={store}><App /></Provider> );
   });
   
   it('should render one FuturePostList component when isLoggedIn is true', () => {
     expect(wrapper.find(FuturePostList)).to.have.length(1);
   });
+  
+  it('should dispatch actions correctly', (done) => {
+    const expectedActions = [
+      { type: 'TOGGLE_MODAL' }
+    ];
+
+    store.dispatch(actions.modalToggle());
+
+    setTimeout(() => {
+      expect(store.getActions().slice(0,1)).to.deep.equal(expectedActions);
+      done();
+    }, 100);
+  });
 
 });
+
+
+
+
   // it('should render one PhotoUpload component when newPostModal is true', () => {
   //   expect(wrapper.find(PhotoUpload)).to.have.length(1);
   // });
