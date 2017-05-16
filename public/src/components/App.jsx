@@ -11,12 +11,12 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import NavBar from './NavBar';
-import FuturePostList from './FuturePostList';
+import NavBar from './NavBar.jsx';
+import FuturePostList from './FuturePostList.jsx';
 import * as util from '../lib/util';
-import PastPostList from './PastPostList';
-import CreatePost from './CreatePost';
-import Loader from './Loader';
+import PastPostList from './PastPostList.jsx';
+import CreatePost from './CreatePost.jsx';
+import Loader from './Loader.jsx';
 import { getCurrentUserInfo,
           modalToggle,
           deletePost,
@@ -25,7 +25,7 @@ import { getCurrentUserInfo,
         } from '../actions/permissions';
 
 injectTapEventPlugin();
-import Calendar from './Calendar'
+import Calendar from './Calendar.jsx'
 
 const muiTheme = getMuiTheme({
   palette: {

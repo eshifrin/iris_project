@@ -8,7 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import CreatePost from './CreatePost';
+import CreatePost from './CreatePost.jsx';
 
 const propTypes = {
   login: PropTypes.bool.isRequired,

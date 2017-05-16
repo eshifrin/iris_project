@@ -34,6 +34,6 @@ const Calendar = props => (
     views={['month', 'week']}
     formats={formats}
   />
-    );
+);
 
 export default Calendar;

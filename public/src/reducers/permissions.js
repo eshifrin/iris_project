@@ -19,6 +19,7 @@ const initialState = {
   isLoading: false,
 };
 
+
 const permissionsAndPostsReducer = (state = initialState, action) => {
   switch (action.type) {
     // case
