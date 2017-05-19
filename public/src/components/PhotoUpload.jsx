@@ -15,6 +15,7 @@ const PhotoUpload = ({ uploadImg, handleClearImg, imgUrl, photoVal = '' }) => (
 
     {imgUrl ?
     <FlatButton
+      id='clearImage'
       primary={true}
       onClick={() => clear.bind(this) && handleClearImg()}>
     clear image
@@ -22,6 +23,7 @@ const PhotoUpload = ({ uploadImg, handleClearImg, imgUrl, photoVal = '' }) => (
     :
 
     <FlatButton
+      id='uploadImage'
       style={{color: yellow800}}
       containerElement='label'
       labelStyle={{'text-transform': 'lowercase'}}

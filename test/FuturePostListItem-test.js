@@ -14,13 +14,21 @@ import FlatButton from 'material-ui/FlatButton';
 
 /* documentation: http://airbnb.io/enzyme/ */
 
-let wrapper, store
+let wrapper, store, deletePost, editPost;
 
 describe('Empty future post list array', () => {
   beforeEach(() => {
+    editPost = sinon.spy();
+    deletePost = sinon.spy();
+
     const muiTheme = getMuiTheme();
 
-    wrapper = mount(<FuturePostListItem post={sampleData.user1_scheduledPost2} />,
+    wrapper = mount(
+      <FuturePostListItem 
+        post={sampleData.user1_scheduledPost2} 
+        deletePost={deletePost}
+        editPost={editPost}
+      />,
           {context: {muiTheme},              
            childContextTypes: {muiTheme: React.PropTypes.object}
           }
@@ -34,6 +42,14 @@ describe('Empty future post list array', () => {
   it('should render 4 FlatButton components for every post', () => {
     expect(wrapper.find(FlatButton)).to.have.length(4);
   });
+
+  it('should call the correct click handlers for editing and deleting posts', () => {
+    wrapper.find('#deletePost').simulate('click');
+    wrapper.find('#editPost').simulate('click');
+    expect(deletePost).to.have.property('callCount', 1);
+    expect(editPost).to.have.property('callCount', 1);
+  });
+
 });
 
 

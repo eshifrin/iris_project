@@ -1,5 +1,7 @@
 import * as util from '../lib/util';
 import axios from 'axios';
+
+
 export const getCurrentUserInfo = () => (dispatch) => {
   return util.getCurrentUserInfo()
       .then((res) => {
@@ -10,6 +12,7 @@ export const getCurrentUserInfo = () => (dispatch) => {
       });
 };
 export const uploadImg = (e) => {
+
   const reader = new FileReader(e.target.files[0]);
   reader.readAsDataURL(e.target.files[0]);
   return dispatch => reader.onloadend = () => {
@@ -53,6 +56,7 @@ export const handleNowSubmit = () => (dispatch, getState) => {
     postToTwitter: st.postToTwitter,
     updatingPostId: st.updatingPostId,
   };
+  
   return util.submitNewPost('now', passSt)
     .then((results) => {
       return util.retrievePosts('posted', st.email);
@@ -143,10 +147,6 @@ export const handleScheduleChange = e => ({
 
 export const handleClearImg = () => ({
   type: 'CLEAR_IMG',
-});
-
-export const handleResetPostFields = () => ({
-  type: 'RESET_POST_FIELDS',
 });
 
 export const toggleLoader = () => ({

@@ -1,6 +1,7 @@
 import { shallow, mount } from 'enzyme';
 import React from 'react';
 import App from '../public/src/components/App.jsx'
+import { mapDispatchToProps } from '../public/src/components/App.jsx'
 import WriteMessage from '../public/src/components/WriteMessage.jsx'
 import PhotoUpload from '../public/src/components/PhotoUpload.jsx'
 import FuturePostList from '../public/src/components/FuturePostList.jsx'
@@ -12,6 +13,9 @@ import configureStore from 'redux-mock-store'
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import * as actions from '../public/src/actions/permissions.js';
+import fetchMock from 'fetch-mock';
+import sampleData from '../db/sampleData.js'
+
 
 const initialState = {
   main: {
@@ -34,16 +38,32 @@ const initialState = {
   }
 };
 
-
-
-
-
+const initialStateNotLoggedIn = {
+  main: {
+  isLoggedIn: false,
+  twitterAuthenticated: false,
+  facebookAuthenticated: false,
+  postToTwitter: false,
+  postToFacebook: false,
+  email: 'a@b.com',
+  text: '',
+  img: '',
+  imgUrl: '',
+  scheduledPosts: [],
+  pastPosts: [],
+  scheduledDateTime: '',
+  updatingPostId: undefined,
+  newPostModal: true,
+  calendarView: true,
+  isLoading: false
+  }
+};
 
 /* documentation: http://airbnb.io/enzyme/ */
 
-let wrapper, store
+let wrapper, store, sandbox;
 
-describe('should render every component', () => {
+describe('should render relevant components when user is logged in', () => {
   beforeEach(() => { 
     const mockStore = configureStore([thunk]);
     store = mockStore(initialState);
@@ -54,7 +74,7 @@ describe('should render every component', () => {
     expect(wrapper.find(FuturePostList)).to.have.length(1);
   });
   
-  it('should dispatch actions correctly', (done) => {
+  it('should dispatch TOGGLE_MODAL correctly', (done) => {
     const expectedActions = [
       { type: 'TOGGLE_MODAL' }
     ];
@@ -67,108 +87,145 @@ describe('should render every component', () => {
     }, 100);
   });
 
+  it('should dispatch uploadImg correctly when stubbed - toggle, then load images, then toggle', (done) => {
+    sandbox = sinon.sandbox.create();
+    results =  {
+      data: 'testurl'
+    };
+    const promise = Promise.resolve(results);
+    sandbox.stub(axios, 'post').withArgs('/api/image/imgLink').returns(promise);
+
+    const expectedSuccessActions = [
+      {type: 'TOGGLE_LOADER'},
+      {type: 'UPLOAD_IMG', payload: {img: null, imgUrl: 'testurl' }},
+      {type: 'TOGGLE_LOADER'}
+    ]
+
+    store.dispatch(actions.uploadImg
+      ({ target: { files: [null] }}))();
+
+    setTimeout(() => {
+     sandbox.restore();
+     expect(store.getActions().slice(0,3)).to.deep.equal(expectedSuccessActions);
+      done();
+    }, 100);
+  });
+
+  it('should dispatch switchScheduledView correctly', (done) => {
+
+    const expectedActions = [
+      { type: 'SWITCH_SCHEDULED_VIEW' }
+    ];
+
+    store.dispatch(actions.switchScheduledView(
+      { target: { getAttribute: () => 'calendarIcon' }}
+    ));
+
+    setTimeout(() => {
+     expect(store.getActions().slice(0,1)).to.deep.equal(expectedActions);
+      done();
+    }, 100);
+  });
 });
 
 
+describe('should handle posting when', () => {
+  beforeEach(() => { 
+    const mockStore = configureStore([thunk]);
+    store = mockStore(initialState);
+    wrapper = mount( <Provider store={store}><App /></Provider> );
+  })
+
+  afterEach(() => {
+    sandbox.restore();
+  })
+
+  it('posting immediately', (done) => {
+    sandbox = sinon.sandbox.create();
+    const postPromise = Promise.resolve({});
+    const postedPostsPromise = Promise.resolve({ data: ['sample post']})
+
+    sandbox.stub(axios, 'post').withArgs('/api/user/now').returns(postPromise);
+    sandbox.stub(axios, 'get').withArgs('/api/user/posted').returns(postedPostsPromise);
+
+    const expectedPostNowActions = [
+      {type: 'TOGGLE_LOADER'},
+      {type: 'POST_NOW', payload: ['sample post']},
+      {type: 'TOGGLE_LOADER'}
+    ];
+
+    store.dispatch(actions.handleNowSubmit());
+    
+    setTimeout(() => {
+     console.log(store.getActions());
+     expect(store.getActions().slice(0,3)).to.deep.equal(expectedPostNowActions);
+      done();
+    }, 500);
+  });
+});
+
+describe('Map Dispatch To Props', () => {
+    it('should dispatch action type TOGGLE_MODAL when modalToggle is ran', () => {
+      const dispatchSpy = sinon.spy();
+      const { modalToggle } = mapDispatchToProps(dispatchSpy);
+      modalToggle();
+      expect(dispatchSpy.args[0][0].type).to.equal('TOGGLE_MODAL')
+    });
+
+    it('should return a function when switchScheduledViewClick is run ', () => {
+      const dispatchSpy = sinon.spy();
+      const { switchScheduledViewClick } = mapDispatchToProps(dispatchSpy);
+      switchScheduledViewClick();
+      
+      expect(typeof dispatchSpy.args[0][0]).to.equal('function')
+    });
+});
+
+describe('should render relevant components when user is not logged in', () => {
+  beforeEach(() => { 
+    const mockStore = configureStore([thunk]);
+    store = mockStore(initialStateNotLoggedIn);
+    wrapper = mount( <Provider store={store}><App /></Provider> );
+  });
+  
+  it('should render one description of app  when isLoggedIn is false', () => {
+    expect(wrapper.contains(<p>We are a one-stop social media manager for posting to Facebook and Twitter.</p>)).to.equal(true);
+  });
+});
+
+let results;
+describe('should call getCurrentUserInfo upon mounting ', () => {
+  beforeEach(() => { 
+    sandbox = sinon.sandbox.create();
+    results =  {
+      data: {
+            email: 'test@email.com',
+            twitterAuthenticated: true,
+            facebookAuthenticated: true,
+            pastPosts: [],
+            scheduledPosts: []
+        }
+    };
+    const promise = Promise.resolve(results);
+    sandbox.stub(axios, 'get').withArgs('/userinfo').returns(promise);
 
 
-  // it('should render one PhotoUpload component when newPostModal is true', () => {
-  //   expect(wrapper.find(PhotoUpload)).to.have.length(1);
-  // });
-    // it('should dispatch events appropriately', (done) => {
-    //   return store.dispatch({
-    //     type: 'GET_USER_INFO_SUCCESS',
-    //     payload: loggedInUserState
-    //   }).then(() => {
-    //     console.log(store.getState());
-    //     done();
-    //   })
-    //   // .then(() => {
-    //     console.log(store.getActions())
-    //     // expect(wrapper.find(FuturePostList)).to.have.length(1);
-    //     done();
-    // })
+    const mockStore = configureStore([thunk]);
+    store = mockStore(initialState);
+    wrapper = mount( <Provider store={store}><App /></Provider> );
+  });
+  
+  it('', (done) => {
+    setTimeout(() => {
+      expect(store.getActions()[0]).to.deep.equal({
+        type: 'GET_USER_INFO_SUCCESS',
+        payload: results
+      });
 
-
-    // it('should render one <FuturePostList /> component', () => {
-    //   expect(wrapper.find(FuturePostList)).to.have.length(1);
-    // });
-
-
-// });
-
-// describe('Tests involving App without requests', () => {
-//   var userInfoStub;
-
-//   before(function() {
-//     let results = {data: {email: '', twitter: false, facebook: false}};
-//     const promise = Promise.resolve(results);
-//     userInfoStub = sinon.stub(axios, 'get').withArgs('/userinfo')
-//     userInfoStub.returns(promise);
-//   });
-
-//   after(function() {
-//     axios.get.restore();
-//   });
-
-//   it('will render a FuturePostList if App is rendered', () => {
-//     const wrapper = mount(<App />);
-//     //so we can see deep into App
-//     wrapper.setState({ isLoggedIn: true });
-//     //use the below if you want to see html representation of all the of code
-//     // console.log(wrapper.debug());
-//     expect(wrapper.find('FuturePostList')).to.have.length(1);
-//   });
-
-
-//   it('should change postToFacebook from false to true on simulated handleFbLogoClick', () => {
-//     const wrapper = shallow(<App />);
-//     expect(wrapper.state('postToFacebook')).to.equal(false);
-//     wrapper.instance().handleFbLogoClick()
-//     expect(wrapper.state('postToFacebook')).to.equal(true);
-//   });
-
-//   // expecting refactor post Redux - doesnt work due to modal
-//   // it('should change postToFacebook from false to true on actual handleFbLogoClick', () => {
-//   //   const wrapper = mount(<App />);
-//   //   wrapper.setState({ isLoggedIn: true });
-//   //   wrapper.setState({ newPostModal: true });
-//   //   expect(wrapper.state('postToFacebook')).to.equal(false);
-//   //   wrapper.find('.sendToFB').simulate('click');
-//   //   expect(wrapper.state('postToFacebook')).to.equal(true);
-//   // });
-
-// })
-
-
-// describe('how to test if functions were called', () => {
-//   it('should call handleFBClick when the logo is clicked', () => {
-//     const handleFbLogoClick = sinon.stub();
-//     const muiTheme = getMuiTheme();
-//     //the context and childcontexttypes arent necesary if you are doing a shallow render
-//     const wrapper = 
-//       mount(<WriteMessage handleFbLogoClick={handleFbLogoClick} />,
-//             {context: {muiTheme},              
-//              childContextTypes: {muiTheme: React.PropTypes.object}});
-//     wrapper.find('.sendToFB').simulate('click');
-//     expect(handleFbLogoClick.called).to.equal(true);
-//   });
-// });
-
-
-// describe('testing stubbed axios requests', () => {
-//     it('should get email on componentWillMount', () => {
-//       let results = {data: {email: 'hello@yo.com', twitter: true, facebook: true}};
-//       const promise = Promise.resolve(results);
-//       sinon.stub(axios, 'get').withArgs('/userinfo').returns(promise);
-
-//       let wrapper = mount(<App />);
-//       promise.then(() => {
-//         expect(wrapper.state().email).to.equal('hello@yo.com');
-//         expect(wrapper.state().twitterAuthenticated).to.equal(true);
-//       });
-//     });
-// });
+      done();
+    }, 100);
+  });
+});
 
 
 

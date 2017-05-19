@@ -32,8 +32,8 @@ const FuturePostListItem = ({ post, deletePost, editPost }) => {
     disableTouchRipple = {true}
     hoverColor ='white'
     disabled={!post.postToFacebook}> Facebook <i style={{color: 'grey'}} className="fa fa-facebook"></i> </FlatButton>
-    <FlatButton href="#" onClick={e => deletePost(e, post)}  style={{color: yellow800}}>delete</FlatButton>
-    <FlatButton href="#" onClick={e => editPost(e, post)} style={{color: yellow800}}>edit</FlatButton>
+    <FlatButton id='deletePost' href="#" onClick={e => deletePost(e, post)}  style={{color: yellow800}}>delete</FlatButton>
+    <FlatButton id='editPost' href="#" onClick={e => editPost(e, post)} style={{color: yellow800}}>edit</FlatButton>
     </Card>
 
   )

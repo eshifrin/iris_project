@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const routes = {
   scheduled: '/api/user/scheduled',
-  now: 'api/user/now',
+  now: '/api/user/now',
   posted: '/api/user/posted',
 };
 

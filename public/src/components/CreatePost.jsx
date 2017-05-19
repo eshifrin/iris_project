@@ -77,9 +77,6 @@ const mapDispatchToProps = dispatch => ({
   handleClearImg: () => {
     dispatch(handleClearImg());
   },
-  handleResetPostFields: () => {
-    dispatch(handleResetPostFields());
-  },
   handleNowSubmit: () => {
     dispatch(handleNowSubmit('now'));
   },

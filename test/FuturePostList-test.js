@@ -16,11 +16,9 @@ import sampleData from '../db/sampleData.js'
 const posts = [sampleData.user1_scheduledPost2, sampleData.user1_scheduledPost2];
 
 
-/* documentation: http://airbnb.io/enzyme/ */
 
 let wrapper, store
 
-//can test for what should be available when logged in and not
 describe('Empty future post list array', () => {
   beforeEach(() => {
       wrapper = mount(<FuturePostList scheduledPosts={[]}/> );

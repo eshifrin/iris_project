@@ -13,7 +13,7 @@
     "webpack": "webpack -w",
     "test": "cross-env NODE_ENV=test ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
     "chrometest": "cross-env NODE_ENV=test ./node_modules/karma/bin/karma start --browsers Chrome",
-    "servertest": "MONGODB_URI=mongodb://localhost:27017/iristest nyc --reporter=html --reporter=text --dir=./coverage/server-results mocha test/servertest.js"
+    "servertest": "MONGODB_URI=mongodb://localhost:27017/iristest nyc --reporter=html --reporter=text --dir=./servercoverage/server-results mocha test/servertest.js"
   },
   "dependencies": {
     "axios": "^0.16.0",
@@ -31,6 +31,7 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-1": "^6.24.1",
     "babel-register": "^6.7.2",
+    "blob-util": "^1.2.1",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "chai": "^3.5.0",
@@ -47,6 +48,7 @@
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
+    "fetch-mock": "^5.10.0",
     "file-loader": "^0.11.1",
     "json-loader": "^0.5.4",
     "karma": "^1.6.0",
@@ -66,6 +68,7 @@
     "mongoose": "^4.9.3",
     "moxios": "^0.4.0",
     "multer": "^1.3.0",
+    "nock": "^9.0.13",
     "node-cron": "^1.1.3",
     "nyc": "^10.2.0",
     "passport": "^0.3.2",
