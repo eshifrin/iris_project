@@ -162,6 +162,31 @@ describe('should handle posting when', () => {
       done();
     }, 500);
   });
+
+  it('posting scheduled', (done) => {
+    sandbox = sinon.sandbox.create();
+    const postPromise = Promise.resolve({});
+    const postedPostsPromise = Promise.resolve({ data: ['sample post 2']})
+
+    sandbox.stub(axios, 'post').withArgs('/api/user/scheduled').returns(postPromise);
+    sandbox.stub(axios, 'get').withArgs('/api/user/scheduled').returns(postedPostsPromise);
+
+    const expectedPostNowActions = [
+      {type: 'TOGGLE_LOADER'},
+      {type: 'POST_LATER', payload: ['sample post 2']},
+      {type: 'TOGGLE_LOADER'}
+    ];
+
+    store.dispatch(actions.handlePostSubmit());
+    
+    setTimeout(() => {
+     console.log(store.getActions());
+     expect(store.getActions().slice(0,3)).to.deep.equal(expectedPostNowActions);
+      done();
+    }, 500);
+  });
+
+
 });
 
 describe('Map Dispatch To Props', () => {
